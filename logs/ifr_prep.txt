@@ -1,0 +1,45 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/Documents/KU/Seminar 2/logs/ifr_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}15 Jul 2024, 16:05:50
+{txt}
+{com}. 
+. import excel "raw_data/ifr/Stock_by_ctry_1997-2011.xlsx", sheet("Sheet2") firstrow
+{res}{text}(30 vars, 20 obs)
+
+{com}. 
+. rename A year
+{res}{txt}
+{com}. 
+. * Use the same countries as Acemuglo and Restrepo 
+. * for instrument, but replace Norway with 
+. * Netherland (Norway not available)
+. keep year DK FR FI DE IT NL ES SE GB
+{txt}
+{com}. 
+. gen foreign_robot_stock = DK + FI + DE + IT + NL + ES + SE + GB
+{txt}
+{com}. 
+. save "clean_data/ifr_clean.dta", replace
+{txt}{p 0 4 2}
+(file {bf}
+clean_data/ifr_clean.dta{rm}
+not found)
+{p_end}
+{p 0 4 2}
+file {bf}
+clean_data/ifr_clean.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/Documents/KU/Seminar 2/logs/ifr_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}15 Jul 2024, 16:05:50
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

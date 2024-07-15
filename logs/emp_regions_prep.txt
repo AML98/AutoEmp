@@ -1,0 +1,36 @@
+{smcl}
+{txt}{sf}{ul off}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/Documents/KU/Seminar 2/logs/emp_regions_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}15 Jul 2024, 16:05:50
+{txt}
+{com}. 
+. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 1") cellrange(A13:L40) firstrow
+{res}{text}(12 vars, 27 obs)
+
+{com}. 
+. drop GEOLabels
+{txt}
+{com}. 
+. save "clean_data/emp_regions_clean.dta", replace
+{txt}{p 0 4 2}
+(file {bf}
+clean_data/emp_regions_clean.dta{rm}
+not found)
+{p_end}
+{p 0 4 2}
+file {bf}
+clean_data/emp_regions_clean.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/Documents/KU/Seminar 2/logs/emp_regions_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}15 Jul 2024, 16:05:50
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
