@@ -1,45 +1,63 @@
 {smcl}
-{txt}{sf}{ul off}{.-}
+{com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/aml/Documents/KU/Seminar 2/logs/ifr_prep.txt
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}15 Jul 2024, 16:05:50
+ {txt}opened on:  {res}16 Jul 2024, 16:39:12
 {txt}
 {com}. 
-. import excel "raw_data/ifr/Stock_by_ctry_1997-2011.xlsx", sheet("Sheet2") firstrow
-{res}{text}(30 vars, 20 obs)
+. import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet1") firstrow
+{res}{text}(7 vars, 1,296 obs)
 
-{com}. 
-. rename A year
-{res}{txt}
-{com}. 
-. * Use the same countries as Acemuglo and Restrepo 
-. * for instrument, but replace Norway with 
-. * Netherland (Norway not available)
-. keep year DK FR FI DE IT NL ES SE GB
-{txt}
-{com}. 
-. gen foreign_robot_stock = DK + FI + DE + IT + NL + ES + SE + GB
-{txt}
-{com}. 
-. save "clean_data/ifr_clean.dta", replace
+{com}. save "raw_data/ifr/IFR_data_new.dta", replace
 {txt}{p 0 4 2}
-(file {bf}
-clean_data/ifr_clean.dta{rm}
-not found)
-{p_end}
-{p 0 4 2}
 file {bf}
-clean_data/ifr_clean.dta{rm}
+raw_data/ifr/IFR_data_new.dta{rm}
 saved
 {p_end}
 
 {com}. 
+. keep if Year == 1999 | Year == 2016
+{txt}(1,188 observations deleted)
+
+{com}. drop if industrycode == "P"
+{txt}(18 observations deleted)
+
+{com}. sort industrycode Year
+{txt}
+{com}. 
+. by industrycode Year: egen total_stock_industry = total(op_stock) 
+{txt}
+{com}. drop delivered op_stock country countrycode
+{txt}
+{com}. duplicates drop Year industrycode, force
+
+{p 0 4}{txt}Duplicates in terms of {res} Year industrycode{p_end}
+
+{txt}(80 observations deleted)
+
+{com}. 
+. replace industrycode = "CE" if industrycode == "C" | industrycode == "D" | industrycode == "E"
+{txt}(6 real changes made)
+
+{com}. collapse (sum) total_stock_industry, by(Year industrycode)
+{res}{txt}
+{com}. save "clean_data/foreign_robot_stock"
+{txt}{p 0 4 2}
+file {bf}
+clean_data/foreign_robot_stock.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files"
+{res}/Users/aml/AutoEmp/do_files
+{txt}
+{com}. 
 . log close
       {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/aml/Documents/KU/Seminar 2/logs/ifr_prep.txt
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}15 Jul 2024, 16:05:50
+ {txt}closed on:  {res}16 Jul 2024, 16:39:13
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

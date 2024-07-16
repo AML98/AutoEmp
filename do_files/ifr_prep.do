@@ -1,19 +1,23 @@
 clear
 capture log close
-cd "/Users/aml/Documents/KU/Seminar 2"
+cd "/Users/aml/AutoEmp"
 log using "logs/ifr_prep.txt", replace
 
-import excel "raw_data/ifr/Stock_by_ctry_1997-2011.xlsx", sheet("Sheet2") firstrow
+import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet1") firstrow
+save "raw_data/ifr/IFR_data_new.dta", replace
 
-rename A year
+keep if Year == 1999 | Year == 2016
+drop if industrycode == "P"
+sort industrycode Year
 
-* Use the same countries as Acemuglo and Restrepo 
-* for instrument, but replace Norway with 
-* Netherland (Norway not available)
-keep year DK FR FI DE IT NL ES SE GB
+by industrycode Year: egen total_stock_industry = total(op_stock) 
+drop delivered op_stock country countrycode
+duplicates drop Year industrycode, force
 
-gen foreign_robot_stock = DK + FI + DE + IT + NL + ES + SE + GB
-
-save "clean_data/ifr_clean.dta", replace
+replace industrycode = "CE" if industrycode == "C" | industrycode == "D" | industrycode == "E"
+collapse (sum) total_stock_industry, by(Year industrycode)
+save "clean_data/foreign_robot_stock"
+cd "/Users/aml/AutoEmp/do_files"
 
 log close
+
