@@ -7,7 +7,7 @@ import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 1") ///
 	cellrange(A13:L40) firstrow
 
 drop GEOLabels
-keep region_code AB CE F emp_total
+keep region_code AB CE F e
 drop if missing(AB) | missing(CE) | missing(F)
 
 foreach v in AB CE F {

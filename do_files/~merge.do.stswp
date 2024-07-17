@@ -19,7 +19,6 @@ foreach industry in AB CE F {
 	gen robot_exposure_`industry' = emp_share_`industry' * ///
 		(diff_robot_stock_`industry' / emp_base_`industry')
 	replace robot_exposure = robot_exposure + robot_exposure_`industry'
-	drop robot_exposure_`industry'
 }
 
 save "clean_data/reg_ready.dta", replace

@@ -8,5 +8,5 @@ do "emp_regions_prep.do"
 do "emp_countries_prep.do"
 do "merge.do"
 
-// Estimation
+// Estoim
 do "estimation.do"
