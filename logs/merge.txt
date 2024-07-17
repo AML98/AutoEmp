@@ -1,0 +1,70 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}17 Jul 2024, 20:10:45
+{txt}
+{com}. 
+. use "clean_data/emp_regions.dta"
+{txt}
+{com}. 
+. // Variables for merge
+. global merge_vars_1 = "emp_base_AB emp_base_CE emp_base_F"
+{txt}
+{com}. global merge_vars_2 = "diff_robot_stock_AB diff_robot_stock_CE diff_robot_stock_F"
+{txt}
+{com}. 
+. merge m:1 id using "clean_data/emp_countries.dta", update
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+
+{txt}{col 5}Matched{col 30}{res}              21
+{txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
+{col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
+{col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge m:1 id using "clean_data/foreign_diff_robot_stock.dta", update
+{res}{txt}{p 0 7 2}
+(variable
+{bf:diff_robot_stock_CE} was {bf:float}, now {bf:double} to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+
+{txt}{col 5}Matched{col 30}{res}              21
+{txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
+{col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
+{col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
+{col 5}{hline 41}
+
+{com}. drop _merge id
+{txt}
+{com}. 
+. save "clean_data/reg_ready.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/reg_ready.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files"
+{res}/Users/aml/AutoEmp/do_files
+{txt}
+{com}. 
+. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}17 Jul 2024, 20:10:45
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

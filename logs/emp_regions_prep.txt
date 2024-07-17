@@ -3,13 +3,15 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}16 Jul 2024, 16:39:13
+ {txt}opened on:  {res}17 Jul 2024, 20:10:45
 {txt}
 {com}. 
-. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 1") cellrange(A13:L40) firstrow
+. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 1") ///
+>         cellrange(A13:L40) firstrow
 {res}{text}(12 vars, 27 obs)
 
-{com}. drop GEOLabels
+{com}. 
+. drop GEOLabels
 {txt}
 {com}. keep region_code AB CE F
 {txt}
@@ -17,11 +19,30 @@
 {txt}(5 observations deleted)
 
 {com}. 
-. gen emp_share_AB = AB / AB[1] 
-{txt}
-{com}. gen emp_share_CE = CE / CE[1] 
-{txt}
-{com}. gen emp_share_F = F / F[1]
+. foreach v in AB CE F {c -(}
+{txt}  2{com}.         
+.         // 1) Employment shares
+.         gen emp_share_`v' = `v' / `v'[1]
+{txt}  3{com}.         drop `v'
+{txt}  4{com}.         
+.         // 2) Variables for merge
+.         gen emp_base_`v' = .
+{txt}  5{com}.         gen diff_robot_stock_`v' = .
+{txt}  6{com}. {c )-}
+{txt}(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+(22 missing values generated)
+
+{com}. 
+. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. // Add id variable for merge
+. gen id = 1
 {txt}
 {com}. 
 . save "clean_data/emp_regions.dta", replace
@@ -31,8 +52,7 @@ clean_data/emp_regions.dta{rm}
 saved
 {p_end}
 
-{com}. 
-. cd "/Users/aml/AutoEmp/do_files"
+{com}. cd "/Users/aml/AutoEmp/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
 {com}. 
@@ -40,7 +60,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}16 Jul 2024, 16:39:13
+ {txt}closed on:  {res}17 Jul 2024, 20:10:45
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}16 Jul 2024, 16:39:12
+ {txt}opened on:  {res}17 Jul 2024, 20:10:44
 {txt}
 {com}. 
 . import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet1") firstrow
@@ -17,16 +17,21 @@ saved
 {p_end}
 
 {com}. 
+. // 1) Remove unnecessary observations
 . keep if Year == 1999 | Year == 2016
 {txt}(1,188 observations deleted)
 
 {com}. drop if industrycode == "P"
 {txt}(18 observations deleted)
 
-{com}. sort industrycode Year
-{txt}
+{com}. drop if country == "France"
+{txt}(10 observations deleted)
+
 {com}. 
-. by industrycode Year: egen total_stock_industry = total(op_stock) 
+. // 2) Aggregagte on country level
+. sort industrycode Year
+{txt}
+{com}. by industrycode Year: egen robot_stock = total(op_stock) 
 {txt}
 {com}. drop delivered op_stock country countrycode
 {txt}
@@ -34,18 +39,48 @@ saved
 
 {p 0 4}{txt}Duplicates in terms of {res} Year industrycode{p_end}
 
-{txt}(80 observations deleted)
+{txt}(70 observations deleted)
 
 {com}. 
-. replace industrycode = "CE" if industrycode == "C" | industrycode == "D" | industrycode == "E"
+. // 3) Aggregate on industry level
+. replace industrycode = "CE" if ///
+>         industrycode == "C" | industrycode == "D" | industrycode == "E"
 {txt}(6 real changes made)
 
-{com}. collapse (sum) total_stock_industry, by(Year industrycode)
+{com}.         
+. collapse (sum) robot_stock, by(Year industrycode)
 {res}{txt}
-{com}. save "clean_data/foreign_robot_stock"
+{com}. 
+. // 4) Compute long differences and transpose
+. by industrycode (Year), sort: ///
+>         gen diff_robot_stock = robot_stock - robot_stock[_n-1]
+{txt}(3 missing values generated)
+
+{com}. 
+. drop if Year == 1999
+{txt}(3 observations deleted)
+
+{com}. drop Year robot_stock
+{txt}
+{com}. sxpose, clear force firstnames destring
+{txt}AB: all characters numeric; {res}replaced {txt}as {res}int
+{txt}CE: all characters numeric; {res}replaced {txt}as {res}long
+{txt}F: all characters numeric; {res}replaced {txt}as {res}int
+{txt}
+{com}. 
+. foreach v in AB CE F {c -(}
+{txt}  2{com}.         rename `v' diff_robot_stock_`v'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. // 5) Add id variable for merge
+. gen id = _n
+{txt}
+{com}. 
+. save "clean_data/foreign_diff_robot_stock", replace
 {txt}{p 0 4 2}
 file {bf}
-clean_data/foreign_robot_stock.dta{rm}
+clean_data/foreign_diff_robot_stock.dta{rm}
 saved
 {p_end}
 
@@ -57,7 +92,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}16 Jul 2024, 16:39:13
+ {txt}closed on:  {res}17 Jul 2024, 20:10:45
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

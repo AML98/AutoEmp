@@ -3,27 +3,54 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}16 Jul 2024, 16:39:13
+ {txt}opened on:  {res}17 Jul 2024, 20:10:45
 {txt}
 {com}. 
-. import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 1") cellrange(A12:Z21) firstrow
+. import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 1") ///
+>         cellrange(A12:Z21) firstrow
 {res}{text}(26 vars, 9 obs)
 
-{com}. keep country AB CF F
+{com}. 
+. keep country AB CF F
 {txt}
+{com}. drop if country == "France"
+{txt}(1 observation deleted)
+
 {com}. gen CE = CF - F
 {txt}
 {com}. drop CF
 {txt}
-{com}. save "clean_data/emp_countries.dta", replace
+{com}. 
+. // Aggregate on country level
+. foreach v in AB CE F {c -(}
+{txt}  2{com}.         egen emp_base_`v' = total(`v')
+{txt}  3{com}.         drop `v'
+{txt}  4{com}. {c )-}
+{txt}
+{com}. 
+. drop country
+{txt}
+{com}. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(7 observations deleted)
+
+{com}. order emp_base_F, last
+{txt}
+{com}. 
+. // Add id variable for merge
+. gen id = _n
+{txt}
+{com}. 
+. save "clean_data/emp_countries.dta", replace
 {txt}{p 0 4 2}
 file {bf}
 clean_data/emp_countries.dta{rm}
 saved
 {p_end}
 
-{com}. 
-. cd "/Users/aml/AutoEmp/do_files"
+{com}. cd "/Users/aml/AutoEmp/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
 {com}. 
@@ -31,7 +58,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}16 Jul 2024, 16:39:13
+ {txt}closed on:  {res}17 Jul 2024, 20:10:45
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
