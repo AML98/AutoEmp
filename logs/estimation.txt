@@ -3,70 +3,43 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Jul 2024, 00:00:34
+ {txt}opened on:  {res}18 Jul 2024, 23:15:14
 {txt}
 {com}. 
 . use "clean_data/reg_ready.dta"
 {txt}
 {com}. 
-. // Test regression
-. regress emp_total robot_exposure
+. // Test regressions
+. regress diff_emp_regions robot_exposure
 
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        21
-{txt}{hline 13}{c +}{hline 34}   F(1, 19)        = {res}   121.45
-{txt}       Model {c |} {res} 16375253.2         1  16375253.2   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} 2561832.33        19  134833.281   {txt}R-squared       ={res}    0.8647
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.8576
-{txt}       Total {c |} {res} 18937085.5        20  946854.275   {txt}Root MSE        =   {res}  367.2
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        19
+{txt}{hline 13}{c +}{hline 34}   F(1, 17)        = {res}     0.63
+{txt}       Model {c |} {res} 5315.15888         1  5315.15888   {txt}Prob > F        ={res}    0.4371
+{txt}    Residual {c |} {res}   142654.6        17  8391.44709   {txt}R-squared       ={res}    0.0359
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}   -0.0208
+{txt}       Total {c |} {res} 147969.759        18  8220.54219   {txt}Root MSE        =   {res} 91.605
 
 {txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}     emp_total{col 16}{c |} Coefficient{col 28}  Std. err.{col 40}      t{col 48}   P>|t|{col 56}     [95% con{col 69}f. interval]
+{col 1}diff_emp_reg~s{col 16}{c |} Coefficient{col 28}  Std. err.{col 40}      t{col 48}   P>|t|{col 56}     [95% con{col 69}f. interval]
 {hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-robot_exposure {c |}{col 16}{res}{space 2} 4749.391{col 28}{space 2} 430.9654{col 39}{space 1}   11.02{col 48}{space 3}0.000{col 56}{space 4}  3847.37{col 69}{space 3} 5651.412
-{txt}{space 9}_cons {c |}{col 16}{res}{space 2}-209.6242{col 28}{space 2} 140.6272{col 39}{space 1}   -1.49{col 48}{space 3}0.152{col 56}{space 4}-503.9602{col 69}{space 3} 84.71189
+robot_exposure {c |}{col 16}{res}{space 2} 230.0462{col 28}{space 2} 289.0516{col 39}{space 1}    0.80{col 48}{space 3}0.437{col 56}{space 4}-379.7994{col 69}{space 3} 839.8919
+{txt}{space 9}_cons {c |}{col 16}{res}{space 2} 95.24943{col 28}{space 2} 54.48639{col 39}{space 1}    1.75{col 48}{space 3}0.098{col 56}{space 4}-19.70681{col 69}{space 3} 210.2057
 {txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
-{com}. twoway (scatter emp_total robot_exposure) (lfit emp_total robot_exposure)
+{com}. twoway (scatter diff_emp_regions robot_exposure) ///
+>         (lfit diff_emp_regions robot_exposure)
 {res}{txt}
 {com}. 
-. regress emp_total robot_exposure_F
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        21
-{txt}{hline 13}{c +}{hline 34}   F(1, 19)        = {res}   642.51
-{txt}       Model {c |} {res} 18393169.1         1  18393169.1   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} 543916.399        19  28627.1789   {txt}R-squared       ={res}    0.9713
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.9698
-{txt}       Total {c |} {res} 18937085.5        20  946854.275   {txt}Root MSE        =   {res}  169.2
-
-{txt}{hline 17}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}       emp_total{col 18}{c |} Coefficient{col 30}  Std. err.{col 42}      t{col 50}   P>|t|{col 58}     [95% con{col 71}f. interval]
-{hline 17}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-robot_exposure_F {c |}{col 18}{res}{space 2} 537197.7{col 30}{space 2} 21193.13{col 41}{space 1}   25.35{col 50}{space 3}0.000{col 58}{space 4}   492840{col 71}{space 3} 581555.4
-{txt}{space 11}_cons {c |}{col 18}{res}{space 2}-211.9965{col 30}{space 2} 62.42656{col 41}{space 1}   -3.40{col 50}{space 3}0.003{col 58}{space 4}-342.6568{col 71}{space 3}-81.33625
-{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. twoway (scatter emp_total robot_exposure_F) (lfit emp_total robot_exposure_F)
-{res}{txt}
-{com}. 
-. regress emp_total robot_exposure_CE
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        21
-{txt}{hline 13}{c +}{hline 34}   F(1, 19)        = {res}   120.24
-{txt}       Model {c |} {res} 16353072.5         1  16353072.5   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} 2584012.96        19  136000.682   {txt}R-squared       ={res}    0.8635
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.8564
-{txt}       Total {c |} {res} 18937085.5        20  946854.275   {txt}Root MSE        =   {res} 368.78
-
-{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}        emp_total{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
-{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-robot_exposure_CE {c |}{col 19}{res}{space 2} 4793.069{col 31}{space 2} 437.1038{col 42}{space 1}   10.97{col 51}{space 3}0.000{col 59}{space 4}   3878.2{col 72}{space 3} 5707.938
-{txt}{space 12}_cons {c |}{col 19}{res}{space 2}-194.3542{col 31}{space 2} 140.1569{col 42}{space 1}   -1.39{col 51}{space 3}0.182{col 59}{space 4} -487.706{col 72}{space 3} 98.99764
-{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. twoway (scatter emp_total robot_exposure_CE) (lfit emp_total robot_exposure_CE)
-{res}{txt}
-{com}. 
+. /*
+> regress diff_emp_regions robot_exposure_F
+> twoway (scatter diff_emp_regions robot_exposure_F) ///
+>         (lfit diff_emp_regions robot_exposure_F)
+> 
+> regress diff_emp_regions robot_exposure_CE
+> twoway (scatter diff_emp_regions robot_exposure_CE) ///
+>         (lfit diff_emp_regions robot_exposure_CE)
+> */
+. 
 . cd "/Users/aml/AutoEmp/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
@@ -75,7 +48,7 @@ robot_exposure_CE {c |}{col 19}{res}{space 2} 4793.069{col 31}{space 2} 437.1038
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}18 Jul 2024, 00:00:35
+ {txt}closed on:  {res}18 Jul 2024, 23:15:14
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

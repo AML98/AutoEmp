@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Jul 2024, 00:00:34
+ {txt}opened on:  {res}18 Jul 2024, 23:15:14
 {txt}
 {com}. 
 . use "clean_data/emp_regions.dta"
@@ -58,7 +58,10 @@
 (21 real changes made)
 
 {com}. 
-. save "clean_data/reg_ready.dta", replace
+. drop if robot_exposure > 0.5
+{txt}(2 observations deleted)
+
+{com}. save "clean_data/reg_ready.dta", replace
 {txt}{p 0 4 2}
 file {bf}
 clean_data/reg_ready.dta{rm}
@@ -73,7 +76,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}18 Jul 2024, 00:00:34
+ {txt}closed on:  {res}18 Jul 2024, 23:15:14
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

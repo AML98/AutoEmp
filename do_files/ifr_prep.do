@@ -7,7 +7,7 @@ import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet1") firstrow
 save "raw_data/ifr/IFR_data_new.dta", replace
 
 // 1) Remove unnecessary observations
-keep if Year == 1999 | Year == 2016
+keep if Year == 1999 | Year == 2008
 drop if industrycode == "P"
 drop if country == "France"
 
