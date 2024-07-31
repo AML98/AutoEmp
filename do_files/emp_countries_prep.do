@@ -3,25 +3,24 @@ capture log c
 cd "/Users/aml/AutoEmp"
 log using "logs/emp_countries_prep.txt", replace
 
-import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 1") ///
-	cellrange(A12:Z21) firstrow
+// Data for year 2000 (sheet 9)
+import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 9") ///
+	cellrange(A12:F21) firstrow
 
-keep country AB CF F
-drop if country == "France"
-gen CE = CF - F
-drop CF
+keep country agri_forest_fish industry manufact construct
+gen other_industry = industry - manufact - construct
+drop industry
 
 // Aggregate on country level
-foreach v in AB CE F {
+foreach v in agri_forest_fish manufact construct other_industry {
 	egen emp_base_`v' = total(`v')
 	drop `v'
 }
 
 drop country
 duplicates drop
-order emp_base_F, last
 
-// Add id variable for merge
+// Add id variable for merge later
 gen id = _n
 
 save "clean_data/emp_countries.dta", replace

@@ -3,36 +3,56 @@ capture log c
 cd "/Users/aml/AutoEmp"
 log using "logs/emp_regions_prep.txt", replace
 
-import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 1") ///
-	cellrange(A13:N40) firstrow
+***
+*** 1) Prepare data for year 2016 (sheet 22)
+***
 
-drop GEOLabels
-keep region_code AB CE F yr_1999 yr_2008
-drop if missing(AB) | missing(CE) | missing(F)
+import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 22") ///
+	cellrange(A11:F113) firstrow	
 
-foreach v in AB CE F {
+tempfile emp_regions_2016
+drop if _n == 1 // Drop France as an observation
+destring total_emp_2016, replace	
+save `emp_regions_2016'
+clear
+
+***
+*** 2) Prepare data for year 2000 (sheet 6)
+***
+
+import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 6") ///
+	cellrange(A11:F113) firstrow
+
+drop if missing(total_emp_2000) | missing(agri_forest_fish) | ///
+	missing(industry_ex_construct) | missing(manufact) | missing(construct)
+
+destring total_emp_2000, replace
+gen other_industry = industry_ex_construct - manufact
+drop industry_ex_construct
+drop if _n == 1
 	
-	// i) Employment shares
-	gen emp_share_`v' = `v' / `v'[1]
+foreach v in agri_forest_fish manufact construct other_industry {
+	
+	// 1) Employment shares
+	gen emp_share_`v' = `v' / total_emp_2000
 	drop `v'
 	
-	// ii) Variables for merge
+	// 2) Variables for merge later
 	gen emp_base_`v' = .
-	gen diff_robot_stock_`v' = .
+	gen diff_robots_`v' = .
 }
 
-// Drop entire France
-drop if _n == 1
+***
+*** 3) Merge data for years 2000 and 2016
+***
 
+merge 1:1 region using `emp_regions_2016', keepusing(total_emp_2016)
+drop if _merge == 2
+drop _merge
 
-// Prep for merge
+// Add id variable for merge later
 gen id = 1
-
-// Outcome variable
-gen diff_emp_regions = yr_2008 - yr_1999
-drop yr_1999 yr_2008
 
 save "clean_data/emp_regions.dta", replace
 cd "/Users/aml/AutoEmp/do_files"
-
 log close

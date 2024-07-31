@@ -6,6 +6,8 @@ cd "/Users/aml/AutoEmp/do_files"
 do "ifr_prep.do"
 do "emp_regions_prep.do"
 do "emp_countries_prep.do"
+do "demographics_prep.do"
+do "nuts_dummies.do"
 do "merge.do"
 
 // Estimation

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Jul 2024, 23:15:14
+ {txt}opened on:  {res}31 Jul 2024, 13:34:51
 {txt}
 {com}. 
 . use "clean_data/emp_regions.dta"
@@ -16,52 +16,79 @@
 {col 5}{hline 41}
 {col 5}Not matched{col 30}{res}               0
 
-{txt}{col 5}Matched{col 30}{res}              21
+{txt}{col 5}Matched{col 30}{res}             100
 {txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
-{col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
+{col 9}missing updated{col 30}{res}             100{txt}  (_merge==4)
 {col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
 {col 5}{hline 41}
 
 {com}. drop _merge
 {txt}
 {com}. 
-. merge m:1 id using "clean_data/foreign_diff_robot_stock.dta", update
+. merge m:1 id using "clean_data/diff_robots.dta", update
 {res}{txt}{p 0 7 2}
 (variable
-{bf:diff_robot_stock_CE} was {bf:float}, now {bf:double} to accommodate using data's values)
+{bf:diff_robots_manufact} was {bf:float}, now {bf:double} to accommodate using data's values)
 {p_end}
 
 {col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
 {col 5}Not matched{col 30}{res}               0
 
-{txt}{col 5}Matched{col 30}{res}              21
+{txt}{col 5}Matched{col 30}{res}             100
 {txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
-{col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
+{col 9}missing updated{col 30}{res}             100{txt}  (_merge==4)
 {col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
 {col 5}{hline 41}
 
 {com}. drop _merge id
 {txt}
 {com}. 
+. merge m:1 region using "clean_data/demographics.dta"
+{res}{txt}{p 0 7 2}
+(variable
+{bf:region} was {bf:str23}, now {bf:str31} to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               1{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              99{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 1 | _merge == 2
+{txt}(1 observation deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. // Compute long difference in robot exposure
 . gen robot_exposure = 0
 {txt}
 {com}. 
-. // Create robot exposure
-. foreach industry in AB CE F {c -(}
+. foreach industry in agri_forest_fish manufact construct other_industry {c -(}
 {txt}  2{com}.         gen robot_exposure_`industry' = emp_share_`industry' * ///
->                 (diff_robot_stock_`industry' / emp_base_`industry')
+>                 (diff_robots_`industry' / emp_base_`industry')
 {txt}  3{com}.         replace robot_exposure = robot_exposure + robot_exposure_`industry'
 {txt}  4{com}. {c )-}
-{txt}(21 real changes made)
-(21 real changes made)
-(21 real changes made)
+{txt}(99 real changes made)
+(99 real changes made)
+(99 real changes made)
+(99 real changes made)
 
 {com}. 
-. drop if robot_exposure > 0.5
-{txt}(2 observations deleted)
-
-{com}. save "clean_data/reg_ready.dta", replace
+. // Compute long difference in employment to population
+. gen diff_emp_to_pop = total_emp_2016/population_2016 - total_emp_2000/population_2000
+{txt}
+{com}. keep region diff_emp_to_pop robot_exposure robot_exposure_agri_forest_fish ///
+>         robot_exposure_manufact robot_exposure_construct ///
+>         robot_exposure_other_industry female_share FR*
+{txt}
+{com}. 
+. save "clean_data/reg_ready.dta", replace
 {txt}{p 0 4 2}
 file {bf}
 clean_data/reg_ready.dta{rm}
@@ -71,12 +98,11 @@ saved
 {com}. cd "/Users/aml/AutoEmp/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
-{com}. 
-. log close
+{com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}18 Jul 2024, 23:15:14
+ {txt}closed on:  {res}31 Jul 2024, 13:34:51
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

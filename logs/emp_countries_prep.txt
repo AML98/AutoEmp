@@ -3,26 +3,25 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Jul 2024, 23:15:14
+ {txt}opened on:  {res}31 Jul 2024, 13:34:51
 {txt}
 {com}. 
-. import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 1") ///
->         cellrange(A12:Z21) firstrow
-{res}{text}(26 vars, 9 obs)
+. // Data for year 2000 (sheet 9)
+. import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 9") ///
+>         cellrange(A12:F21) firstrow
+{res}{text}(6 vars, 9 obs)
 
 {com}. 
-. keep country AB CF F
+. keep country agri_forest_fish industry manufact construct
 {txt}
-{com}. drop if country == "France"
-{txt}(1 observation deleted)
+{com}. gen other_industry = industry - manufact - construct
+{txt}(1 missing value generated)
 
-{com}. gen CE = CF - F
-{txt}
-{com}. drop CF
+{com}. drop industry
 {txt}
 {com}. 
 . // Aggregate on country level
-. foreach v in AB CE F {c -(}
+. foreach v in agri_forest_fish manufact construct other_industry {c -(}
 {txt}  2{com}.         egen emp_base_`v' = total(`v')
 {txt}  3{com}.         drop `v'
 {txt}  4{com}. {c )-}
@@ -34,12 +33,10 @@
 
 {p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
 
-(7 observations deleted)
+(8 observations deleted)
 
-{com}. order emp_base_F, last
-{txt}
 {com}. 
-. // Add id variable for merge
+. // Add id variable for merge later
 . gen id = _n
 {txt}
 {com}. 
@@ -58,7 +55,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}18 Jul 2024, 23:15:14
+ {txt}closed on:  {res}31 Jul 2024, 13:34:51
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

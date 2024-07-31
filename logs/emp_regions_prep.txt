@@ -3,54 +3,105 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}18 Jul 2024, 23:15:14
+ {txt}opened on:  {res}31 Jul 2024, 13:34:51
 {txt}
 {com}. 
-. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 1") ///
->         cellrange(A13:N40) firstrow
-{res}{text}(14 vars, 27 obs)
+. ***
+. *** 1) Prepare data for year 2016 (sheet 22)
+. ***
+. 
+. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 22") ///
+>         cellrange(A11:F113) firstrow    
+{res}{text}(6 vars, 102 obs)
 
 {com}. 
-. drop GEOLabels
+. tempfile emp_regions_2016
 {txt}
-{com}. keep region_code AB CE F yr_1999 yr_2008
+{com}. drop if _n == 1 // Drop France as an observation
+{txt}(1 observation deleted)
+
+{com}. destring total_emp_2016, replace        
+{txt}total_emp_2016 already numeric; no {res}replace
 {txt}
-{com}. drop if missing(AB) | missing(CE) | missing(F)
-{txt}(5 observations deleted)
+{com}. save `emp_regions_2016'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 2) Prepare data for year 2000 (sheet 6)
+. ***
+. 
+. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 6") ///
+>         cellrange(A11:F113) firstrow
+{res}{text}(6 vars, 102 obs)
 
 {com}. 
-. foreach v in AB CE F {c -(}
-{txt}  2{com}.         
-.         // i) Employment shares
-.         gen emp_share_`v' = `v' / `v'[1]
-{txt}  3{com}.         drop `v'
-{txt}  4{com}.         
-.         // ii) Variables for merge
-.         gen emp_base_`v' = .
-{txt}  5{com}.         gen diff_robot_stock_`v' = .
-{txt}  6{com}. {c )-}
-{txt}(22 missing values generated)
-(22 missing values generated)
-(22 missing values generated)
-(22 missing values generated)
-(22 missing values generated)
-(22 missing values generated)
-
-{com}. 
-. // Drop entire France
-. drop if _n == 1
+. drop if missing(total_emp_2000) | missing(agri_forest_fish) | ///
+>         missing(industry_ex_construct) | missing(manufact) | missing(construct)
 {txt}(1 observation deleted)
 
 {com}. 
+. destring total_emp_2000, replace
+{txt}total_emp_2000 already numeric; no {res}replace
+{txt}
+{com}. gen other_industry = industry_ex_construct - manufact
+{txt}
+{com}. drop industry_ex_construct
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}.         
+. foreach v in agri_forest_fish manufact construct other_industry {c -(}
+{txt}  2{com}.         
+.         // 1) Employment shares
+.         gen emp_share_`v' = `v' / total_emp_2000
+{txt}  3{com}.         drop `v'
+{txt}  4{com}.         
+.         // 2) Variables for merge later
+.         gen emp_base_`v' = .
+{txt}  5{com}.         gen diff_robots_`v' = .
+{txt}  6{com}. {c )-}
+{txt}(100 missing values generated)
+(100 missing values generated)
+(100 missing values generated)
+(100 missing values generated)
+(100 missing values generated)
+(100 missing values generated)
+(100 missing values generated)
+(100 missing values generated)
+
+{com}. 
+. ***
+. *** 3) Merge data for years 2000 and 2016
+. ***
 . 
-. // Prep for merge
-. gen id = 1
+. merge 1:1 region using `emp_regions_2016', keepusing(total_emp_2016)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               1{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}             100{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(1 observation deleted)
+
+{com}. drop _merge
 {txt}
 {com}. 
-. // Outcome variable
-. gen diff_emp_regions = yr_2008 - yr_1999
-{txt}
-{com}. drop yr_1999 yr_2008
+. // Add id variable for merge later
+. gen id = 1
 {txt}
 {com}. 
 . save "clean_data/emp_regions.dta", replace
@@ -63,12 +114,11 @@ saved
 {com}. cd "/Users/aml/AutoEmp/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
-{com}. 
-. log close
+{com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}18 Jul 2024, 23:15:14
+ {txt}closed on:  {res}31 Jul 2024, 13:34:51
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
