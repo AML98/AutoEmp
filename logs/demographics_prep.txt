@@ -3,11 +3,11 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/demographics_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}31 Jul 2024, 13:34:51
+ {txt}opened on:  {res}31 Jul 2024, 14:09:57
 {txt}
 {com}. 
 . ***
-. *** 1) Prepare data for year 2016 (sheet 27)
+. *** 1) Prepare population data for year 2016 (sheet 27)
 . ***
 . 
 . import excel "raw_data/eurostat/demographics_gender.xlsx", sheet("Sheet 27") ///
@@ -41,7 +41,43 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 2) Prepare data for year 2000 (sheet 11)
+. *** 2) Prepare working-age population data for year 2000 (sheet 11)
+. ***
+. 
+. import excel "raw_data/eurostat/demographics_age.xlsx", sheet("Sheet 11") ///
+>         cellrange(B12:D115) firstrow    
+{res}{text}(3 vars, 103 obs)
+
+{com}. 
+. tempfile working_age_pop
+{txt}
+{com}.         
+. drop if missing(working_age_pop)
+{txt}(3 observations deleted)
+
+{com}. replace working_age_pop = working_age_pop / 1000
+{txt}variable {bf}{res}working_age_pop{sf}{txt} was {bf}{res}long{sf}{txt} now {bf}{res}double{sf}
+{txt}(100 real changes made)
+
+{com}. drop population
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. save `working_age_pop'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 3) Prepare population data for year 2000 (sheet 11)
 . ***
 . 
 . import excel "raw_data/eurostat/demographics_gender.xlsx", sheet("Sheet 11") ///
@@ -63,7 +99,7 @@ as .dta format
 
 {com}. 
 . ***
-. *** 3) Merge data for years 2000 and 2016
+. *** 4) Merge data into one data set
 . ***
 . 
 . merge 1:1 region using `population_2016', keepusing(population_2016)
@@ -83,6 +119,20 @@ as .dta format
 {com}. drop _merge
 {txt}
 {com}. 
+. merge 1:1 region using `working_age_pop', keepusing(working_age_pop)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              99{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(0 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
 . save "clean_data/demographics.dta", replace
 {txt}{p 0 4 2}
 file {bf}
@@ -97,7 +147,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/demographics_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}31 Jul 2024, 13:34:51
+ {txt}closed on:  {res}31 Jul 2024, 14:09:57
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

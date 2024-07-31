@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}31 Jul 2024, 13:34:51
+ {txt}opened on:  {res}31 Jul 2024, 14:09:57
 {txt}
 {com}. 
 . use "clean_data/emp_regions.dta"
@@ -85,7 +85,7 @@
 {txt}
 {com}. keep region diff_emp_to_pop robot_exposure robot_exposure_agri_forest_fish ///
 >         robot_exposure_manufact robot_exposure_construct ///
->         robot_exposure_other_industry female_share FR*
+>         robot_exposure_other_industry female_share working_age_pop FR*
 {txt}
 {com}. 
 . save "clean_data/reg_ready.dta", replace
@@ -102,7 +102,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}31 Jul 2024, 13:34:51
+ {txt}closed on:  {res}31 Jul 2024, 14:09:57
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
