@@ -8,7 +8,7 @@ log using "logs/emp_regions_prep.txt", replace
 ***
 
 import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 22") ///
-	cellrange(A11:F113) firstrow	
+	cellrange(A12:G114) firstrow	
 
 tempfile emp_regions_2016
 drop if _n == 1 // Drop France as an observation
@@ -21,7 +21,7 @@ clear
 ***
 
 import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 6") ///
-	cellrange(A11:F113) firstrow
+	cellrange(A12:G114) firstrow
 
 drop if missing(total_emp_2000) | missing(agri_forest_fish) | ///
 	missing(industry_ex_construct) | missing(manufact) | missing(construct)
@@ -46,7 +46,7 @@ foreach v in agri_forest_fish manufact construct other_industry {
 *** 3) Merge data for years 2000 and 2016
 ***
 
-merge 1:1 region using `emp_regions_2016', keepusing(total_emp_2016)
+merge 1:1 region_code using `emp_regions_2016', keepusing(total_emp_2016)
 drop if _merge == 2
 drop _merge
 

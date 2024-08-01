@@ -3,61 +3,59 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}31 Jul 2024, 14:09:57
+ {txt}opened on:  {res} 1 Aug 2024, 12:17:57
 {txt}
 {com}. 
 . use "clean_data/reg_ready.dta"
 {txt}
 {com}. 
 . // Reduced form regressions
-. regress diff_emp_to_pop robot_exposure female_share FR* [w=working_age_pop], noconstant 
+. regress diff_emp_to_pop robot_exposure female_share bachelor_share ///
+>         high_school_share population_2000 FR* [w=working_age_pop], noconstant 
 {txt}(analytic weights assumed)
-(sum of wgt is 39,126.38)
-{p 0 6 2}note: {bf:FRY1} omitted because of collinearity.{p_end}
-{p 0 6 2}note: {bf:FRY5} omitted because of collinearity.{p_end}
+(sum of wgt is 38,313.848)
 
-      Source {c |}       SS           df       MS      Number of obs   ={res}        99
-{txt}{hline 13}{c +}{hline 34}   F(27, 72)       = {res}     5.02
-{txt}       Model {c |} {res} .029388411        27   .00108846   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} .015604852        72  .000216734   {txt}R-squared       ={res}    0.6532
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5231
-{txt}       Total {c |} {res} .044993263        99  .000454477   {txt}Root MSE        =   {res} .01472
+      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(27, 69)       = {res}     5.90
+{txt}       Model {c |} {res} .027949135        27  .001035153   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .012114048        69  .000175566   {txt}R-squared       ={res}    0.6976
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5793
+{txt}       Total {c |} {res} .040063183        96  .000417325   {txt}Root MSE        =   {res} .01325
 
-{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}diff_emp_to_~p{col 16}{c |} Coefficient{col 28}  Std. err.{col 40}      t{col 48}   P>|t|{col 56}     [95% con{col 69}f. interval]
-{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-robot_exposure {c |}{col 16}{res}{space 2}-.0418004{col 28}{space 2} .0134964{col 39}{space 1}   -3.10{col 48}{space 3}0.003{col 56}{space 4} -.068705{col 69}{space 3}-.0148958
-{txt}{space 2}female_share {c |}{col 16}{res}{space 2} .1690261{col 28}{space 2}  .371441{col 39}{space 1}    0.46{col 48}{space 3}0.650{col 56}{space 4}-.5714279{col 69}{space 3} .9094801
-{txt}{space 10}FR10 {c |}{col 16}{res}{space 2}-.0763304{col 28}{space 2} .1957266{col 39}{space 1}   -0.39{col 48}{space 3}0.698{col 56}{space 4}-.4665041{col 69}{space 3} .3138434
-{txt}{space 10}FRB0 {c |}{col 16}{res}{space 2}-.0685194{col 28}{space 2}  .198103{col 39}{space 1}   -0.35{col 48}{space 3}0.730{col 56}{space 4}-.4634306{col 69}{space 3} .3263918
-{txt}{space 10}FRC1 {c |}{col 16}{res}{space 2}-.0640467{col 28}{space 2}  .198773{col 39}{space 1}   -0.32{col 48}{space 3}0.748{col 56}{space 4}-.4602934{col 69}{space 3} .3322001
-{txt}{space 10}FRC2 {c |}{col 16}{res}{space 2}-.0687737{col 28}{space 2} .1993722{col 39}{space 1}   -0.34{col 48}{space 3}0.731{col 56}{space 4}-.4662148{col 69}{space 3} .3286675
-{txt}{space 10}FRD1 {c |}{col 16}{res}{space 2}-.0661627{col 28}{space 2} .1983039{col 39}{space 1}   -0.33{col 48}{space 3}0.740{col 56}{space 4}-.4614744{col 69}{space 3} .3291489
-{txt}{space 10}FRD2 {c |}{col 16}{res}{space 2}-.0671508{col 28}{space 2} .1993555{col 39}{space 1}   -0.34{col 48}{space 3}0.737{col 56}{space 4}-.4645587{col 69}{space 3} .3302571
-{txt}{space 10}FRE1 {c |}{col 16}{res}{space 2} -.045054{col 28}{space 2} .1990531{col 39}{space 1}   -0.23{col 48}{space 3}0.822{col 56}{space 4}-.4418591{col 69}{space 3} .3517512
-{txt}{space 10}FRE2 {c |}{col 16}{res}{space 2}-.0681898{col 28}{space 2} .1977708{col 39}{space 1}   -0.34{col 48}{space 3}0.731{col 56}{space 4}-.4624388{col 69}{space 3} .3260591
-{txt}{space 10}FRF1 {c |}{col 16}{res}{space 2}-.0664309{col 28}{space 2} .1988728{col 39}{space 1}   -0.33{col 48}{space 3}0.739{col 56}{space 4}-.4628766{col 69}{space 3} .3300148
-{txt}{space 10}FRF2 {c |}{col 16}{res}{space 2}-.0658511{col 28}{space 2} .1981211{col 39}{space 1}   -0.33{col 48}{space 3}0.741{col 56}{space 4}-.4607983{col 69}{space 3}  .329096
-{txt}{space 10}FRF3 {c |}{col 16}{res}{space 2}-.0752045{col 28}{space 2} .1973611{col 39}{space 1}   -0.38{col 48}{space 3}0.704{col 56}{space 4}-.4686366{col 69}{space 3} .3182276
-{txt}{space 10}FRG0 {c |}{col 16}{res}{space 2}-.0574405{col 28}{space 2} .1984157{col 39}{space 1}   -0.29{col 48}{space 3}0.773{col 56}{space 4}-.4529749{col 69}{space 3}  .338094
-{txt}{space 10}FRH0 {c |}{col 16}{res}{space 2}-.0654101{col 28}{space 2} .1974559{col 39}{space 1}   -0.33{col 48}{space 3}0.741{col 56}{space 4}-.4590313{col 69}{space 3}  .328211
-{txt}{space 10}FRI1 {c |}{col 16}{res}{space 2} -.072998{col 28}{space 2} .1976647{col 39}{space 1}   -0.37{col 48}{space 3}0.713{col 56}{space 4}-.4670354{col 69}{space 3} .3210394
-{txt}{space 10}FRI2 {c |}{col 16}{res}{space 2}-.0810041{col 28}{space 2} .1987773{col 39}{space 1}   -0.41{col 48}{space 3}0.685{col 56}{space 4}-.4772594{col 69}{space 3} .3152513
-{txt}{space 10}FRI3 {c |}{col 16}{res}{space 2} -.073774{col 28}{space 2} .1970428{col 39}{space 1}   -0.37{col 48}{space 3}0.709{col 56}{space 4}-.4665716{col 69}{space 3} .3190237
-{txt}{space 10}FRJ1 {c |}{col 16}{res}{space 2}-.0779364{col 28}{space 2} .1961665{col 39}{space 1}   -0.40{col 48}{space 3}0.692{col 56}{space 4} -.468987{col 69}{space 3} .3131143
-{txt}{space 10}FRJ2 {c |}{col 16}{res}{space 2}-.0625042{col 28}{space 2} .1960953{col 39}{space 1}   -0.32{col 48}{space 3}0.751{col 56}{space 4} -.453413{col 69}{space 3} .3284045
-{txt}{space 10}FRK1 {c |}{col 16}{res}{space 2}-.0630095{col 28}{space 2} .1988504{col 39}{space 1}   -0.32{col 48}{space 3}0.752{col 56}{space 4}-.4594105{col 69}{space 3} .3333915
-{txt}{space 10}FRK2 {c |}{col 16}{res}{space 2}-.0632391{col 28}{space 2} .1981791{col 39}{space 1}   -0.32{col 48}{space 3}0.751{col 56}{space 4}-.4583019{col 69}{space 3} .3318238
-{txt}{space 10}FRL0 {c |}{col 16}{res}{space 2}-.0527458{col 28}{space 2} .1969322{col 39}{space 1}   -0.27{col 48}{space 3}0.790{col 56}{space 4} -.445323{col 69}{space 3} .3398314
-{txt}{space 10}FRM0 {c |}{col 16}{res}{space 2}-.0575079{col 28}{space 2} .1934383{col 39}{space 1}   -0.30{col 48}{space 3}0.767{col 56}{space 4}-.4431201{col 69}{space 3} .3281044
-{txt}{space 10}FRY1 {c |}{col 16}{res}{space 2}        0{col 28}{txt}  (omitted)
-{space 10}FRY2 {c |}{col 16}{res}{space 2}-.0532942{col 28}{space 2} .1986983{col 39}{space 1}   -0.27{col 48}{space 3}0.789{col 56}{space 4}-.4493919{col 69}{space 3} .3428036
-{txt}{space 10}FRY3 {c |}{col 16}{res}{space 2}-.1347992{col 28}{space 2} .1888089{col 39}{space 1}   -0.71{col 48}{space 3}0.478{col 56}{space 4}-.5111829{col 69}{space 3} .2415846
-{txt}{space 10}FRY4 {c |}{col 16}{res}{space 2} -.021133{col 28}{space 2} .1921183{col 39}{space 1}   -0.11{col 48}{space 3}0.913{col 56}{space 4}-.4041138{col 69}{space 3} .3618477
-{txt}{space 10}FRY5 {c |}{col 16}{res}{space 2}        0{col 28}{txt}  (omitted)
-{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  diff_emp_to_pop{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.0342801{col 31}{space 2} .0132407{col 42}{space 1}   -2.59{col 51}{space 3}0.012{col 59}{space 4}-.0606945{col 72}{space 3}-.0078657
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .6997514{col 31}{space 2} .4487799{col 42}{space 1}    1.56{col 51}{space 3}0.124{col 59}{space 4}  -.19554{col 72}{space 3} 1.595043
+{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2}-.1717162{col 31}{space 2} .0549164{col 42}{space 1}   -3.13{col 51}{space 3}0.003{col 59}{space 4}-.2812713{col 72}{space 3} -.062161
+{txt}high_school_share {c |}{col 19}{res}{space 2} .0312937{col 31}{space 2} .1162683{col 42}{space 1}    0.27{col 51}{space 3}0.789{col 59}{space 4}-.2006551{col 72}{space 3} .2632426
+{txt}{space 2}population_2000 {c |}{col 19}{res}{space 2}  .000021{col 31}{space 2} 5.23e-06{col 42}{space 1}    4.01{col 51}{space 3}0.000{col 59}{space 4} .0000105{col 72}{space 3} .0000314
+{txt}{space 13}FR10 {c |}{col 19}{res}{space 2}-.3555889{col 31}{space 2} .2427356{col 42}{space 1}   -1.46{col 51}{space 3}0.147{col 59}{space 4}-.8398331{col 72}{space 3} .1286553
+{txt}{space 13}FRB0 {c |}{col 19}{res}{space 2}-.3470077{col 31}{space 2} .2470413{col 42}{space 1}   -1.40{col 51}{space 3}0.165{col 59}{space 4}-.8398417{col 72}{space 3} .1458263
+{txt}{space 13}FRC1 {c |}{col 19}{res}{space 2}-.3442196{col 31}{space 2} .2481823{col 42}{space 1}   -1.39{col 51}{space 3}0.170{col 59}{space 4}-.8393297{col 72}{space 3} .1508905
+{txt}{space 13}FRC2 {c |}{col 19}{res}{space 2}-.3443446{col 31}{space 2} .2473182{col 42}{space 1}   -1.39{col 51}{space 3}0.168{col 59}{space 4}-.8377308{col 72}{space 3} .1490416
+{txt}{space 13}FRD1 {c |}{col 19}{res}{space 2}-.3479817{col 31}{space 2} .2468981{col 42}{space 1}   -1.41{col 51}{space 3}0.163{col 59}{space 4}-.8405299{col 72}{space 3} .1445666
+{txt}{space 13}FRD2 {c |}{col 19}{res}{space 2}-.3600575{col 31}{space 2} .2480313{col 42}{space 1}   -1.45{col 51}{space 3}0.151{col 59}{space 4}-.8548664{col 72}{space 3} .1347513
+{txt}{space 13}FRE1 {c |}{col 19}{res}{space 2}-.3610089{col 31}{space 2} .2477207{col 42}{space 1}   -1.46{col 51}{space 3}0.150{col 59}{space 4}-.8551981{col 72}{space 3} .1331803
+{txt}{space 13}FRE2 {c |}{col 19}{res}{space 2}-.3507359{col 31}{space 2} .2451705{col 42}{space 1}   -1.43{col 51}{space 3}0.157{col 59}{space 4}-.8398377{col 72}{space 3} .1383659
+{txt}{space 13}FRF1 {c |}{col 19}{res}{space 2} -.351812{col 31}{space 2} .2494809{col 42}{space 1}   -1.41{col 51}{space 3}0.163{col 59}{space 4}-.8495128{col 72}{space 3} .1458888
+{txt}{space 13}FRF2 {c |}{col 19}{res}{space 2}-.3444085{col 31}{space 2} .2465261{col 42}{space 1}   -1.40{col 51}{space 3}0.167{col 59}{space 4}-.8362146{col 72}{space 3} .1473976
+{txt}{space 13}FRF3 {c |}{col 19}{res}{space 2}-.3597506{col 31}{space 2} .2470852{col 42}{space 1}   -1.46{col 51}{space 3}0.150{col 59}{space 4}-.8526722{col 72}{space 3} .1331709
+{txt}{space 13}FRG0 {c |}{col 19}{res}{space 2}-.3431483{col 31}{space 2} .2481205{col 42}{space 1}   -1.38{col 51}{space 3}0.171{col 59}{space 4}-.8381352{col 72}{space 3} .1518385
+{txt}{space 13}FRH0 {c |}{col 19}{res}{space 2}-.3480343{col 31}{space 2} .2474252{col 42}{space 1}   -1.41{col 51}{space 3}0.164{col 59}{space 4}-.8416342{col 72}{space 3} .1455656
+{txt}{space 13}FRI1 {c |}{col 19}{res}{space 2}-.3575725{col 31}{space 2} .2482861{col 42}{space 1}   -1.44{col 51}{space 3}0.154{col 59}{space 4}-.8528897{col 72}{space 3} .1377447
+{txt}{space 13}FRI2 {c |}{col 19}{res}{space 2} -.357366{col 31}{space 2}  .248715{col 42}{space 1}   -1.44{col 51}{space 3}0.155{col 59}{space 4}-.8535388{col 72}{space 3} .1388069
+{txt}{space 13}FRI3 {c |}{col 19}{res}{space 2}-.3521631{col 31}{space 2} .2467422{col 42}{space 1}   -1.43{col 51}{space 3}0.158{col 59}{space 4}-.8444004{col 72}{space 3} .1400741
+{txt}{space 13}FRJ1 {c |}{col 19}{res}{space 2}-.3554904{col 31}{space 2} .2454684{col 42}{space 1}   -1.45{col 51}{space 3}0.152{col 59}{space 4}-.8451864{col 72}{space 3} .1342055
+{txt}{space 13}FRJ2 {c |}{col 19}{res}{space 2}-.3355362{col 31}{space 2} .2451391{col 42}{space 1}   -1.37{col 51}{space 3}0.176{col 59}{space 4}-.8245753{col 72}{space 3} .1535028
+{txt}{space 13}FRK1 {c |}{col 19}{res}{space 2}-.3415413{col 31}{space 2} .2484889{col 42}{space 1}   -1.37{col 51}{space 3}0.174{col 59}{space 4}-.8372632{col 72}{space 3} .1541805
+{txt}{space 13}FRK2 {c |}{col 19}{res}{space 2}-.3460219{col 31}{space 2} .2466732{col 42}{space 1}   -1.40{col 51}{space 3}0.165{col 59}{space 4}-.8381214{col 72}{space 3} .1460777
+{txt}{space 13}FRL0 {c |}{col 19}{res}{space 2}-.3425616{col 31}{space 2} .2465363{col 42}{space 1}   -1.39{col 51}{space 3}0.169{col 59}{space 4}-.8343881{col 72}{space 3} .1492649
+{txt}{space 13}FRM0 {c |}{col 19}{res}{space 2}-.3229134{col 31}{space 2} .2414236{col 42}{space 1}   -1.34{col 51}{space 3}0.185{col 59}{space 4}-.8045402{col 72}{space 3} .1587134
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
-{com}. twoway (scatter diff_emp_to_pop robot_exposure) (lfit diff_emp_to_pop robot_exposure)
+{com}. twoway (scatter diff_emp_to_pop robot_exposure) ///
+>         (lfit diff_emp_to_pop robot_exposure)
 {res}{txt}
 {com}.         
 . /*
@@ -78,7 +76,7 @@ robot_exposure {c |}{col 16}{res}{space 2}-.0418004{col 28}{space 2} .0134964{co
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}31 Jul 2024, 14:09:57
+ {txt}closed on:  {res} 1 Aug 2024, 12:17:57
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

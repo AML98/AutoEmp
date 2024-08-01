@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}31 Jul 2024, 14:09:57
+ {txt}opened on:  {res} 1 Aug 2024, 12:17:56
 {txt}
 {com}. 
 . // Data for year 2000 (sheet 9)
@@ -55,7 +55,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}31 Jul 2024, 14:09:57
+ {txt}closed on:  {res} 1 Aug 2024, 12:17:56
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

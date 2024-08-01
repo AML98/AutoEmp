@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/demographics_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}31 Jul 2024, 14:09:57
+ {txt}opened on:  {res} 1 Aug 2024, 12:17:56
 {txt}
 {com}. 
 . ***
@@ -11,15 +11,15 @@
 . ***
 . 
 . import excel "raw_data/eurostat/demographics_gender.xlsx", sheet("Sheet 27") ///
->         cellrange(B12:E115) firstrow    
-{res}{text}(4 vars, 103 obs)
+>         cellrange(A12:E114) firstrow    
+{res}{text}(5 vars, 102 obs)
 
 {com}. 
 . tempfile population_2016
 {txt}
 {com}.         
 . drop if missing(population) | missing(males) | missing(females)
-{txt}(1 observation deleted)
+{txt}(0 observations deleted)
 
 {com}. gen population_2016 = population / 1000
 {txt}
@@ -45,15 +45,15 @@ as .dta format
 . ***
 . 
 . import excel "raw_data/eurostat/demographics_age.xlsx", sheet("Sheet 11") ///
->         cellrange(B12:D115) firstrow    
-{res}{text}(3 vars, 103 obs)
+>         cellrange(A12:D114) firstrow    
+{res}{text}(4 vars, 102 obs)
 
 {com}. 
 . tempfile working_age_pop
 {txt}
 {com}.         
 . drop if missing(working_age_pop)
-{txt}(3 observations deleted)
+{txt}(2 observations deleted)
 
 {com}. replace working_age_pop = working_age_pop / 1000
 {txt}variable {bf}{res}working_age_pop{sf}{txt} was {bf}{res}long{sf}{txt} now {bf}{res}double{sf}
@@ -77,16 +77,58 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 3) Prepare population data for year 2000 (sheet 11)
+. *** 3) Prepare education data for year 2001 (sheet 1)
+. ***
+. 
+. import excel "raw_data/eurostat/demographics_educ.xlsx", sheet("Sheet 1") ///
+>         cellrange(A14:E111) firstrow    
+{res}{text}(5 vars, 97 obs)
+
+{com}. 
+. tempfile education_pop
+{txt}
+{com}.         
+. drop if missing(population) | missing(high_school) | missing(bachelor)
+{txt}(0 observations deleted)
+
+{com}. gen high_school_share = high_school / population
+{txt}
+{com}. gen bachelor_share = bachelor / population 
+{txt}
+{com}. drop population high_school bachelor
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. save `education_pop'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 4) Prepare population data for year 2000 (sheet 11)
 . ***
 . 
 . import excel "raw_data/eurostat/demographics_gender.xlsx", sheet("Sheet 11") ///
->         cellrange(B12:E115) firstrow    
-{res}{text}(4 vars, 103 obs)
+>         cellrange(A12:E114) firstrow    
+{res}{text}(5 vars, 102 obs)
+
+{com}. 
+. // Remove overseas regions
+. drop if region == "Guadeloupe" | region == "Martinique" | region == "Guyane" ///
+>         | region == "La Réunion" | region == "Mayotte"
+{txt}(5 observations deleted)
 
 {com}.         
 . drop if missing(population) | missing(males) | missing(females)
-{txt}(3 observations deleted)
+{txt}(0 observations deleted)
 
 {com}. gen female_share = females / population
 {txt}
@@ -99,32 +141,49 @@ as .dta format
 
 {com}. 
 . ***
-. *** 4) Merge data into one data set
+. *** 5) Merge data into one data set
 . ***
 . 
-. merge 1:1 region using `population_2016', keepusing(population_2016)
+. merge 1:1 region_code using `population_2016', keepusing(population_2016)
 {res}
 {txt}{col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
-{col 5}Not matched{col 30}{res}               2
+{col 5}Not matched{col 30}{res}               5
 {txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
-{col 9}from using{col 30}{res}               2{txt}  (_merge==2)
+{col 9}from using{col 30}{res}               5{txt}  (_merge==2)
 
-{col 5}Matched{col 30}{res}              99{txt}  (_merge==3)
+{col 5}Matched{col 30}{res}              96{txt}  (_merge==3)
 {col 5}{hline 41}
 
 {com}. drop if _merge == 2
-{txt}(2 observations deleted)
+{txt}(5 observations deleted)
 
 {com}. drop _merge
 {txt}
 {com}. 
-. merge 1:1 region using `working_age_pop', keepusing(working_age_pop)
+. merge 1:1 region_code using `working_age_pop', keepusing(working_age_pop)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               3
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               3{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              96{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(3 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 region_code using `education_pop', keepusing(high_school_share bachelor_share)
 {res}
 {txt}{col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
 {col 5}Not matched{col 30}{res}               0
-{txt}{col 5}Matched{col 30}{res}              99{txt}  (_merge==3)
+{txt}{col 5}Matched{col 30}{res}              96{txt}  (_merge==3)
 {col 5}{hline 41}
 
 {com}. drop if _merge == 2
@@ -147,7 +206,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/demographics_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res}31 Jul 2024, 14:09:57
+ {txt}closed on:  {res} 1 Aug 2024, 12:17:57
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

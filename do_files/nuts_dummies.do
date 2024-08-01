@@ -96,24 +96,12 @@ gen FRL0 = region == "Alpes-de-Haute-Provence" | region == "Hautes-Alpes" | ///
 
 gen FRM0 = region == "Corse-du-Sud" | region == "Haute-Corse"
 
-gen FRY1 = region == "Guadeloupe"
-
-gen FRY2 = region == "Martinique"
-
-gen FRY3 = region == "Guyane"
-
-gen FRY4 = region == "La Réunion"
-
-gen FRY5 = region == "Mayotte"
-
-// Stata cannot find these regions, so set the dummies manually
-replace FRC1 = 1 if _n == 22
-replace FRH0 = 1 if _n == 23
+// Stata cannot find this region, so set the dummy manually
+replace FRC1 = 1 if _n == 15
 
 // Check that each region is assigned to exactly one NUTS 2 area
 egen sum_dummies = rowtotal(FRL0 FR10 FRJ2 FRI1 FRB0 FRK2 FRG0 FRH0 FRI3 ///
-	FRJ1 FRC2 FRF3 FRK1 FRC1 FRF2 FRI2 FRM0 FRD1 FRD2 FRF1 FRE1 FRE2 FRY1 ///
-	FRY2 FRY3 FRY4 FRY5)
+	FRJ1 FRC2 FRF3 FRK1 FRC1 FRF2 FRI2 FRM0 FRD1 FRD2 FRF1 FRE1 FRE2)
 assert sum_dummies == 1
 
 save "clean_data/demographics.dta", replace
