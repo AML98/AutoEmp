@@ -3,24 +3,31 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 2 Aug 2024, 14:05:19
+ {txt}opened on:  {res} 2 Aug 2024, 17:38:53
 {txt}
 {com}. 
-. // Data for year 2000 (sheet 9)
+. ***
+. *** 1) National employment for instrument countries in year 2000 (Sheet 9)
+. ***
+. 
 . import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 9") ///
 >         cellrange(A12:F21) firstrow
 {res}{text}(6 vars, 9 obs)
 
 {com}. 
-. keep country agri_forest_fish industry manufact construct
+. tempfile emp_inst_countries
+{txt}
+{com}. 
+. drop if country == "France"
+{txt}(1 observation deleted)
+
+{com}. keep country agri_forest_fish industry manufact construct
 {txt}
 {com}. gen other_industry = industry - manufact - construct
-{txt}(1 missing value generated)
-
+{txt}
 {com}. drop industry
 {txt}
 {com}. 
-. // Aggregate on country level
 . foreach v in agri_forest_fish manufact construct other_industry {c -(}
 {txt}  2{com}.         egen emp_base_`v' = total(`v')
 {txt}  3{com}.         drop `v'
@@ -33,11 +40,68 @@
 
 {p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
 
-(8 observations deleted)
+(7 observations deleted)
 
 {com}. 
-. // Add id variable for merge later
+. // Add id variable for merge
 . gen id = _n
+{txt}
+{com}. 
+. save `emp_inst_countries'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 2) National employment for France in year 2000 (Sheet 9)
+. ***
+. 
+. import excel "raw_data/eurostat/emp_countries.xlsx", sheet("Sheet 9") ///
+>         cellrange(A12:F21) firstrow
+{res}{text}(6 vars, 9 obs)
+
+{com}.         
+. keep if country == "France"
+{txt}(8 observations deleted)
+
+{com}. keep country agri_forest_fish industry manufact construct
+{txt}
+{com}. gen other_industry = industry - manufact - construct
+{txt}
+{com}. drop industry
+{txt}
+{com}. 
+. foreach v in agri_forest_fish manufact construct other_industry {c -(}
+{txt}  2{com}.         rename `v' fr_emp_base_`v'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. drop country
+{txt}
+{com}. 
+. // Add id variable for merge
+. gen id = _n
+{txt}
+{com}. 
+. ***
+. *** 3) Merge into one data set
+. ***
+. 
+. merge 1:1 id using `emp_inst_countries'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}               1{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
 {txt}
 {com}. 
 . save "clean_data/emp_countries.dta", replace
@@ -55,7 +119,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 2 Aug 2024, 14:05:19
+ {txt}closed on:  {res} 2 Aug 2024, 17:38:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

@@ -13,6 +13,11 @@ regress diff_emp_to_pop robot_exposure import_exposure female_share bachelor_sha
 	high_school_share population_2000 FR* [w=working_age_pop], noconstant 	
 	
 /*
+
+regress robot_exposure frobot_exposure, noconstant
+twoway (scatter robot_exposure frobot_exposure) ///
+	(lfit robot_exposure frobot_exposure)
+	
 regress diff_emp_regions robot_exposure_F
 twoway (scatter diff_emp_regions robot_exposure_F) ///
 	(lfit diff_emp_regions robot_exposure_F)

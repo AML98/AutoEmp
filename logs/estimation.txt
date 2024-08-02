@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 2 Aug 2024, 14:05:19
+ {txt}opened on:  {res} 2 Aug 2024, 17:38:53
 {txt}
 {com}. 
 . use "clean_data/reg_ready.dta"
@@ -102,6 +102,11 @@
 {res}{txt}
 {com}.         
 . /*
+> 
+> regress robot_exposure frobot_exposure, noconstant
+> twoway (scatter robot_exposure frobot_exposure) ///
+>         (lfit robot_exposure frobot_exposure)
+>         
 > regress diff_emp_regions robot_exposure_F
 > twoway (scatter diff_emp_regions robot_exposure_F) ///
 >         (lfit diff_emp_regions robot_exposure_F)
@@ -119,7 +124,7 @@
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 2 Aug 2024, 14:05:19
+ {txt}closed on:  {res} 2 Aug 2024, 17:38:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

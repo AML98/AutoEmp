@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/imports_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 2 Aug 2024, 14:05:19
+ {txt}opened on:  {res} 2 Aug 2024, 17:38:53
 {txt}
 {com}. 
 . import excel "raw_data/eurostat/imports.xlsx", sheet("Sheet 1") ///
@@ -56,7 +56,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/imports_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 2 Aug 2024, 14:05:19
+ {txt}closed on:  {res} 2 Aug 2024, 17:38:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
