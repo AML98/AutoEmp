@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts_dummies.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 1 Aug 2024, 12:17:57
+ {txt}opened on:  {res} 2 Aug 2024, 14:05:19
 {txt}
 {com}. 
 . use "clean_data/demographics.dta"
@@ -148,7 +148,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts_dummies.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 1 Aug 2024, 12:17:57
+ {txt}closed on:  {res} 2 Aug 2024, 14:05:19
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

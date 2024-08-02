@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 1 Aug 2024, 12:17:55
+ {txt}opened on:  {res} 2 Aug 2024, 14:05:18
 {txt}
 {com}. 
 . import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet1") firstrow
@@ -98,7 +98,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 1 Aug 2024, 12:17:56
+ {txt}closed on:  {res} 2 Aug 2024, 14:05:19
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

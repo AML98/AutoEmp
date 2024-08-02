@@ -1,0 +1,62 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/imports_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 2 Aug 2024, 14:05:19
+{txt}
+{com}. 
+. import excel "raw_data/eurostat/imports.xlsx", sheet("Sheet 1") ///
+>         cellrange(A14:F25) firstrow     
+{res}{text}(6 vars, 11 obs)
+
+{com}. 
+. gen imp_other_industry = imp_industry_ex_construct - imp_manufact
+{txt}(3 missing values generated)
+
+{com}. keep if yr == 2012 | yr == 2016
+{txt}(9 observations deleted)
+
+{com}. drop imp_industry_ex_construct
+{txt}
+{com}. drop imp_total
+{txt}
+{com}. 
+. foreach v in imp_agri_forest_fish imp_manufact imp_construct imp_other_industry{c -(}
+{txt}  2{com}.         gen diff_`v' = `v' - `v'[_n-1]
+{txt}  3{com}.         format diff_`v' %14.2f
+{txt}  4{com}.         drop `v'
+{txt}  5{com}. {c )-}
+{txt}(1 missing value generated)
+(1 missing value generated)
+(1 missing value generated)
+(1 missing value generated)
+
+{com}. 
+. gen id = 1
+{txt}
+{com}. 
+. drop if yr == 2012
+{txt}(1 observation deleted)
+
+{com}. drop yr
+{txt}
+{com}. 
+. save "clean_data/diff_imports.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/diff_imports.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files"
+{res}/Users/aml/AutoEmp/do_files
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/imports_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 2 Aug 2024, 14:05:19
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

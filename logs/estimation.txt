@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 1 Aug 2024, 12:17:57
+ {txt}opened on:  {res} 2 Aug 2024, 14:05:19
 {txt}
 {com}. 
 . use "clean_data/reg_ready.dta"
@@ -54,8 +54,51 @@
 {txt}{space 13}FRM0 {c |}{col 19}{res}{space 2}-.3229134{col 31}{space 2} .2414236{col 42}{space 1}   -1.34{col 51}{space 3}0.185{col 59}{space 4}-.8045402{col 72}{space 3} .1587134
 {txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
-{com}. twoway (scatter diff_emp_to_pop robot_exposure) ///
->         (lfit diff_emp_to_pop robot_exposure)
+{com}. 
+. regress diff_emp_to_pop robot_exposure import_exposure female_share bachelor_share ///
+>         high_school_share population_2000 FR* [w=working_age_pop], noconstant   
+{txt}(analytic weights assumed)
+(sum of wgt is 38,313.848)
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(28, 68)       = {res}     6.40
+{txt}       Model {c |} {res} .029038038        28  .001037073   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .011025145        68  .000162134   {txt}R-squared       ={res}    0.7248
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6115
+{txt}       Total {c |} {res} .040063183        96  .000417325   {txt}Root MSE        =   {res} .01273
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  diff_emp_to_pop{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.0892091{col 31}{space 2} .0247215{col 42}{space 1}   -3.61{col 51}{space 3}0.001{col 59}{space 4}-.1385401{col 72}{space 3} -.039878
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-.0000378{col 31}{space 2} .0000146{col 42}{space 1}   -2.59{col 51}{space 3}0.012{col 59}{space 4}-.0000668{col 72}{space 3}-8.68e-06
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .8807751{col 31}{space 2}  .436892{col 42}{space 1}    2.02{col 51}{space 3}0.048{col 59}{space 4} .0089707{col 72}{space 3}  1.75258
+{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2}-.1764582{col 31}{space 2} .0528056{col 42}{space 1}   -3.34{col 51}{space 3}0.001{col 59}{space 4}-.2818302{col 72}{space 3}-.0710862
+{txt}high_school_share {c |}{col 19}{res}{space 2} .0659106{col 31}{space 2} .1125279{col 42}{space 1}    0.59{col 51}{space 3}0.560{col 59}{space 4}-.1586354{col 72}{space 3} .2904566
+{txt}{space 2}population_2000 {c |}{col 19}{res}{space 2} .0000215{col 31}{space 2} 5.03e-06{col 42}{space 1}    4.26{col 51}{space 3}0.000{col 59}{space 4} .0000114{col 72}{space 3} .0000315
+{txt}{space 13}FR10 {c |}{col 19}{res}{space 2} -.467504{col 31}{space 2} .2372295{col 42}{space 1}   -1.97{col 51}{space 3}0.053{col 59}{space 4}-.9408881{col 72}{space 3} .0058802
+{txt}{space 13}FRB0 {c |}{col 19}{res}{space 2}-.4630692{col 31}{space 2} .2415908{col 42}{space 1}   -1.92{col 51}{space 3}0.059{col 59}{space 4}-.9451562{col 72}{space 3} .0190178
+{txt}{space 13}FRC1 {c |}{col 19}{res}{space 2}-.4574522{col 31}{space 2} .2424693{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9412921{col 72}{space 3} .0263877
+{txt}{space 13}FRC2 {c |}{col 19}{res}{space 2}-.4570086{col 31}{space 2} .2416129{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9391397{col 72}{space 3} .0251225
+{txt}{space 13}FRD1 {c |}{col 19}{res}{space 2}-.4644401{col 31}{space 2}  .241484{col 42}{space 1}   -1.92{col 51}{space 3}0.059{col 59}{space 4}-.9463139{col 72}{space 3} .0174338
+{txt}{space 13}FRD2 {c |}{col 19}{res}{space 2}-.4778517{col 31}{space 2} .2426501{col 42}{space 1}   -1.97{col 51}{space 3}0.053{col 59}{space 4}-.9620524{col 72}{space 3}  .006349
+{txt}{space 13}FRE1 {c |}{col 19}{res}{space 2}-.4730967{col 31}{space 2} .2419536{col 42}{space 1}   -1.96{col 51}{space 3}0.055{col 59}{space 4}-.9559076{col 72}{space 3} .0097141
+{txt}{space 13}FRE2 {c |}{col 19}{res}{space 2}-.4593787{col 31}{space 2} .2393063{col 42}{space 1}   -1.92{col 51}{space 3}0.059{col 59}{space 4}-.9369071{col 72}{space 3} .0181497
+{txt}{space 13}FRF1 {c |}{col 19}{res}{space 2} -.467077{col 31}{space 2} .2438388{col 42}{space 1}   -1.92{col 51}{space 3}0.060{col 59}{space 4}-.9536497{col 72}{space 3} .0194956
+{txt}{space 13}FRF2 {c |}{col 19}{res}{space 2}-.4587857{col 31}{space 2} .2409844{col 42}{space 1}   -1.90{col 51}{space 3}0.061{col 59}{space 4}-.9396627{col 72}{space 3} .0220912
+{txt}{space 13}FRF3 {c |}{col 19}{res}{space 2}-.4768756{col 31}{space 2} .2417087{col 42}{space 1}   -1.97{col 51}{space 3}0.053{col 59}{space 4}-.9591977{col 72}{space 3} .0054466
+{txt}{space 13}FRG0 {c |}{col 19}{res}{space 2}-.4582679{col 31}{space 2} .2425432{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9422552{col 72}{space 3} .0257195
+{txt}{space 13}FRH0 {c |}{col 19}{res}{space 2}-.4634861{col 31}{space 2}   .24191{col 42}{space 1}   -1.92{col 51}{space 3}0.060{col 59}{space 4}-.9462099{col 72}{space 3} .0192377
+{txt}{space 13}FRI1 {c |}{col 19}{res}{space 2}-.4766537{col 31}{space 2} .2429841{col 42}{space 1}   -1.96{col 51}{space 3}0.054{col 59}{space 4}-.9615209{col 72}{space 3} .0082134
+{txt}{space 13}FRI2 {c |}{col 19}{res}{space 2} -.472619{col 31}{space 2} .2431143{col 42}{space 1}   -1.94{col 51}{space 3}0.056{col 59}{space 4} -.957746{col 72}{space 3}  .012508
+{txt}{space 13}FRI3 {c |}{col 19}{res}{space 2}-.4696402{col 31}{space 2} .2414104{col 42}{space 1}   -1.95{col 51}{space 3}0.056{col 59}{space 4}-.9513671{col 72}{space 3} .0120866
+{txt}{space 13}FRJ1 {c |}{col 19}{res}{space 2}-.4713763{col 31}{space 2}  .240093{col 42}{space 1}   -1.96{col 51}{space 3}0.054{col 59}{space 4}-.9504743{col 72}{space 3} .0077217
+{txt}{space 13}FRJ2 {c |}{col 19}{res}{space 2}-.4543082{col 31}{space 2} .2399923{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9332053{col 72}{space 3} .0245889
+{txt}{space 13}FRK1 {c |}{col 19}{res}{space 2}-.4581092{col 31}{space 2} .2429941{col 42}{space 1}   -1.89{col 51}{space 3}0.064{col 59}{space 4}-.9429963{col 72}{space 3} .0267779
+{txt}{space 13}FRK2 {c |}{col 19}{res}{space 2}-.4609586{col 31}{space 2}  .241163{col 42}{space 1}   -1.91{col 51}{space 3}0.060{col 59}{space 4}-.9421918{col 72}{space 3} .0202747
+{txt}{space 13}FRL0 {c |}{col 19}{res}{space 2} -.459711{col 31}{space 2} .2411923{col 42}{space 1}   -1.91{col 51}{space 3}0.061{col 59}{space 4}-.9410027{col 72}{space 3} .0215807
+{txt}{space 13}FRM0 {c |}{col 19}{res}{space 2}-.4397533{col 31}{space 2}  .236345{col 42}{space 1}   -1.86{col 51}{space 3}0.067{col 59}{space 4}-.9113724{col 72}{space 3} .0318659
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}.         
 . /*
@@ -76,7 +119,7 @@
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 1 Aug 2024, 12:17:57
+ {txt}closed on:  {res} 2 Aug 2024, 14:05:19
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

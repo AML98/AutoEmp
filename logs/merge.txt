@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 1 Aug 2024, 12:17:57
+ {txt}opened on:  {res} 2 Aug 2024, 14:05:19
 {txt}
 {com}. 
 . use "clean_data/emp_regions.dta"
@@ -41,6 +41,21 @@
 {col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
 {col 5}{hline 41}
 
+{com}. drop _merge
+{txt}
+{com}. 
+. merge m:1 id using "clean_data/diff_imports.dta", update
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+
+{txt}{col 5}Matched{col 30}{res}             100
+{txt}{col 9}not updated{col 30}{res}             100{txt}  (_merge==3)
+{col 9}missing updated{col 30}{res}               0{txt}  (_merge==4)
+{col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
+{col 5}{hline 41}
+
 {com}. drop _merge id
 {txt}
 {com}. 
@@ -61,16 +76,29 @@
 {com}. drop _merge
 {txt}
 {com}. 
-. // Compute long difference in robot exposure
+. // Compute long differences
 . gen robot_exposure = 0
+{txt}
+{com}. gen import_exposure = 0
 {txt}
 {com}. 
 . foreach industry in agri_forest_fish manufact construct other_industry {c -(}
-{txt}  2{com}.         gen robot_exposure_`industry' = emp_share_`industry' * ///
+{txt}  2{com}.         
+.         // 1) Robot exposure
+.         gen robot_exposure_`industry' = emp_share_`industry' * ///
 >                 (diff_robots_`industry' / emp_base_`industry')
 {txt}  3{com}.         replace robot_exposure = robot_exposure + robot_exposure_`industry'
-{txt}  4{com}. {c )-}
+{txt}  4{com}.         
+.         // 2) Import exposure
+.         gen import_exposure_`industry' = imp_emp_share_`industry' * ///
+>                 (diff_imp_`industry' / imp_emp_base_`industry')
+{txt}  5{com}.         replace import_exposure = import_exposure + import_exposure_`industry'
+{txt}  6{com}. {c )-}
 {txt}(96 real changes made)
+(96 real changes made)
+(96 real changes made)
+(96 real changes made)
+(96 real changes made)
 (96 real changes made)
 (96 real changes made)
 (96 real changes made)
@@ -82,7 +110,9 @@
 {com}. keep region_code region diff_emp_to_pop robot_exposure ///
 >         robot_exposure_agri_forest_fish robot_exposure_manufact ///
 >         robot_exposure_construct robot_exposure_other_industry female_share ///
->         working_age_pop population_2000 high_school_share bachelor_share FR*
+>         import_exposure import_exposure_agri_forest_fish import_exposure_manufact ///
+>         import_exposure_construct import_exposure_other_industry working_age_pop ///
+>         population_2000 high_school_share bachelor_share FR*
 {txt}
 {com}. 
 . save "clean_data/reg_ready.dta", replace
@@ -99,7 +129,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 1 Aug 2024, 12:17:57
+ {txt}closed on:  {res} 2 Aug 2024, 14:05:19
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

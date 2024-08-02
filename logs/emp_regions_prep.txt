@@ -3,11 +3,96 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 1 Aug 2024, 12:17:56
+ {txt}opened on:  {res} 2 Aug 2024, 14:05:19
 {txt}
 {com}. 
 . ***
-. *** 1) Prepare data for year 2016 (sheet 22)
+. *** 1) Employment data for import exposure in year 2012 (sheet 18)
+. ***
+. 
+. // i) National employment (employment base)
+. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 18") ///
+>         cellrange(A12:G114) firstrow
+{res}{text}(7 vars, 102 obs)
+
+{com}. 
+. tempfile emp_France_2012
+{txt}
+{com}. 
+. destring total_emp_2012, replace
+{txt}total_emp_2012 already numeric; no {res}replace
+{txt}
+{com}. gen other_industry = industry_ex_construct - manufact
+{txt}(1 missing value generated)
+
+{com}. drop industry_ex_construct
+{txt}
+{com}. keep if _n == 1
+{txt}(101 observations deleted)
+
+{com}. gen id = 1
+{txt}
+{com}. 
+. foreach v in agri_forest_fish manufact construct other_industry {c -(}
+{txt}  2{com}.         rename `v' imp_emp_base_`v'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. save `emp_France_2012'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. // ii) Regional employment (employment shares)
+. import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 18") ///
+>         cellrange(A12:G114) firstrow
+{res}{text}(7 vars, 102 obs)
+
+{com}.         
+. tempfile emp_regions_2012
+{txt}
+{com}. 
+. drop if missing(total_emp_2012) | missing(agri_forest_fish) | ///
+>         missing(industry_ex_construct) | missing(manufact) | missing(construct)
+{txt}(1 observation deleted)
+
+{com}. 
+. destring total_emp_2012, replace
+{txt}total_emp_2012 already numeric; no {res}replace
+{txt}
+{com}. gen other_industry = industry_ex_construct - manufact
+{txt}
+{com}. drop industry_ex_construct
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. foreach v in agri_forest_fish manufact construct other_industry {c -(}
+{txt}  2{com}.         gen imp_emp_share_`v' = `v' / total_emp_2012
+{txt}  3{com}.         drop `v'
+{txt}  4{com}. {c )-}
+{txt}
+{com}. 
+. save `emp_regions_2012'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 2) Regional employment data for outcome in year 2016 (sheet 22)
 . ***
 . 
 . import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 22") ///
@@ -26,7 +111,7 @@
 {com}. save `emp_regions_2016'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
 saved
 as .dta format
 {p_end}
@@ -35,7 +120,7 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 2) Prepare data for year 2000 (sheet 6)
+. *** 3) Regional employment data for outcome and robot exposure in year 2000 (sheet 6)
 . ***
 . 
 . import excel "raw_data/eurostat/emp_regions.xlsx", sheet("Sheet 6") ///
@@ -61,11 +146,11 @@ as .dta format
 {com}.         
 . foreach v in agri_forest_fish manufact construct other_industry {c -(}
 {txt}  2{com}.         
-.         // 1) Employment shares
+.         // i) Employment shares
 .         gen emp_share_`v' = `v' / total_emp_2000
 {txt}  3{com}.         drop `v'
 {txt}  4{com}.         
-.         // 2) Variables for merge later
+.         // ii) Variables for merge later
 .         gen emp_base_`v' = .
 {txt}  5{com}.         gen diff_robots_`v' = .
 {txt}  6{com}. {c )-}
@@ -80,9 +165,13 @@ as .dta format
 
 {com}. 
 . ***
-. *** 3) Merge data for years 2000 and 2016
+. *** 4) Merge into one data set
 . ***
 . 
+. // Add id variable for merge
+. gen id = 1
+{txt}
+{com}. 
 . merge 1:1 region_code using `emp_regions_2016', keepusing(total_emp_2016)
 {res}
 {txt}{col 5}Result{col 33}Number of obs
@@ -100,8 +189,32 @@ as .dta format
 {com}. drop _merge
 {txt}
 {com}. 
-. // Add id variable for merge later
-. gen id = 1
+. merge 1:1 region_code using `emp_regions_2012', keepusing( ///
+>         imp_emp_share_agri_forest_fish imp_emp_share_manufact ///
+>         imp_emp_share_construct imp_emp_share_other_industry)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}             100{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(0 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge m:1 id using `emp_France_2012', keepusing(imp_emp_base_agri_forest_fish ///
+>         imp_emp_base_manufact imp_emp_base_construct imp_emp_base_other_industry id)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}             100{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
 {txt}
 {com}. 
 . save "clean_data/emp_regions.dta", replace
@@ -118,7 +231,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 1 Aug 2024, 12:17:56
+ {txt}closed on:  {res} 2 Aug 2024, 14:05:19
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
