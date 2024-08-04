@@ -3,20 +3,36 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Aug 2024, 15:49:57
+ {txt}opened on:  {res} 4 Aug 2024, 18:01:54
 {txt}
 {com}. 
 . use "clean_data/nuts2_emp_regions.dta"
 {txt}
 {com}. 
 . // Merge
+. merge 1:1 region_code using "clean_data/nuts2_demographics.dta"
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               1{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
 . merge m:1 id using "clean_data/nuts2_emp_countries.dta", update
 {res}
 {txt}{col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
-{col 5}Not matched{col 30}{res}               0
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               1{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
 
-{txt}{col 5}Matched{col 30}{res}              21
+{col 5}Matched{col 30}{res}              21
 {txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
 {col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
 {col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
@@ -33,9 +49,11 @@
 
 {col 5}Result{col 33}Number of obs
 {col 5}{hline 41}
-{col 5}Not matched{col 30}{res}               0
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               1{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
 
-{txt}{col 5}Matched{col 30}{res}              21
+{col 5}Matched{col 30}{res}              21
 {txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
 {col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
 {col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
@@ -44,10 +62,29 @@
 {com}. drop _merge
 {txt}
 {com}. 
+. merge m:1 id using "clean_data/nuts2_diff_imports.dta", update
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               1{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               0{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              21
+{txt}{col 9}not updated{col 30}{res}              21{txt}  (_merge==3)
+{col 9}missing updated{col 30}{res}               0{txt}  (_merge==4)
+{col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
+{col 5}{hline 41}
+
+{com}. drop _merge id
+{txt}
+{com}. 
 . // Compute long differences
 . gen robot_exposure = 0
 {txt}
 {com}. gen frobot_exposure = 0
+{txt}
+{com}. gen import_exposure = 0
 {txt}
 {com}. 
 . local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
@@ -65,48 +102,120 @@
 .         gen frobot_exposure_`industry' = emp_share_`industry' * ///
 >                 (fr_diff_robots_`industry' / fr_emp_base_`industry')
 {txt}  5{com}.         replace frobot_exposure = frobot_exposure + frobot_exposure_`industry'
-{txt}  6{com}. {c )-}
-{txt}(21 real changes made)
-(21 real changes made)
+{txt}  6{com}.         
+.         // 3) Import exposure
+.         gen import_exposure_`industry' = emp_share_`industry' * ///
+>                 (diff_imp_`industry' / fr_emp_base_`industry')
+{txt}  7{com}.         replace import_exposure = import_exposure + import_exposure_`industry'
+{txt}  8{com}. {c )-}
+{txt}(1 missing value generated)
+(22 real changes made, 1 to missing)
+(1 missing value generated)
+(22 real changes made, 1 to missing)
+(1 missing value generated)
+(22 real changes made, 1 to missing)
+(1 missing value generated)
 (20 real changes made)
+(1 missing value generated)
 (20 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
-(21 real changes made)
+(1 missing value generated)
 (20 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
 (20 real changes made)
+(1 missing value generated)
+(20 real changes made)
+(1 missing value generated)
+(20 real changes made)
+(1 missing value generated)
 (21 real changes made)
+(1 missing value generated)
 (21 real changes made)
+(1 missing value generated)
+(0 real changes made)
+(1 missing value generated)
 (21 real changes made)
+(1 missing value generated)
+(21 real changes made)
+(1 missing value generated)
 (21 real changes made)
 
 {com}. 
 . // Compute long difference in employment to population
-. gen diff_emp_to_pop = total_emp_2016 - total_emp_2001
-{txt}
-{com}. 
+. gen diff_emp_to_pop = total_emp_2016/population_2016 - ///
+>         total_emp_2001/population_2001
+{txt}(1 missing value generated)
+
+{com}.         
 . keep region_code region diff_emp_to_pop robot_exposure robot_exposure_* ///
->         frobot_exposure frobot_exposure_*
+>         frobot_exposure frobot_exposure_* import_exposure import_exposure_* ///
+>         population_2001 working_age_pop female_share high_school_share ///
+>         bachelor_share FR*
 {txt}
-{com}. order region_code region diff_emp_to_pop robot_exposure robot_exposure_* ///
->         frobot_exposure frobot_exposure_*
+{com}.         
+. order region_code region diff_emp_to_pop robot_exposure robot_exposure_* ///
+>         frobot_exposure frobot_exposure_* import_exposure import_exposure_* ///
+>         population_2001 working_age_pop female_share high_school_share ///
+>         bachelor_share FR*
 {txt}
 {com}. 
 . save "clean_data/nuts2_reg_ready.dta", replace
@@ -123,7 +232,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 4 Aug 2024, 15:49:57
+ {txt}closed on:  {res} 4 Aug 2024, 18:01:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
