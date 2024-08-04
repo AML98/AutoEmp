@@ -95,7 +95,6 @@ merge 1:1 id using `robots_inst_countries'
 drop _merge
 
 save "clean_data/diff_robots", replace
-cd "/Users/aml/AutoEmp/do_files"
-
+cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
 log close
 

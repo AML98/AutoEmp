@@ -3,14 +3,25 @@ capture log close
 cd "/Users/aml/AutoEmp"
 log using "logs/estimation.txt", replace
 
-use "clean_data/reg_ready.dta"
+use "clean_data/nuts2_reg_ready.dta"
 
 // Reduced form regressions
+
+/*
+
 regress diff_emp_to_pop robot_exposure female_share bachelor_share ///
 	high_school_share population_2000 FR* [w=working_age_pop], noconstant 
 
 regress diff_emp_to_pop robot_exposure import_exposure female_share bachelor_share ///
 	high_school_share population_2000 FR* [w=working_age_pop], noconstant 	
+
+clear
+
+*/
+
+regress robot_exposure frobot_exposure, noconstant
+twoway (scatter robot_exposure frobot_exposure) ///
+	(lfit robot_exposure frobot_exposure)
 	
 /*
 

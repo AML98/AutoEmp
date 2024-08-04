@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_fr_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 3 Aug 2024, 01:23:31
+ {txt}opened on:  {res} 4 Aug 2024, 15:49:55
 {txt}
 {com}. 
 . import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet2") firstrow
@@ -17,8 +17,6 @@ saved
 {p_end}
 
 {com}. 
-. 
-. 
 . ***
 . *** 1) Long differences in robot stock for instrument countries
 . ***
@@ -93,7 +91,11 @@ saved
 {txt}ind91: all characters numeric; {res}replaced {txt}as {res}int
 {txt}
 {com}. 
-. // Add id variable for merge
+. foreach var of varlist _all {c -(}
+{txt}  2{com}.         rename `var' diff_robots_`var'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
 . gen id = _n
 {txt}
 {com}. 
@@ -109,7 +111,7 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 2) Long differences in robot stock for instrument countries
+. *** 2) Long differences in robot stock for France
 . ***
 . 
 . use "raw_data/ifr/nuts2_IFR_data.dta"
@@ -157,7 +159,7 @@ as .dta format
 >         gen diff_robot_stock = robot_stock - robot_stock[_n-1]
 {txt}(16 missing values generated)
 
-{com}. 
+{com}.         
 . drop if Year == 2001
 {txt}(16 observations deleted)
 
@@ -183,11 +185,10 @@ as .dta format
 {txt}
 {com}. 
 . foreach var of varlist _all {c -(}
-{txt}  2{com}.         rename `var' fr_`var'
+{txt}  2{com}.         rename `var' fr_diff_robots_`var'
 {txt}  3{com}. {c )-}
 {res}{txt}
 {com}. 
-. // Add id variable for merge
 . gen id = _n
 {txt}
 {com}. 
@@ -213,14 +214,14 @@ clean_data/nuts2_diff_robots.dta{rm}
 saved
 {p_end}
 
-{com}. cd "/Users/aml/AutoEmp/do_files"
-{res}/Users/aml/AutoEmp/do_files
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_fr_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 3 Aug 2024, 01:23:32
+ {txt}closed on:  {res} 4 Aug 2024, 15:49:57
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

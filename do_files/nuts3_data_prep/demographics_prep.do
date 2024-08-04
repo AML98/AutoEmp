@@ -89,5 +89,5 @@ drop if _merge == 2
 drop _merge
 
 save "clean_data/demographics.dta", replace
-cd "/Users/aml/AutoEmp/do_files"
+cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
 log close

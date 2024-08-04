@@ -53,5 +53,5 @@ keep region_code region diff_emp_to_pop robot_exposure ///
 	population_2000 high_school_share bachelor_share FR* frobot_exposure
 
 save "clean_data/reg_ready.dta", replace
-cd "/Users/aml/AutoEmp/do_files"
+cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
 log close

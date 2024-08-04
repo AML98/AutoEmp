@@ -109,5 +109,5 @@ merge m:1 id using `emp_France_2012', keepusing(imp_emp_base_agri_forest_fish //
 drop _merge
 
 save "clean_data/emp_regions.dta", replace
-cd "/Users/aml/AutoEmp/do_files"
+cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
 log close

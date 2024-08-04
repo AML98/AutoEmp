@@ -6,8 +6,6 @@ log using "logs/nuts2_fr_prep.txt", replace
 import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet2") firstrow
 save "raw_data/ifr/nuts2_IFR_data.dta", replace
 
-
-
 ***
 *** 1) Long differences in robot stock for instrument countries
 ***
@@ -41,14 +39,17 @@ drop if Year == 2001
 drop Year robot_stock
 sxpose, clear force firstnames destring
 
-// Add id variable for merge
+foreach var of varlist _all {
+	rename `var' diff_robots_`var'
+}
+
 gen id = _n
 
 save `robots_inst_countries'
 clear
 
 ***
-*** 2) Long differences in robot stock for instrument countries
+*** 2) Long differences in robot stock for France
 ***
 
 use "raw_data/ifr/nuts2_IFR_data.dta"
@@ -75,16 +76,15 @@ collapse (sum) robot_stock, by(Year industrycode)
 // Compute long differences and transpose
 by industrycode (Year), sort: ///
 	gen diff_robot_stock = robot_stock - robot_stock[_n-1]
-
+	
 drop if Year == 2001
 drop Year robot_stock
 sxpose, clear force firstnames destring
 
 foreach var of varlist _all {
-	rename `var' fr_`var'
+	rename `var' fr_diff_robots_`var'
 }
 
-// Add id variable for merge
 gen id = _n
 
 ***
@@ -95,6 +95,5 @@ merge 1:1 id using `robots_inst_countries'
 drop _merge
 
 save "clean_data/nuts2_diff_robots", replace
-cd "/Users/aml/AutoEmp/do_files"
+cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
 log close
-

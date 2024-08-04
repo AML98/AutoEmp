@@ -1,0 +1,94 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_countries_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 4 Aug 2024, 15:49:57
+{txt}
+{com}. 
+. ***
+. *** 1) Combine LFS and SBS data
+. ***
+. 
+. import excel "raw_data/eurostat/nuts2_emp_countries_lfs.xlsx", sheet("Sheet 2") ///
+>         cellrange(A13:D19) firstrow
+{res}{text}(4 vars, 6 obs)
+
+{com}.         
+. tempfile lfs_emp
+{txt}
+{com}. drop total_emp_2000
+{txt}
+{com}. save `lfs_emp'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. import excel "raw_data/eurostat/nuts2_emp_countries_sbs.xlsx", sheet("Sheet 6") ///
+>         cellrange(A38:Q44) firstrow
+{res}{text}(17 vars, 6 obs)
+
+{com}. 
+. tempfile lfs_sbs_emp
+{txt}
+{com}. 
+. merge 1:1 country_code using `lfs_emp'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}               6{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. ***
+. *** 2) National employment for instrument countries in year 2000
+. ***
+. 
+. local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
+>         ind28 ind29_30 ind91 AB C E F
+{txt}
+{com}. 
+. foreach var of local varlist {c -(}
+{txt}  2{com}.         egen emp_base_`var' = total(`var')
+{txt}  3{com}.         drop `var'
+{txt}  4{com}. {c )-}
+{txt}
+{com}. 
+. drop country country_code D
+{txt}
+{com}. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(5 observations deleted)
+
+{com}. gen id = 1
+{txt}
+{com}. 
+. save "clean_data/nuts2_emp_countries.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/nuts2_emp_countries.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_countries_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 4 Aug 2024, 15:49:57
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

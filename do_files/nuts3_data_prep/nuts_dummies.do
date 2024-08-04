@@ -105,5 +105,5 @@ egen sum_dummies = rowtotal(FRL0 FR10 FRJ2 FRI1 FRB0 FRK2 FRG0 FRH0 FRI3 ///
 assert sum_dummies == 1
 
 save "clean_data/demographics.dta", replace
-cd "/Users/aml/AutoEmp/do_files"
+cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
 log close

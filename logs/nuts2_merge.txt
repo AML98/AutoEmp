@@ -1,0 +1,129 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 4 Aug 2024, 15:49:57
+{txt}
+{com}. 
+. use "clean_data/nuts2_emp_regions.dta"
+{txt}
+{com}. 
+. // Merge
+. merge m:1 id using "clean_data/nuts2_emp_countries.dta", update
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+
+{txt}{col 5}Matched{col 30}{res}              21
+{txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
+{col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
+{col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge m:1 id using "clean_data/nuts2_diff_robots.dta", update
+{res}{txt}{p 0 7 2}
+(variable
+{bf:diff_robots_ind29_30} was {bf:float}, now {bf:double} to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+
+{txt}{col 5}Matched{col 30}{res}              21
+{txt}{col 9}not updated{col 30}{res}               0{txt}  (_merge==3)
+{col 9}missing updated{col 30}{res}              21{txt}  (_merge==4)
+{col 9}nonmissing conflict{col 30}{res}               0{txt}  (_merge==5)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. // Compute long differences
+. gen robot_exposure = 0
+{txt}
+{com}. gen frobot_exposure = 0
+{txt}
+{com}. 
+. local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
+>         ind28 ind29_30 ind91 AB C E F
+{txt}
+{com}. 
+. foreach industry of local varlist {c -(}
+{txt}  2{com}.         
+.         // 1) Robot exposure for instrument countries
+.         gen robot_exposure_`industry' = emp_share_`industry' * ///
+>                 (diff_robots_`industry' / emp_base_`industry')
+{txt}  3{com}.         replace robot_exposure = robot_exposure + robot_exposure_`industry'
+{txt}  4{com}.         
+.         // 2) Robot exposure for France
+.         gen frobot_exposure_`industry' = emp_share_`industry' * ///
+>                 (fr_diff_robots_`industry' / fr_emp_base_`industry')
+{txt}  5{com}.         replace frobot_exposure = frobot_exposure + frobot_exposure_`industry'
+{txt}  6{com}. {c )-}
+{txt}(21 real changes made)
+(21 real changes made)
+(20 real changes made)
+(20 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(20 real changes made)
+(20 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+
+{com}. 
+. // Compute long difference in employment to population
+. gen diff_emp_to_pop = total_emp_2016 - total_emp_2001
+{txt}
+{com}. 
+. keep region_code region diff_emp_to_pop robot_exposure robot_exposure_* ///
+>         frobot_exposure frobot_exposure_*
+{txt}
+{com}. order region_code region diff_emp_to_pop robot_exposure robot_exposure_* ///
+>         frobot_exposure frobot_exposure_*
+{txt}
+{com}. 
+. save "clean_data/nuts2_reg_ready.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/nuts2_reg_ready.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 4 Aug 2024, 15:49:57
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

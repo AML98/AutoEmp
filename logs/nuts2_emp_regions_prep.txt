@@ -1,0 +1,254 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 4 Aug 2024, 15:49:57
+{txt}
+{com}. 
+. ***
+. *** 1) Combine LFS and SBS data
+. ***
+. 
+. import excel "raw_data/eurostat/nuts2_emp_lfs_9908.xlsx", sheet("Sheet 3") ///
+>         cellrange(A13:D36) firstrow
+{res}{text}(4 vars, 23 obs)
+
+{com}.         
+. tempfile lfs_emp
+{txt}
+{com}. save `lfs_emp'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. import excel "raw_data/eurostat/nuts2_emp_sbs_9507.xlsx", sheet("Sheet 7") ///
+>         cellrange(A70:Q93) firstrow
+{res}{text}(17 vars, 23 obs)
+
+{com}. 
+. tempfile lfs_sbs_emp
+{txt}
+{com}. 
+. merge 1:1 region_code using `lfs_emp'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              23{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. save `lfs_sbs_emp'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 2) Employment data in year 2001
+. ***
+. 
+. // i) National employment (employment base)
+. use `lfs_sbs_emp'
+{txt}
+{com}. 
+. tempfile emp_national_2001
+{txt}
+{com}. 
+. drop total_emp_2001
+{txt}
+{com}. keep if _n == 1
+{txt}(22 observations deleted)
+
+{com}. gen id = 1
+{txt}
+{com}. drop D
+{txt}
+{com}. 
+. foreach v in AB C E F ind* {c -(}
+{txt}  2{com}.         rename `v' fr_emp_base_`v'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. save `emp_national_2001'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. // ii) Regional employment (employment shares)
+. use `lfs_sbs_emp'
+{txt}
+{com}.         
+. tempfile emp_regions_2001
+{txt}
+{com}. 
+. drop if missing(AB) | missing(C) | missing(D) | missing(E) | missing(F)
+{txt}(1 observation deleted)
+
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. drop D
+{txt}
+{com}. 
+. local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
+>         ind28 ind29_30 ind91 AB C E F
+{txt}
+{com}. 
+. foreach var of local varlist {c -(}
+{txt}  2{com}.         gen emp_share_`var' = `var' / total_emp_2001
+{txt}  3{com}.         gen diff_robots_`var' = .
+{txt}  4{com}.         gen emp_base_`var' = .
+{txt}  5{com}.         drop `var'
+{txt}  6{com}. {c )-}
+{txt}(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
+
+{com}. 
+. save `emp_regions_2001'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 3) Employment data in year 2016
+. ***
+. 
+. import excel "raw_data/eurostat/nuts2_emp_lfs_0823.xlsx", sheet("Sheet 1") ///
+>         cellrange(A12:R35) firstrow     
+{res}{text}(18 vars, 23 obs)
+
+{com}. 
+. tempfile emp_regions_2016
+{txt}
+{com}.         
+. keep region_code region total_emp_2016
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. save `emp_regions_2016'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000005{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 4) Merge into one data set
+. ***
+. 
+. use `emp_regions_2001'
+{txt}
+{com}. 
+. gen id = 1
+{txt}
+{com}. 
+. merge m:1 id using `emp_national_2001'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 region_code using `emp_regions_2016'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               1{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(1 observation deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. order region_code region total_emp_* emp_share_* diff_robots_* emp_base_* fr_emp_base_* id
+{txt}
+{com}. 
+. save "clean_data/nuts2_emp_regions.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/nuts2_emp_regions.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 4 Aug 2024, 15:49:57
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

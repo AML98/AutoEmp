@@ -23,5 +23,5 @@ drop if yr == 2012
 drop yr
 
 save "clean_data/diff_imports.dta", replace
-cd "/Users/aml/AutoEmp/do_files"
+cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
 log close

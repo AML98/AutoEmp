@@ -1,0 +1,170 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_first_stage.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 4 Aug 2024, 15:30:18
+{txt}
+{com}. 
+. use "clean_data/nuts2_emp_regions.dta"
+{txt}
+{com}. keep fr_emp_base_*
+{txt}
+{com}. 
+. tempfile tem_fr_emp_base
+{txt}
+{com}. xpose, clear
+{txt}
+{com}. gen id = _n
+{txt}
+{com}. rename v1 fr_emp_base
+{res}{txt}
+{com}. save `tem_fr_emp_base'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. use "clean_data/nuts2_emp_countries.dta"
+{txt}
+{com}. keep emp_base_*
+{txt}
+{com}. 
+. tempfile tem_emp_base
+{txt}
+{com}. xpose, clear
+{txt}
+{com}. gen id = _n
+{txt}
+{com}. rename v1 emp_base
+{res}{txt}
+{com}. save `tem_emp_base'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. foreach v in fr_diff_robots diff_robots {c -(}
+{txt}  2{com}.         
+.         use "clean_data/nuts2_diff_robots.dta"
+{txt}  3{com}.         keep `v'_*
+{txt}  4{com}. 
+.         tempfile tem_`v'
+{txt}  5{com}.         xpose, clear
+{txt}  6{com}.         gen id = _n
+{txt}  7{com}.         rename v1 `v'
+{txt}  8{com}.         save `tem_`v''
+{txt}  9{com}.         clear
+{txt} 10{com}. {c )-}
+{res}{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+saved
+as .dta format
+{p_end}
+{res}{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. 
+. use `tem_fr_emp_base'
+{txt}
+{com}. 
+. merge 1:1 id using `tem_emp_base'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              15{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 id using `tem_fr_diff_robots'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               1{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              15{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 id using `tem_diff_robots'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              16{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge id
+{txt}
+{com}. 
+. gen diff_robots_to_pop = diff_robots / emp_base
+{txt}(1 missing value generated)
+
+{com}. gen diff_fr_robots_to_pop = fr_diff_robots / fr_emp_base 
+{txt}(1 missing value generated)
+
+{com}. 
+. drop if _n == 3
+{txt}(1 observation deleted)
+
+{com}. 
+. regress diff_fr_robots_to_pop diff_robots_to_pop
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        14
+{txt}{hline 13}{c +}{hline 34}   F(1, 12)        = {res}     1.63
+{txt}       Model {c |} {res} 11.8774549         1  11.8774549   {txt}Prob > F        ={res}    0.2252
+{txt}    Residual {c |} {res} 87.1794301        12  7.26495251   {txt}R-squared       ={res}    0.1199
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0466
+{txt}       Total {c |} {res}  99.056885        13  7.61976038   {txt}Root MSE        =   {res} 2.6954
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_fr_robots_t~p{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      t{col 52}   P>|t|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+diff_robots_to_pop {c |}{col 20}{res}{space 2} .1640537{col 32}{space 2} .1283041{col 43}{space 1}    1.28{col 52}{space 3}0.225{col 60}{space 4} -.115497{col 73}{space 3} .4436044
+{txt}{space 13}_cons {c |}{col 20}{res}{space 2} .8532401{col 32}{space 2} .8680176{col 43}{space 1}    0.98{col 52}{space 3}0.345{col 60}{space 4}-1.038008{col 73}{space 3} 2.744488
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. twoway (scatter diff_fr_robots_to_pop diff_robots_to_pop) ///
+>         (lfit diff_fr_robots_to_pop diff_robots_to_pop)
+{res}{txt}
+{com}. 
+. save "clean_data/first_stage.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/first_stage.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files"
+{res}/Users/aml/AutoEmp/do_files
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_first_stage.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 4 Aug 2024, 15:30:19
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}
