@@ -5,18 +5,45 @@ log using "logs/estimation.txt", replace
 
 use "clean_data/nuts2_reg_ready.dta"
 
-// First stage
-regress robot_exposure frobot_exposure, noconstant
-twoway (scatter robot_exposure frobot_exposure) ///
-	(lfit robot_exposure frobot_exposure)
+***
+*** 1) First stage
+***
 
-// Reduced form regressions
-regress diff_emp_to_pop robot_exposure import_exposure population_2001 
+// EU countries
+regress robot_exposure frobot_exposure_01, noconstant
+twoway (scatter robot_exposure frobot_exposure_01) ///
+	(lfit robot_exposure frobot_exposure_01)
+	
+// The US
+regress usrobot_exposure frobot_exposure_04, noconstant
+twoway (scatter robot_exposure frobot_exposure_04) ///
+	(lfit robot_exposure frobot_exposure_04)
+
+***
+*** 2) Reduced form regressions
+***
+
+// EU countries
+regress diff_emp_to_pop_01 robot_exposure import_exposure population_2001 ///
+	female_share bachelor_share high_school_share ///
+	[w=working_age_pop], noconstant 
+
+// The US
+regress diff_emp_to_pop_04 usrobot_exposure import_exposure population_2001 ///
 	female_share bachelor_share high_school_share ///
 	[w=working_age_pop], noconstant 
 	
-// 2 stage least squares estimation
-ivregress 2sls diff_emp_to_pop (frobot_exposure = robot_exposure) ///
+***
+*** 3) Two-stage least squares estimation
+***	
+
+// EU countries
+ivregress 2sls diff_emp_to_pop_01 (frobot_exposure_01 = robot_exposure) ///
+	import_exposure population_2001 female_share bachelor_share ///
+	high_school_share [w=working_age_pop], noconstant 
+
+// The US
+ivregress 2sls diff_emp_to_pop_04 (frobot_exposure_04 = usrobot_exposure) ///
 	import_exposure population_2001 female_share bachelor_share ///
 	high_school_share [w=working_age_pop], noconstant 
 

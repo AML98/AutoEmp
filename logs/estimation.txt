@@ -3,14 +3,14 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Aug 2024, 18:01:54
+ {txt}opened on:  {res} 5 Aug 2024, 16:00:04
 {txt}
 {com}. 
 . use "clean_data/nuts2_reg_ready.dta"
 {txt}
 {com}. 
-. // First stage
-. regress robot_exposure frobot_exposure, noconstant
+. // First stage on EU countries
+. regress robot_exposure frobot_exposure_01, noconstant
 
 {txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        21
 {txt}{hline 13}{c +}{hline 34}   F(1, 20)        = {res}   644.50
@@ -19,19 +19,39 @@
 {txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.9684
 {txt}       Total {c |} {res} 43.7391646        21  2.08281736   {txt}Root MSE        =   {res} .25656
 
-{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1} robot_exposure{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
-{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-frobot_exposure {c |}{col 17}{res}{space 2} 3.375131{col 29}{space 2} .1329471{col 40}{space 1}   25.39{col 49}{space 3}0.000{col 57}{space 4} 3.097808{col 70}{space 3} 3.652454
-{txt}{hline 16}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}    robot_exposure{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      t{col 52}   P>|t|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} 3.375131{col 32}{space 2} .1329471{col 43}{space 1}   25.39{col 52}{space 3}0.000{col 60}{space 4} 3.097808{col 73}{space 3} 3.652454
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
-{com}. twoway (scatter robot_exposure frobot_exposure) ///
->         (lfit robot_exposure frobot_exposure)
+{com}. twoway (scatter robot_exposure frobot_exposure_01) ///
+>         (lfit robot_exposure frobot_exposure_01)
+{res}{txt}
+{com}.         
+. // First stage on US
+. regress usrobot_exposure frobot_exposure_04, noconstant
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        21
+{txt}{hline 13}{c +}{hline 34}   F(1, 20)        = {res}    17.19
+{txt}       Model {c |} {res} 96.5257798         1  96.5257798   {txt}Prob > F        ={res}    0.0005
+{txt}    Residual {c |} {res} 112.305868        20   5.6152934   {txt}R-squared       ={res}    0.4622
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4353
+{txt}       Total {c |} {res} 208.831648        21  9.94436418   {txt}Root MSE        =   {res} 2.3697
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  usrobot_exposure{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      t{col 52}   P>|t|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} 10.84619{col 32}{space 2} 2.616024{col 43}{space 1}    4.15{col 52}{space 3}0.000{col 60}{space 4} 5.389257{col 73}{space 3} 16.30312
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. twoway (scatter robot_exposure frobot_exposure_04) ///
+>         (lfit robot_exposure frobot_exposure_04)
 {res}{txt}
 {com}. 
 . // Reduced form regressions
-. regress diff_emp_to_pop robot_exposure import_exposure female_share ///
->         population_2001 bachelor_share high_school_share ///
+. regress diff_emp_to_pop_01 robot_exposure import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
 >         [w=working_age_pop], noconstant 
 {txt}(analytic weights assumed)
 (sum of wgt is 37,517.3)
@@ -44,20 +64,45 @@ frobot_exposure {c |}{col 17}{res}{space 2} 3.375131{col 29}{space 2} .1329471{c
 {txt}       Total {c |} {res} .016200251        21  .000771441   {txt}Root MSE        =   {res} .02107
 
 {txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}  diff_emp_to_pop{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
+{col 1}diff_emp_to_po~01{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
 {hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {space 3}robot_exposure {c |}{col 19}{res}{space 2}-.0133257{col 31}{space 2} .0085962{col 42}{space 1}   -1.55{col 51}{space 3}0.142{col 59}{space 4}-.0316482{col 72}{space 3} .0049967
 {txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-3.44e-06{col 31}{space 2} 5.20e-06{col 42}{space 1}   -0.66{col 51}{space 3}0.518{col 59}{space 4}-.0000145{col 72}{space 3} 7.64e-06
-{txt}{space 5}female_share {c |}{col 19}{res}{space 2}  .129081{col 31}{space 2}  .159708{col 42}{space 1}    0.81{col 51}{space 3}0.432{col 59}{space 4}-.2113286{col 72}{space 3} .4694905
 {txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-6.32e-06{col 31}{space 2} 7.47e-06{col 42}{space 1}   -0.85{col 51}{space 3}0.411{col 59}{space 4}-.0000222{col 72}{space 3} 9.60e-06
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2}  .129081{col 31}{space 2}  .159708{col 42}{space 1}    0.81{col 51}{space 3}0.432{col 59}{space 4}-.2113286{col 72}{space 3} .4694905
 {txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2} .0731862{col 31}{space 2} .2599756{col 42}{space 1}    0.28{col 51}{space 3}0.782{col 59}{space 4}-.4809387{col 72}{space 3} .6273111
 {txt}high_school_share {c |}{col 19}{res}{space 2}-.0767722{col 31}{space 2} .2070668{col 42}{space 1}   -0.37{col 51}{space 3}0.716{col 59}{space 4}-.5181246{col 72}{space 3} .3645802
 {txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
+{com}. 
+. regress diff_emp_to_pop_04 usrobot_exposure import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{txt}(analytic weights assumed)
+(sum of wgt is 37,517.3)
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        21
+{txt}{hline 13}{c +}{hline 34}   F(6, 15)        = {res}     2.41
+{txt}       Model {c |} {res} .005721627         6  .000953604   {txt}Prob > F        ={res}    0.0782
+{txt}    Residual {c |} {res} .005934653        15  .000395644   {txt}R-squared       ={res}    0.4909
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.2872
+{txt}       Total {c |} {res} .011656279        21  .000555061   {txt}Root MSE        =   {res} .01989
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_po~04{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}usrobot_exposure {c |}{col 19}{res}{space 2}-.0069344{col 31}{space 2} .0036085{col 42}{space 1}   -1.92{col 51}{space 3}0.074{col 59}{space 4}-.0146258{col 72}{space 3} .0007569
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2} 5.03e-06{col 31}{space 2} 4.91e-06{col 42}{space 1}    1.02{col 51}{space 3}0.322{col 59}{space 4}-5.43e-06{col 72}{space 3} .0000155
+{txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-3.03e-06{col 31}{space 2} 7.04e-06{col 42}{space 1}   -0.43{col 51}{space 3}0.673{col 59}{space 4} -.000018{col 72}{space 3}  .000012
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2}-.2216837{col 31}{space 2} .1506241{col 42}{space 1}   -1.47{col 51}{space 3}0.162{col 59}{space 4}-.5427314{col 72}{space 3} .0993641
+{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2} .1967317{col 31}{space 2} .2482379{col 42}{space 1}    0.79{col 51}{space 3}0.440{col 59}{space 4} -.332375{col 72}{space 3} .7258383
+{txt}high_school_share {c |}{col 19}{res}{space 2} .2613703{col 31}{space 2}  .195821{col 42}{space 1}    1.33{col 51}{space 3}0.202{col 59}{space 4}-.1560122{col 72}{space 3} .6787529
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
 {com}.         
 . // 2 stage least squares estimation
-. ivregress 2sls diff_emp_to_pop (frobot_exposure = robot_exposure) ///
->         import_exposure female_share population_2001 bachelor_share ///
+. ivregress 2sls diff_emp_to_pop_01 (frobot_exposure_01 = robot_exposure) ///
+>         import_exposure population_2001 female_share bachelor_share ///
 >         high_school_share [w=working_age_pop], noconstant 
 {res}{txt}(analytic weights assumed)
 (sum of wgt is   3.7517e+04)
@@ -68,18 +113,72 @@ frobot_exposure {c |}{col 17}{res}{space 2} 3.375131{col 29}{space 2} .1329471{c
 {txt}{col 1}{col 51}R-squared{col 67}= {res}         .
 {txt}{col 51}Root MSE{col 67}=    {res} .01871
 
-{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}  diff_emp_to_pop{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      z{col 51}   P>|z|{col 59}     [95% con{col 72}f. interval]
-{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 2}frobot_exposure {c |}{col 19}{res}{space 2}-.0508672{col 31}{space 2} .0291391{col 42}{space 1}   -1.75{col 51}{space 3}0.081{col 59}{space 4}-.1079787{col 72}{space 3} .0062443
-{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-5.49e-06{col 31}{space 2} 4.49e-06{col 42}{space 1}   -1.22{col 51}{space 3}0.222{col 59}{space 4}-.0000143{col 72}{space 3} 3.32e-06
-{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .1149614{col 31}{space 2} .1411539{col 42}{space 1}    0.81{col 51}{space 3}0.415{col 59}{space 4}-.1616952{col 72}{space 3}  .391618
-{txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-6.56e-06{col 31}{space 2} 6.69e-06{col 42}{space 1}   -0.98{col 51}{space 3}0.327{col 59}{space 4}-.0000197{col 72}{space 3} 6.56e-06
-{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2}   .07887{col 31}{space 2} .2320631{col 42}{space 1}    0.34{col 51}{space 3}0.734{col 59}{space 4}-.3759653{col 72}{space 3} .5337054
-{txt}high_school_share {c |}{col 19}{res}{space 2}-.0565426{col 31}{space 2} .1827038{col 42}{space 1}   -0.31{col 51}{space 3}0.757{col 59}{space 4}-.4146355{col 72}{space 3} .3015502
-{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{p 0 12 20}Endogenous: {res:frobot_exposure}{p_end}
-{p 0 12 20}Exogenous:{space 1} {res:import_exposure female_share population_2001 bachelor_share high_school_share robot_exposure}{p_end}
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2}-.0508672{col 32}{space 2} .0291391{col 43}{space 1}   -1.75{col 52}{space 3}0.081{col 60}{space 4}-.1079787{col 73}{space 3} .0062443
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-5.49e-06{col 32}{space 2} 4.49e-06{col 43}{space 1}   -1.22{col 52}{space 3}0.222{col 60}{space 4}-.0000143{col 73}{space 3} 3.32e-06
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-6.56e-06{col 32}{space 2} 6.69e-06{col 43}{space 1}   -0.98{col 52}{space 3}0.327{col 60}{space 4}-.0000197{col 73}{space 3} 6.56e-06
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .1149614{col 32}{space 2} .1411539{col 43}{space 1}    0.81{col 52}{space 3}0.415{col 60}{space 4}-.1616952{col 73}{space 3}  .391618
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2}   .07887{col 32}{space 2} .2320631{col 43}{space 1}    0.34{col 52}{space 3}0.734{col 60}{space 4}-.3759653{col 73}{space 3} .5337054
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2}-.0565426{col 32}{space 2} .1827038{col 43}{space 1}   -0.31{col 52}{space 3}0.757{col 60}{space 4}-.4146355{col 73}{space 3} .3015502
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 19}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share robot_exposure}{p_end}
+
+{com}.         
+. ivregress 2sls diff_emp_to_pop_04 (frobot_exposure_04 = usrobot_exposure) ///
+>         import_exposure population_2001 female_share bachelor_share ///
+>         high_school_share [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01815
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.2397595{col 32}{space 2} .1138632{col 43}{space 1}   -2.11{col 52}{space 3}0.035{col 60}{space 4}-.4629272{col 73}{space 3}-.0165918
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0000181{col 32}{space 2} .0000109{col 43}{space 1}   -1.67{col 52}{space 3}0.095{col 60}{space 4}-.0000395{col 73}{space 3} 3.17e-06
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-6.44e-06{col 32}{space 2} 7.27e-06{col 43}{space 1}   -0.89{col 52}{space 3}0.375{col 60}{space 4}-.0000207{col 73}{space 3} 7.81e-06
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2}-.3241564{col 32}{space 2} .1410548{col 43}{space 1}   -2.30{col 52}{space 3}0.022{col 60}{space 4}-.6006187{col 73}{space 3}-.0476942
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .2951787{col 32}{space 2} .2484893{col 43}{space 1}    1.19{col 52}{space 3}0.235{col 60}{space 4}-.1918514{col 73}{space 3} .7822087
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .3914124{col 32}{space 2} .1804158{col 43}{space 1}    2.17{col 52}{space 3}0.030{col 60}{space 4} .0378038{col 73}{space 3} .7450209
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 19}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share usrobot_exposure}{p_end}
+
+{com}.         
+. bootstrap _b, reps(1000) seed(12345): ivregress 2sls diff_emp_to_pop_04 (frobot_exposure_04 = usrobot_exposure) ///
+>         import_exposure population_2001 female_share bachelor_share ///
+>         high_school_share, noconstant 
+{res}{txt}(running {bf:ivregress} on estimation sample)
+{res}
+{text}Bootstrap replications ({result:1,000}){text}: {res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}10{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}20{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}30{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}40{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}50{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}60{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}70{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}80{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}90{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}100{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}110{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}120{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}130{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}140{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}150{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}160{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}170{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}180{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}190{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}200{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}210{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}220{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}230{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}240{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}250{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}260{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}270{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}280{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}290{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}300{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}310{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}320{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}330{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}340{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}350{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}360{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}370{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}380{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}390{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}400{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}410{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}420{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}430{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}440{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}450{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}460{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}470{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}480{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}490{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}500{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}510{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}520{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}530{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}540{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}550{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}560{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}570{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}580{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}590{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}600{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}610{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}620{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}630{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}640{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}650{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}660{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}670{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}680{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}690{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}700{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}710{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}720{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}730{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}740{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}750{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}760{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}770{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}780{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}790{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}800{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}810{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}820{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}830{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}840{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}850{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}860{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}870{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}880{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}890{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}900{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}910{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}920{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}930{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}940{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}950{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}960{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}970{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}980{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}990{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}.{res}{text}1,000{text} done
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}      1.60
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}    0.9529
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02035
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 20}{c |}   Observed{col 32}   Bootstrap{col 60}         Norm{col 73}al-based
+{col 1}diff_emp_to_pop_04{col 20}{c |} coefficient{col 32}  std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.0846381{col 32}{space 2} .8558222{col 43}{space 1}   -0.10{col 52}{space 3}0.921{col 60}{space 4}-1.762019{col 73}{space 3} 1.592743
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-4.57e-06{col 32}{space 2} .0000633{col 43}{space 1}   -0.07{col 52}{space 3}0.942{col 60}{space 4}-.0001287{col 73}{space 3} .0001195
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2} 2.07e-06{col 32}{space 2} .0000282{col 43}{space 1}    0.07{col 52}{space 3}0.941{col 60}{space 4}-.0000532{col 73}{space 3} .0000573
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2}-.3860377{col 32}{space 2} .4527903{col 43}{space 1}   -0.85{col 52}{space 3}0.394{col 60}{space 4} -1.27349{col 73}{space 3}  .501415
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .0953431{col 32}{space 2} .9109781{col 43}{space 1}    0.10{col 52}{space 3}0.917{col 60}{space 4}-1.690141{col 73}{space 3} 1.880827
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .4683278{col 32}{space 2} .6237262{col 43}{space 1}    0.75{col 52}{space 3}0.453{col 60}{space 4}-.7541531{col 73}{space 3} 1.690809
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 19}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share usrobot_exposure}{p_end}
 
 {com}. 
 . cd "/Users/aml/AutoEmp/do_files"
@@ -89,7 +188,7 @@ frobot_exposure {c |}{col 17}{res}{space 2} 3.375131{col 29}{space 2} .1329471{c
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 4 Aug 2024, 18:01:54
+ {txt}closed on:  {res} 5 Aug 2024, 16:00:13
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

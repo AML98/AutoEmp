@@ -3,11 +3,11 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Aug 2024, 18:01:54
+ {txt}opened on:  {res} 5 Aug 2024, 16:00:03
 {txt}
 {com}. 
 . ***
-. *** 1) Combine LFS and SBS data
+. *** 1) Combine LFS and SBS data for 2001
 . ***
 . 
 . import excel "raw_data/eurostat/nuts2_emp_countries_lfs.xlsx", sheet("Sheet 2") ///
@@ -15,9 +15,9 @@
 {res}{text}(4 vars, 6 obs)
 
 {com}.         
-. tempfile lfs_emp
+. drop total_emp_2000
 {txt}
-{com}. drop total_emp_2000
+{com}. tempfile lfs_emp
 {txt}
 {com}. save `lfs_emp'
 {txt}{p 0 4 2}
@@ -35,9 +35,6 @@ as .dta format
 {res}{text}(17 vars, 6 obs)
 
 {com}. 
-. tempfile lfs_sbs_emp
-{txt}
-{com}. 
 . merge 1:1 country_code using `lfs_emp'
 {res}
 {txt}{col 5}Result{col 33}Number of obs
@@ -49,10 +46,90 @@ as .dta format
 {com}. drop _merge
 {txt}
 {com}. 
+. tempfile lfs_sbs_emp
+{txt}
+{com}. save `lfs_sbs_emp', replace
+{txt}{p 0 4 2}
+(file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+not found)
+{p_end}
+{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
 . ***
-. *** 2) National employment for instrument countries in year 2000
+. *** 2) Combine FRED data for for US
 . ***
 . 
+. import excel "raw_data/fred/us_emp_agri.xls", ///
+>         cellrange(A11:B45) firstrow
+{res}{text}(2 vars, 34 obs)
+
+{com}. 
+. tempfile agri
+{txt}
+{com}. save `agri'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear   
+{txt}
+{com}.         
+. import excel "raw_data/fred/us_emp_ex_agri.xls", ///
+>         cellrange(A70:P104) firstrow
+{res}{text}(16 vars, 34 obs)
+
+{com}. 
+. merge 1:1 yr using `agri'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              34{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. keep if yr == 2001
+{txt}(33 observations deleted)
+
+{com}. drop D yr
+{txt}
+{com}. 
+. tempfile us_emp
+{txt}
+{com}. save `us_emp'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear 
+{txt}
+{com}. 
+. ***
+. *** 3) National employment for instrument countries
+. ***
+. 
+. // i) EU countries
+. 
+. use `lfs_sbs_emp'
+{txt}
+{com}. 
 . local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
 >         ind28 ind29_30 ind91 AB C E F
 {txt}
@@ -74,6 +151,54 @@ as .dta format
 {com}. gen id = 1
 {txt}
 {com}. 
+. save `lfs_sbs_emp', replace
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. // ii) United States
+. 
+. use `us_emp'
+{txt}
+{com}. 
+. local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
+>         ind28 ind29_30 ind91 AB C E F
+{txt}
+{com}. 
+. foreach var of local varlist {c -(}
+{txt}  2{com}.         rename `var' us_emp_base_`var'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. gen id = 1
+{txt}
+{com}. 
+. // iii) Combine data for US and EU
+. 
+. merge 1:1 id using `lfs_sbs_emp'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}               1{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. order emp_base_* us_emp_base_ind10_12 us_emp_base_ind13_15 us_emp_base_ind16 ///
+>         us_emp_base_ind17_18 us_emp_base_ind19_22 us_emp_base_ind23 ///
+>         us_emp_base_ind24_25 us_emp_base_ind26_27 us_emp_base_ind28 ///
+>         us_emp_base_ind29_30 us_emp_base_ind91 us_emp_base_AB ///
+>         us_emp_base_C us_emp_base_E us_emp_base_F
+{txt}
+{com}. 
 . save "clean_data/nuts2_emp_countries.dta", replace
 {txt}{p 0 4 2}
 file {bf}
@@ -88,7 +213,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 4 Aug 2024, 18:01:54
+ {txt}closed on:  {res} 5 Aug 2024, 16:00:04
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

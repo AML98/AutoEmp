@@ -1,0 +1,416 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_fr_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 5 Aug 2024, 16:00:01
+{txt}
+{com}. 
+. import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet2") firstrow
+{res}{text}(7 vars, 3,888 obs)
+
+{com}. save "raw_data/ifr/nuts2_IFR_data.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+raw_data/ifr/nuts2_IFR_data.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. ***
+. *** 1) Long differences in robot stock for instrument countries
+. ***
+. 
+. // Remove unnecessary observations
+. keep if Year == 2001 | Year == 2016
+{txt}(3,564 observations deleted)
+
+{com}. drop if country == "France" | industrycode == "D"
+{txt}(52 observations deleted)
+
+{com}. 
+. // Aggregagte on country level
+. sort industrycode Year
+{txt}
+{com}. by industrycode Year: egen robot_stock = total(op_stock) 
+{txt}
+{com}. drop delivered op_stock country countrycode
+{txt}
+{com}. duplicates drop Year industrycode, force
+
+{p 0 4}{txt}Duplicates in terms of {res} Year industrycode{p_end}
+
+{txt}(238 observations deleted)
+
+{com}. 
+. // Aggregate on industry level
+. replace industrycode = "ind24_25" if ///
+>         industrycode == "ind24" | industrycode == "ind25"
+{txt}(4 real changes made)
+
+{com}. collapse (sum) robot_stock, by(Year industrycode)
+{res}{txt}
+{com}. 
+. replace industrycode = "ind29_30" if ///
+>         industrycode == "ind29" | industrycode == "ind30"
+{txt}(4 real changes made)
+
+{com}. collapse (sum) robot_stock, by(Year industrycode)
+{res}{txt}
+{com}. 
+. // Compute long differences and transpose
+. by industrycode (Year), sort: ///
+>         gen diff_robot_stock = robot_stock - robot_stock[_n-1]
+{txt}(15 missing values generated)
+
+{com}. 
+. drop if Year == 2001
+{txt}(15 observations deleted)
+
+{com}. drop Year robot_stock
+{txt}
+{com}. sxpose, clear force firstnames destring
+{txt}AB: all characters numeric; {res}replaced {txt}as {res}int
+{txt}C: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}E: all characters numeric; {res}replaced {txt}as {res}int
+{txt}F: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind10_12: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind13_15: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind16: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind17_18: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind19_22: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind23: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind24_25: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind26_27: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind28: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind29_30: all characters numeric; {res}replaced {txt}as {res}long
+{txt}ind91: all characters numeric; {res}replaced {txt}as {res}int
+{txt}
+{com}. 
+. foreach var of varlist _all {c -(}
+{txt}  2{com}.         rename `var' diff_robots_`var'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. gen id = _n
+{txt}
+{com}. 
+. tempfile robots_inst_countries
+{txt}
+{com}. save `robots_inst_countries'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 2) Long differences in robot stock for the US
+. ***
+. 
+. import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet3") firstrow
+{res}{text}(7 vars, 432 obs)
+
+{com}. 
+. // Remove unnecessary observations
+. keep if Year == 2004 | Year == 2016
+{txt}(396 observations deleted)
+
+{com}. drop if industrycode == "D"
+{txt}(2 observations deleted)
+
+{com}. replace industrycode = "ind" + industrycode if industrycode != "A_B" & ///
+>         industrycode != "C" & industrycode != "E" & industrycode != "F"
+{txt}variable {bf}{res}industrycode{sf}{txt} was {bf}{res}str5{sf}{txt} now {bf}{res}str8{sf}
+{txt}(26 real changes made)
+
+{com}. replace industrycode = "AB" if industrycode == "A_B"
+{txt}(2 real changes made)
+
+{com}. 
+. // Aggregagte on country level
+. sort industrycode Year
+{txt}
+{com}. by industrycode Year: egen robot_stock = total(op_stock) 
+{txt}
+{com}. drop delivered op_stock country countrycode
+{txt}
+{com}. duplicates drop Year industrycode, force
+
+{p 0 4}{txt}Duplicates in terms of {res} Year industrycode{p_end}
+
+{txt}(0 observations are duplicates)
+
+{com}. 
+. // Aggregate on industry level
+. replace industrycode = "ind24_25" if ///
+>         industrycode == "ind24" | industrycode == "ind25"
+{txt}(4 real changes made)
+
+{com}. collapse (sum) robot_stock, by(Year industrycode)
+{res}{txt}
+{com}. 
+. replace industrycode = "ind29_30" if ///
+>         industrycode == "ind29" | industrycode == "ind30"
+{txt}(4 real changes made)
+
+{com}. collapse (sum) robot_stock, by(Year industrycode)
+{res}{txt}
+{com}. 
+. // Compute long differences and transpose
+. by industrycode (Year), sort: ///
+>         gen diff_robot_stock = robot_stock - robot_stock[_n-1]
+{txt}(15 missing values generated)
+
+{com}.         
+. drop if Year == 2004
+{txt}(15 observations deleted)
+
+{com}. drop Year robot_stock
+{txt}
+{com}. sxpose, clear force firstnames destring
+{txt}AB: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}C: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}E: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}F: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind10_12: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind13_15: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind16: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind17_18: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind19_22: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind23: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind24_25: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind26_27: all characters numeric; {res}replaced {txt}as {res}long
+{txt}ind28: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind29_30: all characters numeric; {res}replaced {txt}as {res}long
+{txt}ind91: all characters numeric; {res}replaced {txt}as {res}int
+{txt}
+{com}. 
+. foreach var of varlist _all {c -(}
+{txt}  2{com}.         rename `var' us_diff_robots_`var'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. gen id = _n
+{txt}
+{com}. 
+. tempfile robots_us
+{txt}
+{com}. save `robots_us'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 3) Long differences in robot stock for France
+. ***
+. 
+. use "raw_data/ifr/nuts2_IFR_data.dta"
+{txt}
+{com}. 
+. // Remove unnecessary observations
+. keep if Year == 2001 | Year == 2004 | Year == 2016
+{txt}(3,402 observations deleted)
+
+{com}. keep if country == "France"
+{txt}(432 observations deleted)
+
+{com}. drop if industrycode == "D"
+{txt}(3 observations deleted)
+
+{com}. 
+. // Aggregagte on country level
+. sort industrycode Year
+{txt}
+{com}. by industrycode Year: egen robot_stock = total(op_stock) 
+{txt}
+{com}. drop delivered op_stock country countrycode
+{txt}
+{com}. duplicates drop Year industrycode, force
+
+{p 0 4}{txt}Duplicates in terms of {res} Year industrycode{p_end}
+
+{txt}(0 observations are duplicates)
+
+{com}. 
+. // Aggregate on industry level
+. replace industrycode = "ind24_25" if ///
+>         industrycode == "ind24" | industrycode == "ind25"
+{txt}(6 real changes made)
+
+{com}. collapse (sum) robot_stock, by(Year industrycode)
+{res}{txt}
+{com}. 
+. replace industrycode = "ind29_30" if ///
+>         industrycode == "ind29" | industrycode == "ind30"
+{txt}(6 real changes made)
+
+{com}. collapse (sum) robot_stock, by(Year industrycode)
+{res}{txt}
+{com}. 
+. tempfile temp
+{txt}
+{com}. save `temp'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. 
+. // Compute long differences and transpose (2004-2016)
+. by industrycode (Year), sort: ///
+>         gen diff_robot_stock_04 = robot_stock - robot_stock[_n-1] if Year == 2016
+{txt}(30 missing values generated)
+
+{com}. 
+. drop if Year == 2001 | Year == 2004
+{txt}(30 observations deleted)
+
+{com}. drop Year robot_stock
+{txt}
+{com}. sxpose, clear force firstnames destring
+{txt}AB: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}C: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}E: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}F: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind10_12: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind13_15: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind16: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind17_18: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind19_22: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind23: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind24_25: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind26_27: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind28: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind29_30: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind91: all characters numeric; {res}replaced {txt}as {res}int
+{txt}
+{com}. 
+. foreach var of varlist _all {c -(}
+{txt}  2{com}.         rename `var' fr_diff_robots_04_`var'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. gen id = 1
+{txt}
+{com}. 
+. tempfile diff04
+{txt}
+{com}. save `diff04'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. use `temp'
+{txt}
+{com}. 
+. // Compute long differences and transpose (2001-2016)
+. by industrycode (Year), sort: ///
+>         gen diff_robot_stock_01 = robot_stock - robot_stock[_n-2] if Year == 2016
+{txt}(30 missing values generated)
+
+{com}. 
+. drop if Year == 2001 | Year == 2004
+{txt}(30 observations deleted)
+
+{com}. drop Year robot_stock
+{txt}
+{com}. sxpose, clear force firstnames destring
+{txt}AB: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}C: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}E: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}F: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind10_12: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind13_15: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind16: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind17_18: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind19_22: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind23: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind24_25: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind26_27: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind28: all characters numeric; {res}replaced {txt}as {res}int
+{txt}ind29_30: all characters numeric; {res}replaced {txt}as {res}byte
+{txt}ind91: all characters numeric; {res}replaced {txt}as {res}int
+{txt}
+{com}. 
+. foreach var of varlist _all {c -(}
+{txt}  2{com}.         rename `var' fr_diff_robots_01_`var'
+{txt}  3{com}. {c )-}
+{res}{txt}
+{com}. 
+. gen id = 1
+{txt}
+{com}. 
+. ***
+. *** 4) Merge into one data set
+. ***
+. 
+. merge 1:1 id using `diff04'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}               1{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 id using `robots_inst_countries'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}               1{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 id using `robots_us'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}               1{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. save "clean_data/nuts2_diff_robots", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/nuts2_diff_robots.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_fr_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 5 Aug 2024, 16:00:03
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

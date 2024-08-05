@@ -21,7 +21,23 @@ save `population_2016'
 clear
 
 ***
-*** 2) Prepare working-age population data for year 2001
+*** 2) Prepare population data for year 2004 (sheet 6)
+***
+
+import excel "raw_data/eurostat/nuts2_demographics_gender.xlsx", sheet("Sheet 6") ///
+	cellrange(A13:D36) firstrow	
+
+tempfile population_2004
+	
+drop if missing(population)
+rename population population_2004
+drop if _n == 1
+
+save `population_2004'
+clear
+
+***
+*** 3) Prepare working-age population data for year 2001
 ***
 
 import excel "raw_data/eurostat/nuts2_demographics_working_age.xlsx", sheet("Sheet 1") ///
@@ -38,7 +54,7 @@ save `working_age_pop'
 clear
 
 ***
-*** 3) Prepare education data for year 2001 (sheet 3)
+*** 4) Prepare education data for year 2001 (sheet 3)
 ***
 
 import excel "raw_data/eurostat/nuts2_demographics_educ.xlsx", sheet("Sheet 3") ///
@@ -56,7 +72,7 @@ save `education_pop'
 clear
 
 ***
-*** 4) Prepare population data for year 2001 (sheet 3)
+*** 5) Prepare population data for year 2001 (sheet 3)
 ***
 
 import excel "raw_data/eurostat/nuts2_demographics_gender.xlsx", sheet("Sheet 3") ///
@@ -69,10 +85,14 @@ drop if _n == 1
 drop females
 
 ***
-*** 5) Merge data into one data set
+*** 6) Merge data into one data set
 ***
 
 merge 1:1 region_code using `population_2016', keepusing(population_2016)
+drop if _merge == 2
+drop _merge
+
+merge 1:1 region_code using `population_2004', keepusing(population_2004)
 drop if _merge == 2
 drop _merge
 

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts_dummies.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Aug 2024, 18:01:54
+ {txt}opened on:  {res} 5 Aug 2024, 16:00:04
 {txt}
 {com}. 
 . use "clean_data/nuts2_demographics.dta"
@@ -11,28 +11,19 @@
 {com}. 
 . // Dummies for every NUTS 1 area (12)
 . 
-. gen FR1 = region_code == "FR10"
-{txt}
-{com}. 
-. gen FRB = region_code == "FRB0"
-{txt}
-{com}. 
-. gen FRC = region_code == "FRC1" | region_code == "FRC2"
+. gen FRC = region_code == "FRC1" | region_code == "FRC2" |  region_code == "FRB0"
 {txt}
 {com}. 
 . gen FRD = region_code == "FRD1" | region_code == "FRD2"
 {txt}
 {com}. 
-. gen FRE = region_code == "FRE1" | region_code == "FRE2"
+. gen FRE = region_code == "FRE1" | region_code == "FRE2" | region_code == "FR10"
 {txt}
 {com}. 
 . gen FRF = region_code == "FRF1" | region_code == "FRF2" | region_code == "FRF3"
 {txt}
 {com}. 
-. gen FRG = region_code == "FRG0"
-{txt}
-{com}. 
-. gen FRH = region_code == "FRH0"
+. gen FRH = region_code == "FRH0" | region_code == "FRG0"
 {txt}
 {com}. 
 . gen FRI = region_code == "FRI1" | region_code == "FRI2" | region_code == "FRI3"
@@ -41,17 +32,14 @@
 . gen FRJ = region_code == "FRJ1" | region_code == "FRJ2"
 {txt}
 {com}. 
-. gen FRK = region_code == "FRK1" | region_code == "FRK2"
-{txt}
-{com}. 
-. gen FRL = region_code == "FRL0"
+. gen FRK = region_code == "FRK1" | region_code == "FRK2" | region_code == "FRL0"
 {txt}
 {com}. 
 . gen FRM = region_code == "FRM0"
 {txt}
 {com}. 
 . // Check that each region is assigned to exactly one NUTS 2 area
-. egen sum_dummies = rowtotal(FR1 FRB FRC FRD FRE FRF FRG FRH FRI FRJ FRK FRL FRM)
+. egen sum_dummies = rowtotal(FRC FRD FRE FRF FRH FRI FRJ FRK FRM)
 {txt}
 {com}. assert sum_dummies == 1
 {txt}
@@ -70,7 +58,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts_dummies.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 4 Aug 2024, 18:01:54
+ {txt}closed on:  {res} 5 Aug 2024, 16:00:04
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

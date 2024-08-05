@@ -74,17 +74,30 @@ clear
 
 import excel "raw_data/eurostat/nuts2_emp_lfs_0823.xlsx", sheet("Sheet 1") ///
 	cellrange(A12:R35) firstrow	
-
-tempfile emp_regions_2016
 	
 keep region_code region total_emp_2016
 drop if _n == 1
 
+tempfile emp_regions_2016
 save `emp_regions_2016'
 clear
 
 ***
-*** 4) Merge into one data set
+*** 4) Employment data in year 2004
+***
+
+import excel "raw_data/eurostat/nuts2_emp_lfs_9908.xlsx", sheet("Sheet 6") ///
+	cellrange(A13:C36) firstrow	
+
+keep region_code region total_emp_2004
+drop if _n == 1
+
+tempfile emp_regions_2004
+save `emp_regions_2004'
+clear
+
+***
+*** 5) Merge into one data set
 ***
 
 use `emp_regions_2001'
@@ -92,6 +105,10 @@ use `emp_regions_2001'
 gen id = 1
 
 merge m:1 id using `emp_national_2001'
+drop _merge
+
+merge 1:1 region_code using `emp_regions_2004'
+drop if _merge == 2
 drop _merge
 
 merge 1:1 region_code using `emp_regions_2016'

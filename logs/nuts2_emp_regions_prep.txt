@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Aug 2024, 18:01:54
+ {txt}opened on:  {res} 5 Aug 2024, 16:00:03
 {txt}
 {com}. 
 . ***
@@ -172,9 +172,6 @@ as .dta format
 >         cellrange(A12:R35) firstrow     
 {res}{text}(18 vars, 23 obs)
 
-{com}. 
-. tempfile emp_regions_2016
-{txt}
 {com}.         
 . keep region_code region total_emp_2016
 {txt}
@@ -182,7 +179,9 @@ as .dta format
 {txt}(1 observation deleted)
 
 {com}. 
-. save `emp_regions_2016'
+. tempfile emp_regions_2016
+{txt}
+{com}. save `emp_regions_2016'
 {txt}{p 0 4 2}
 file {bf}
 /var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000005{rm}
@@ -194,7 +193,35 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 4) Merge into one data set
+. *** 4) Employment data in year 2004
+. ***
+. 
+. import excel "raw_data/eurostat/nuts2_emp_lfs_9908.xlsx", sheet("Sheet 6") ///
+>         cellrange(A13:C36) firstrow     
+{res}{text}(3 vars, 23 obs)
+
+{com}. 
+. keep region_code region total_emp_2004
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. tempfile emp_regions_2004
+{txt}
+{com}. save `emp_regions_2004'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000006{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 5) Merge into one data set
 . ***
 . 
 . use `emp_regions_2001'
@@ -210,6 +237,23 @@ as .dta format
 {col 5}Not matched{col 30}{res}               0
 {txt}{col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
 {col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 region_code using `emp_regions_2004'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               1
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               1{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(1 observation deleted)
 
 {com}. drop _merge
 {txt}
@@ -248,7 +292,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 4 Aug 2024, 18:01:54
+ {txt}closed on:  {res} 5 Aug 2024, 16:00:03
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
