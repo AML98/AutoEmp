@@ -1,6 +1,5 @@
 clear
-capture log close
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_merge.txt", replace
 
 use "clean_data/nuts2_emp_regions.dta"
@@ -86,5 +85,5 @@ order region_code region diff_* robot_exposure robot_exposure_* ///
 	high_school_share bachelor_share emp_share_D emp_share_F FR*
 
 save "clean_data/nuts2_reg_ready.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

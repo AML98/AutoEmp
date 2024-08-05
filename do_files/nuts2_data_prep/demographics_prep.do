@@ -1,6 +1,5 @@
 clear
-capture log c
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_demographics_prep.txt", replace
 
 ***
@@ -105,5 +104,5 @@ drop if _merge == 2
 drop _merge
 
 save "clean_data/nuts2_demographics.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

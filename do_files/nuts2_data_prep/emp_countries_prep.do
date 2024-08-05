@@ -1,6 +1,5 @@
 clear
-capture log c
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_emp_countries_prep.txt", replace
 
 ***
@@ -97,5 +96,5 @@ order emp_base_* us_emp_base_ind10_12 us_emp_base_ind13_15 us_emp_base_ind16 ///
 	us_emp_base_C us_emp_base_E us_emp_base_F
 
 save "clean_data/nuts2_emp_countries.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

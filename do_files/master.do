@@ -1,6 +1,8 @@
 clear
-capture log close
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+global mydir "/Users/aml/AutoEmp"
+cd "$mydir/do_files/nuts2_data_prep"
+
+*** ONLY NUTS 2 ANALYSIS
 
 // Data prep
 do "ifr_prep.do"
@@ -12,7 +14,7 @@ do "nuts_dummies.do"
 do "imports_prep.do"
 do "big_merge.do"
 
-cd "/Users/aml/AutoEmp/do_files"
+cd "$mydir/do_files"
 
 // Estimation
 do "estimation.do"

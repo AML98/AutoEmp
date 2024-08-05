@@ -1,6 +1,5 @@
 clear
-capture log c
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts_dummies.txt", replace
 
 use "clean_data/nuts2_demographics.dta"
@@ -30,5 +29,5 @@ egen sum_dummies = rowtotal(FRC FRD FRE FRF FRH FRI FRJ FRK FRM)
 assert sum_dummies == 1
 
 save "clean_data/nuts2_demographics.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

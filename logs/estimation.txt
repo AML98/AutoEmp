@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:02:03
+ {txt}opened on:  {res} 6 Aug 2024, 00:32:53
 {txt}
 {com}. 
 . use "clean_data/nuts2_reg_ready.dta"
@@ -29,9 +29,25 @@
 frobot_exposure_01 {c |}{col 20}{res}{space 2} 3.375131{col 32}{space 2} .1329471{col 43}{space 1}   25.39{col 52}{space 3}0.000{col 60}{space 4} 3.097808{col 73}{space 3} 3.652454
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
-{com}. twoway (scatter robot_exposure frobot_exposure_01) ///
->         (lfit robot_exposure frobot_exposure_01)
+{com}. twoway (scatter robot_exposure frobot_exposure_01, ///
+>        mcolor(black) msymbol(circle) msize(small)) ///
+>        (lfit robot_exposure frobot_exposure_01, lcolor(black) lwidth(medium)), ///
+>            xtitle("French Robot Exposure") ytitle("EU Countries Robot Exposure") ///
+>            xlabel(, labsize(medium)) ylabel(, labsize(medium)) ///
+>        plotregion(style(none)) bgcolor(white) ///
+>        legend(off) graphregion(color(white)) ///
+>        subtitle("First Stage Regression") ///
+>          
 {res}{txt}
+{com}. graph export "plots/first_stage_EU.png", replace
+{txt}{p 0 4 2}
+file {bf}
+/Users/aml/AutoEmp/plots/first_stage_EU.png{rm}
+saved as
+PNG
+format
+{p_end}
+
 {com}.         
 . // The US
 . regress usrobot_exposure frobot_exposure_04, noconstant
@@ -49,9 +65,25 @@ frobot_exposure_01 {c |}{col 20}{res}{space 2} 3.375131{col 32}{space 2} .132947
 frobot_exposure_04 {c |}{col 20}{res}{space 2} 10.84619{col 32}{space 2} 2.616024{col 43}{space 1}    4.15{col 52}{space 3}0.000{col 60}{space 4} 5.389257{col 73}{space 3} 16.30312
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
-{com}. twoway (scatter robot_exposure frobot_exposure_04) ///
->         (lfit robot_exposure frobot_exposure_04)
+{com}. twoway (scatter usrobot_exposure frobot_exposure_04, ///
+>        mcolor(black) msymbol(circle) msize(small)) ///
+>        (lfit usrobot_exposure frobot_exposure_04, lcolor(black) lwidth(medium)), ///
+>            xtitle("French Robot Exposure") ytitle("US Robot Exposure") ///
+>            xlabel(, labsize(medium)) ylabel(, labsize(medium)) ///
+>        plotregion(style(none)) bgcolor(white) ///
+>        legend(off) graphregion(color(white)) ///
+>        subtitle("First Stage Regression") ///
+> 
 {res}{txt}
+{com}. graph export "plots/first_stage_US.png", replace
+{txt}{p 0 4 2}
+file {bf}
+/Users/aml/AutoEmp/plots/first_stage_US.png{rm}
+saved as
+PNG
+format
+{p_end}
+
 {com}. 
 . ***
 . *** 2) Reduced form regressions
@@ -301,14 +333,14 @@ frobot_exposure_04 {c |}{col 20}{res}{space 2} .4090493{col 32}{space 2} .145898
 {p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure}{p_end}
 
 {com}. 
-. cd "/Users/aml/AutoEmp/do_files"
+. cd "$mydir/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:02:04
+ {txt}closed on:  {res} 6 Aug 2024, 00:32:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

@@ -1,6 +1,5 @@
 clear
-capture log c
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_emp_regions_prep.txt", replace
 
 ***
@@ -117,5 +116,5 @@ drop _merge
 order region_code region total_emp_* emp_share_* diff_robots_* emp_base_* fr_emp_base_* id
 
 save "clean_data/nuts2_emp_regions.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

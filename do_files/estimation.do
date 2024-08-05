@@ -1,7 +1,6 @@
 clear
-capture log close
-cd "/Users/aml/AutoEmp"
-log using "logs/estimation.txt", replace
+cd "$mydir"
+log using "logs/estimation.txt", replace 
 
 use "clean_data/nuts2_reg_ready.dta"
 
@@ -11,13 +10,29 @@ use "clean_data/nuts2_reg_ready.dta"
 
 // EU countries
 regress robot_exposure frobot_exposure_01, noconstant
-twoway (scatter robot_exposure frobot_exposure_01) ///
-	(lfit robot_exposure frobot_exposure_01)
+twoway (scatter robot_exposure frobot_exposure_01, ///
+       mcolor(black) msymbol(circle) msize(small)) ///
+       (lfit robot_exposure frobot_exposure_01, lcolor(black) lwidth(medium)), ///
+	   xtitle("French Robot Exposure") ytitle("EU Countries Robot Exposure") ///
+	   xlabel(, labsize(medium)) ylabel(, labsize(medium)) ///
+       plotregion(style(none)) bgcolor(white) ///
+       legend(off) graphregion(color(white)) ///
+       subtitle("First Stage Regression") ///
+	 
+graph export "plots/first_stage_EU.png", replace
 	
 // The US
 regress usrobot_exposure frobot_exposure_04, noconstant
-twoway (scatter robot_exposure frobot_exposure_04) ///
-	(lfit robot_exposure frobot_exposure_04)
+twoway (scatter usrobot_exposure frobot_exposure_04, ///
+       mcolor(black) msymbol(circle) msize(small)) ///
+       (lfit usrobot_exposure frobot_exposure_04, lcolor(black) lwidth(medium)), ///
+	   xtitle("French Robot Exposure") ytitle("US Robot Exposure") ///
+	   xlabel(, labsize(medium)) ylabel(, labsize(medium)) ///
+       plotregion(style(none)) bgcolor(white) ///
+       legend(off) graphregion(color(white)) ///
+       subtitle("First Stage Regression") ///
+
+graph export "plots/first_stage_US.png", replace
 
 ***
 *** 2) Reduced form regressions
@@ -79,5 +94,5 @@ ivregress 2sls diff_log_wages_04 (frobot_exposure_04 = usrobot_exposure) ///
 	high_school_share emp_share_D emp_share_F ///
 	[w=working_age_pop], noconstant 
 
-cd "/Users/aml/AutoEmp/do_files"
+cd "$mydir/do_files"
 log close

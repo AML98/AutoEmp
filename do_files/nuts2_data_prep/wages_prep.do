@@ -1,6 +1,5 @@
 clear
-capture log c
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_wages.txt", replace
 
 import excel "raw_data/eurostat/nuts2_wages.xlsx", sheet("Sheet 1") ///
@@ -14,5 +13,5 @@ gen log_wages_2004 = log(wages_2004)
 gen log_wages_2016 = log(wages_2016)
 
 save "clean_data/nuts2_wages.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

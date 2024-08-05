@@ -1,6 +1,5 @@
 clear
-capture log close
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_first_stage.txt", replace
 
 use "clean_data/nuts2_emp_regions.dta"
@@ -57,5 +56,5 @@ twoway (scatter diff_fr_robots_to_pop diff_robots_to_pop) ///
 	(lfit diff_fr_robots_to_pop diff_robots_to_pop)
 
 save "clean_data/first_stage.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

@@ -1,6 +1,5 @@
 clear
-capture log c
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/imports_prep.txt", replace
 
 import excel "raw_data/eurostat/imports_detailed_industry.xlsx", sheet("Sheet 1") ///
@@ -24,5 +23,5 @@ drop if yr == 2012
 drop yr
 
 save "clean_data/nuts2_diff_imports.dta", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:02:03
+ {txt}opened on:  {res} 6 Aug 2024, 00:32:53
 {txt}
 {com}. 
 . ***
@@ -285,14 +285,14 @@ clean_data/nuts2_emp_regions.dta{rm}
 saved
 {p_end}
 
-{com}. cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+{com}. cd "$mydir/do_files/nuts2_data_prep"
 {res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:02:03
+ {txt}closed on:  {res} 6 Aug 2024, 00:32:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

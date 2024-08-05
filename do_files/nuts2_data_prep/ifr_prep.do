@@ -1,6 +1,5 @@
 clear
-capture log close
-cd "/Users/aml/AutoEmp"
+cd "$mydir"
 log using "logs/nuts2_fr_prep.txt", replace
 
 import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet2") firstrow
@@ -170,5 +169,5 @@ merge 1:1 id using `robots_us'
 drop _merge
 
 save "clean_data/nuts2_diff_robots", replace
-cd "/Users/aml/AutoEmp/do_files/nuts2_data_prep"
+cd "$mydir/do_files/nuts2_data_prep"
 log close
