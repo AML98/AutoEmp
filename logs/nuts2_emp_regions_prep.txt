@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 5 Aug 2024, 16:00:03
+ {txt}opened on:  {res} 6 Aug 2024, 00:02:03
 {txt}
 {com}. 
 . ***
@@ -108,11 +108,9 @@ as .dta format
 {com}. drop if _n == 1
 {txt}(1 observation deleted)
 
-{com}. drop D
-{txt}
 {com}. 
 . local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
->         ind28 ind29_30 ind91 AB C E F
+>         ind28 ind29_30 ind91 AB C D E F
 {txt}
 {com}. 
 . foreach var of local varlist {c -(}
@@ -122,6 +120,8 @@ as .dta format
 {txt}  5{com}.         drop `var'
 {txt}  6{com}. {c )-}
 {txt}(21 missing values generated)
+(21 missing values generated)
+(21 missing values generated)
 (21 missing values generated)
 (21 missing values generated)
 (21 missing values generated)
@@ -292,7 +292,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 5 Aug 2024, 16:00:03
+ {txt}closed on:  {res} 6 Aug 2024, 00:02:03
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

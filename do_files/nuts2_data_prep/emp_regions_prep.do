@@ -53,10 +53,9 @@ tempfile emp_regions_2001
 
 drop if missing(AB) | missing(C) | missing(D) | missing(E) | missing(F)
 drop if _n == 1
-drop D
 
 local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
-	ind28 ind29_30 ind91 AB C E F
+	ind28 ind29_30 ind91 AB C D E F
 
 foreach var of local varlist {
 	gen emp_share_`var' = `var' / total_emp_2001

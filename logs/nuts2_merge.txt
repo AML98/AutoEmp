@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 5 Aug 2024, 16:00:04
+ {txt}opened on:  {res} 6 Aug 2024, 00:02:03
 {txt}
 {com}. 
 . use "clean_data/nuts2_emp_regions.dta"
@@ -19,6 +19,17 @@
 {col 9}from using{col 30}{res}               1{txt}  (_merge==2)
 
 {col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 region_code using "clean_data/nuts2_wages.dta"
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              22{txt}  (_merge==3)
 {col 5}{hline 41}
 
 {com}. drop _merge
@@ -285,16 +296,31 @@
 {txt}(1 missing value generated)
 
 {com}.         
-. keep region_code region diff_emp_to_pop_* robot_exposure robot_exposure_* ///
->         frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
->         import_exposure_* population_2001 working_age_pop female_share ///
->         high_school_share bachelor_share FR*
+. gen diff_wages_to_emp_01 = wages_2016/total_emp_2016 - ///
+>         wages_2001/total_emp_2001
+{txt}(1 missing value generated)
+
+{com}.         
+. gen diff_wages_to_emp_04 = wages_2016/total_emp_2016 - ///
+>         wages_2004/total_emp_2004
+{txt}(1 missing value generated)
+
+{com}.         
+. gen diff_log_wages_01 = log_wages_2016 - log_wages_2001
+{txt}
+{com}. gen diff_log_wages_04 = log_wages_2016 - log_wages_2004
 {txt}
 {com}.         
-. order region_code region diff_emp_to_pop_* robot_exposure robot_exposure_* ///
+. keep region_code region diff_* robot_exposure robot_exposure_* ///
 >         frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
 >         import_exposure_* population_2001 working_age_pop female_share ///
->         high_school_share bachelor_share FR*
+>         high_school_share bachelor_share emp_share_D emp_share_F FR*
+{txt}
+{com}.         
+. order region_code region diff_* robot_exposure robot_exposure_* ///
+>         frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
+>         import_exposure_* population_2001 working_age_pop female_share ///
+>         high_school_share bachelor_share emp_share_D emp_share_F FR*
 {txt}
 {com}. 
 . save "clean_data/nuts2_reg_ready.dta", replace
@@ -311,7 +337,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 5 Aug 2024, 16:00:04
+ {txt}closed on:  {res} 6 Aug 2024, 00:02:03
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}
