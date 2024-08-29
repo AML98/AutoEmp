@@ -3,36 +3,36 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/demographics_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 4 Aug 2024, 16:35:24
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
 {txt}
 {com}. 
 . ***
-. *** 1) Prepare population data for year 2016 (sheet 18)
+. *** 1) Prepare population data for year 2016 (sheet 27)
 . ***
 . 
-. import excel "raw_data/eurostat/nuts2_demographics_gender.xlsx", sheet("Sheet 18") ///
->         cellrange(A13:D36) firstrow     
-{res}{text}(4 vars, 23 obs)
+. import excel "raw_data/eurostat/demographics_gender.xlsx", sheet("Sheet 27") ///
+>         cellrange(A12:E114) firstrow    
+{res}{text}(5 vars, 102 obs)
 
 {com}. 
 . tempfile population_2016
 {txt}
 {com}.         
-. drop if missing(population)
+. drop if missing(population) | missing(males) | missing(females)
 {txt}(0 observations deleted)
 
-{com}. rename population population_2016
-{res}{txt}
+{com}. gen population_2016 = population / 1000
+{txt}
+{com}. drop males females population
+{txt}
 {com}. drop if _n == 1
 {txt}(1 observation deleted)
 
-{com}. drop females
-{txt}
 {com}. 
 . save `population_2016'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000001{rm}
 saved
 as .dta format
 {p_end}
@@ -41,24 +41,26 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 2) Prepare working-age population data for year 2001
+. *** 2) Prepare working-age population data for year 2000 (sheet 11)
 . ***
 . 
-. import excel "raw_data/eurostat/nuts2_demographics_working_age.xlsx", sheet("Sheet 1") ///
->         cellrange(A12:AA35) firstrow    
-{res}{text}(27 vars, 23 obs)
+. import excel "raw_data/eurostat/demographics_age.xlsx", sheet("Sheet 11") ///
+>         cellrange(A12:D114) firstrow    
+{res}{text}(4 vars, 102 obs)
 
 {com}. 
 . tempfile working_age_pop
 {txt}
 {com}.         
-. keep region_code region working_age_pop_2001
-{txt}
-{com}. rename working_age_pop_2001 working_age_pop
-{res}{txt}
-{com}. drop if missing(working_age_pop)
-{txt}(0 observations deleted)
+. drop if missing(working_age_pop)
+{txt}(2 observations deleted)
 
+{com}. replace working_age_pop = working_age_pop / 1000
+{txt}variable {bf}{res}working_age_pop{sf}{txt} was {bf}{res}long{sf}{txt} now {bf}{res}double{sf}
+{txt}(100 real changes made)
+
+{com}. drop population
+{txt}
 {com}. drop if _n == 1
 {txt}(1 observation deleted)
 
@@ -66,7 +68,7 @@ as .dta format
 . save `working_age_pop'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 saved
 as .dta format
 {p_end}
@@ -75,25 +77,136 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 3) Prepare education data for year 2001 (sheet 3)
+. *** 3) Prepare education data for year 2001 (sheet 1)
 . ***
 . 
-. import excel "raw_data/eurostat/demographics_educ.xlsx", sheet("Sheet 3") ///
->         cellrange(A13:E36) firstrow     
-{res}{err}worksheet {bf:Sheet 3} not found
-{res}{txt}{search r(601), local:r(601);}
+. import excel "raw_data/eurostat/demographics_educ.xlsx", sheet("Sheet 1") ///
+>         cellrange(A14:E111) firstrow    
+{res}{text}(5 vars, 97 obs)
 
-end of do-file
-
-{search r(601), local:r(601);}
-
-{com}. cd do_files/nuts2_data_prep
-{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
-
-{com}. do demographics_prep
+{com}. 
+. tempfile education_pop
 {txt}
+{com}.         
+. drop if missing(population) | missing(high_school) | missing(bachelor)
+{txt}(0 observations deleted)
+
+{com}. gen high_school_share = high_school / population
+{txt}
+{com}. gen bachelor_share = bachelor / population 
+{txt}
+{com}. drop population high_school bachelor
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. save `education_pop'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000003{rm}
+saved
+as .dta format
+{p_end}
+
 {com}. clear
 {txt}
-{com}. capture log c
+{com}. 
+. ***
+. *** 4) Prepare population data for year 2000 (sheet 11)
+. ***
+. 
+. import excel "raw_data/eurostat/demographics_gender.xlsx", sheet("Sheet 11") ///
+>         cellrange(A12:E114) firstrow    
+{res}{text}(5 vars, 102 obs)
+
+{com}. 
+. // Remove overseas regions
+. drop if region == "Guadeloupe" | region == "Martinique" | region == "Guyane" ///
+>         | region == "La Réunion" | region == "Mayotte"
+{txt}(5 observations deleted)
+
+{com}.         
+. drop if missing(population) | missing(males) | missing(females)
+{txt}(0 observations deleted)
+
+{com}. gen female_share = females / population
+{txt}
+{com}. gen population_2000 = population / 1000
+{txt}
+{com}. drop males females population
+{txt}
+{com}. drop if _n == 1
+{txt}(1 observation deleted)
+
+{com}. 
+. ***
+. *** 5) Merge data into one data set
+. ***
+. 
+. merge 1:1 region_code using `population_2016', keepusing(population_2016)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               5
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               5{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              96{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(5 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 region_code using `working_age_pop', keepusing(working_age_pop)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               3
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               3{txt}  (_merge==2)
+
+{col 5}Matched{col 30}{res}              96{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(3 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. merge 1:1 region_code using `education_pop', keepusing(high_school_share bachelor_share)
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              96{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(0 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. save "clean_data/demographics.dta", replace
+{txt}{p 0 4 2}
+file {bf}
+clean_data/demographics.dta{rm}
+saved
+{p_end}
+
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts3_data_prep
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/demographics_prep.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
+{txt}{.-}
 {smcl}
-{com}{sf}{ul off}
+{txt}{sf}{ul off}

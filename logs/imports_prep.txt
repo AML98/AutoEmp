@@ -3,41 +3,31 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/imports_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
 {txt}
 {com}. 
-. import excel "raw_data/eurostat/imports_detailed_industry.xlsx", sheet("Sheet 1") ///
->         cellrange(A32:Q43) firstrow     
-{res}{text}(17 vars, 11 obs)
+. import excel "raw_data/eurostat/imports_broad_industry.xlsx", sheet("Sheet 1") ///
+>         cellrange(A14:F25) firstrow     
+{res}{text}(6 vars, 11 obs)
 
 {com}. 
-. keep if yr == 2012 | yr == 2016
+. gen imp_other_industry = imp_industry_ex_construct - imp_manufact
+{txt}(3 missing values generated)
+
+{com}. keep if yr == 2012 | yr == 2016
 {txt}(9 observations deleted)
 
-{com}. drop D
+{com}. drop imp_industry_ex_construct
+{txt}
+{com}. drop imp_total
 {txt}
 {com}. 
-. local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
->         ind28 ind29_30 ind91 AB C E F
-{txt}
-{com}. 
-. foreach var of local varlist {c -(}
-{txt}  2{com}.         gen diff_imp_`var' = `var' - `var'[_n-1]
-{txt}  3{com}.         format diff_imp_`var' %14.2f
-{txt}  4{com}.         drop `var'
+. foreach v in imp_agri_forest_fish imp_manufact imp_construct imp_other_industry{c -(}
+{txt}  2{com}.         gen diff_`v' = (`v' - `v'[_n-1])/1000
+{txt}  3{com}.         format diff_`v' %14.2f
+{txt}  4{com}.         drop `v'
 {txt}  5{com}. {c )-}
 {txt}(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
-(1 missing value generated)
 (1 missing value generated)
 (1 missing value generated)
 (1 missing value generated)
@@ -52,21 +42,21 @@
 {com}. drop yr
 {txt}
 {com}. 
-. save "clean_data/nuts2_diff_imports.dta", replace
+. save "clean_data/diff_imports.dta", replace
 {txt}{p 0 4 2}
 file {bf}
-clean_data/nuts2_diff_imports.dta{rm}
+clean_data/diff_imports.dta{rm}
 saved
 {p_end}
 
-{com}. cd "$mydir/do_files/nuts2_data_prep"
-{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts3_data_prep
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/imports_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

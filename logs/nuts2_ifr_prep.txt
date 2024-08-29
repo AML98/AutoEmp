@@ -1,9 +1,9 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_fr_prep.txt
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:51
+ {txt}opened on:  {res}29 Aug 2024, 23:23:50
 {txt}
 {com}. 
 . import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet2") firstrow
@@ -100,7 +100,7 @@ saved
 {com}. save `robots_inst_countries'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000001{rm}
 saved
 as .dta format
 {p_end}
@@ -203,7 +203,7 @@ as .dta format
 {com}. save `robots_us'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 saved
 as .dta format
 {p_end}
@@ -263,7 +263,7 @@ as .dta format
 {com}. save `temp'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000003{rm}
 saved
 as .dta format
 {p_end}
@@ -311,7 +311,7 @@ as .dta format
 {com}. save `diff04'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000004{rm}
 saved
 as .dta format
 {p_end}
@@ -408,9 +408,9 @@ saved
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
-       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_fr_prep.txt
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:52
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

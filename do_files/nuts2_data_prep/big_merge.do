@@ -27,8 +27,16 @@ gen frobot_exposure_04 = 0 // 2004-2016 diff
 gen usrobot_exposure = 0
 gen import_exposure = 0
 
+gen robot_exposure_auto = 0
+gen frobot_exposure_01_auto = 0
+gen frobot_exposure_04_auto = 0
+gen usrobot_exposure_auto = 0
+
 local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
 	ind28 ind29_30 ind91 AB C E F
+	
+local varlist_no_auto ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ///
+	ind26_27 ind28 ind91 AB C E F
 
 foreach industry of local varlist {
 	
@@ -58,6 +66,21 @@ foreach industry of local varlist {
 	replace import_exposure = import_exposure + import_exposure_`industry'
 }
 
+foreach industry of local varlist_no_auto {
+	
+	// 1) Robot exposure for EU instrument countries (2001-2016)
+	replace robot_exposure_auto = robot_exposure_auto + robot_exposure_`industry'
+	
+	// 2) Robot exposure for US as instrument (2004-2016)
+	replace usrobot_exposure_auto = usrobot_exposure_auto + usrobot_exposure_`industry'
+	
+	// 3) Robot exposure for France (2001-2016)
+	replace frobot_exposure_01_auto = frobot_exposure_01_auto + frobot_exposure_01_`industry'
+	
+	// 4) Robot exposure for France (2004-2016)
+	replace frobot_exposure_04_auto = frobot_exposure_04_auto + frobot_exposure_04_`industry'
+}
+
 // Compute long difference in employment to population
 gen diff_emp_to_pop_01 = total_emp_2016/population_2016 - ///
 	total_emp_2001/population_2001
@@ -77,12 +100,14 @@ gen diff_log_wages_04 = log_wages_2016 - log_wages_2004
 keep region_code region diff_* robot_exposure robot_exposure_* ///
 	frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
 	import_exposure_* population_2001 working_age_pop female_share ///
-	high_school_share bachelor_share emp_share_D emp_share_F FR*
+	high_school_share bachelor_share emp_share_D emp_share_F FR* ///
+	emp_to_pop_diff_9601
 	
 order region_code region diff_* robot_exposure robot_exposure_* ///
 	frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
 	import_exposure_* population_2001 working_age_pop female_share ///
-	high_school_share bachelor_share emp_share_D emp_share_F FR*
+	high_school_share bachelor_share emp_share_D emp_share_F FR* ///
+	emp_to_pop_diff_9601
 
 save "clean_data/nuts2_reg_ready.dta", replace
 cd "$mydir/do_files/nuts2_data_prep"

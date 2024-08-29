@@ -3,62 +3,152 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts_dummies.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
 {txt}
 {com}. 
-. use "clean_data/nuts2_demographics.dta"
+. use "clean_data/demographics.dta"
 {txt}
 {com}. 
-. // Dummies for every NUTS 1 area (12)
+. // Dummies for every NUTS 2 area
 . 
-. gen FRC = region_code == "FRC1" | region_code == "FRC2" |  region_code == "FRB0"
+. gen FR10 = region == "Paris" | region == "Seine-et-Marne" | ///
+>         region == "Seine-Saint-Denis" | ///
+>         region == "Hauts-de-Seine" | ///
+>         region == "Val-de-Marne" | ///
+>         region == "Yvelines" | ///
+>         region == "Essonne" | ///
+>         region == "Val-d'Oise"
 {txt}
 {com}. 
-. gen FRD = region_code == "FRD1" | region_code == "FRD2"
+. gen FRB0 = region == "Cher" | region == "Eure-et-Loir" | ///
+>         region == "Indre-et-Loire" | ///
+>         region == "Loir-et-Cher" | ///
+>         region == "Indre" | ///
+>         region == "Loiret"
 {txt}
 {com}. 
-. gen FRE = region_code == "FRE1" | region_code == "FRE2" | region_code == "FR10"
+. gen FRC1 = region == "Côte-d'Or" | region == "Nièvre" | ///
+>         region == "Saône-et-Loire" | ///
+>         region == "Yonne"
 {txt}
 {com}. 
-. gen FRF = region_code == "FRF1" | region_code == "FRF2" | region_code == "FRF3"
+. gen FRC2 = region == "Doubs" | region == "Jura" | region == "Haute-Saône" | ///
+>     region == "Territoire de Belfort"
 {txt}
 {com}. 
-. gen FRH = region_code == "FRH0" | region_code == "FRG0"
+. gen FRD1 = region == "Calvados" | region == "Manche" | region == "Orne"
 {txt}
 {com}. 
-. gen FRI = region_code == "FRI1" | region_code == "FRI2" | region_code == "FRI3"
+. gen FRD2 = region == "Eure" | region == "Seine-Maritime"
 {txt}
 {com}. 
-. gen FRJ = region_code == "FRJ1" | region_code == "FRJ2"
+. gen FRE1 = region == "Nord" | region == "Pas-de-Calais"
 {txt}
 {com}. 
-. gen FRK = region_code == "FRK1" | region_code == "FRK2" | region_code == "FRL0"
+. gen FRE2 = region == "Aisne" | region == "Oise" | region == "Somme"
 {txt}
 {com}. 
-. gen FRM = region_code == "FRM0"
+. gen FRF1 = region == "Bas-Rhin" | region == "Haut-Rhin"
 {txt}
+{com}. 
+. gen FRF2 = region == "Ardennes" | region == "Aube" | region == "Marne" | ///
+>     region == "Haute-Marne"
+{txt}
+{com}. 
+. gen FRF3 = region == "Meurthe-et-Moselle" | region == "Meuse" | ///
+>         region == "Moselle" | ///
+>         region == "Vosges"
+{txt}
+{com}. 
+. gen FRG0 = region == "Loire-Atlantique" | region == "Maine-et-Loire" | ///
+>         region == "Mayenne" | ///
+>         region == "Sarthe" | ///
+>         region == "Vendée"
+{txt}
+{com}. 
+. gen FRH0 = region == "Côtes-d'Armor" | region == "Finistère" | ///
+>         region == "Ille-et-Vilaine" | ///
+>         region == "Morbihan"
+{txt}
+{com}. 
+. gen FRI1 = region == "Dordogne" | region == "Gironde" | ///
+>         region == "Pyrénées-Atlantiques" | ///
+>         region == "Lot-et-Garonne" | ///
+>         region == "Landes"
+{txt}
+{com}. 
+. gen FRI2 = region == "Corrèze" | region == "Creuse" | region == "Haute-Vienne"
+{txt}
+{com}. 
+. gen FRI3 = region == "Charente" | region == "Charente-Maritime" | ///
+>         region == "Deux-Sèvres" | ///
+>         region == "Vienne"
+{txt}
+{com}. 
+. gen FRJ1 = region == "Aude" | region == "Gard" | region == "Hérault" | ///
+>         region == "Pyrénées-Orientales" | ///
+>     region == "Lozère"
+{txt}
+{com}. 
+. gen FRJ2 = region == "Ariège" | region == "Aveyron" | ///
+>         region == "Hautes-Pyrénées" | ///
+>         region == "Tarn-et-Garonne" | ///
+>         region == "Haute-Garonne" | ///
+>         region == "Gers" | ///
+>         region == "Lot" | ///
+>         region == "Tarn"
+{txt}
+{com}. 
+. gen FRK1 = region == "Allier" | region == "Cantal" | ///
+>         region == "Haute-Loire" | ///
+>     region == "Puy-de-Dôme"
+{txt}
+{com}. 
+. gen FRK2 = region == "Ain" | region == "Ardèche" | region == "Drôme" | ///
+>         region == "Isère" | ///
+>         region == "Loire" | ///
+>         region == "Rhône" | ///
+>         region == "Savoie" | ///
+>         region == "Haute-Savoie"
+{txt}
+{com}. 
+. gen FRL0 = region == "Alpes-de-Haute-Provence" | region == "Hautes-Alpes" | ///
+>         region == "Bouches-du-Rhône" | ///
+>         region == "Alpes-Maritimes" | ///
+>         region == "Vaucluse" | ///
+>         region == "Var"
+{txt}
+{com}. 
+. gen FRM0 = region == "Corse-du-Sud" | region == "Haute-Corse"
+{txt}
+{com}. 
+. // Stata cannot find this region, so set the dummy manually
+. replace FRC1 = 1 if _n == 15
+{txt}(1 real change made)
+
 {com}. 
 . // Check that each region is assigned to exactly one NUTS 2 area
-. egen sum_dummies = rowtotal(FRC FRD FRE FRF FRH FRI FRJ FRK FRM)
+. egen sum_dummies = rowtotal(FRL0 FR10 FRJ2 FRI1 FRB0 FRK2 FRG0 FRH0 FRI3 ///
+>         FRJ1 FRC2 FRF3 FRK1 FRC1 FRF2 FRI2 FRM0 FRD1 FRD2 FRF1 FRE1 FRE2)
 {txt}
 {com}. assert sum_dummies == 1
 {txt}
 {com}. 
-. save "clean_data/nuts2_demographics.dta", replace
+. save "clean_data/demographics.dta", replace
 {txt}{p 0 4 2}
 file {bf}
-clean_data/nuts2_demographics.dta{rm}
+clean_data/demographics.dta{rm}
 saved
 {p_end}
 
-{com}. cd "$mydir/do_files/nuts2_data_prep"
-{res}/Users/aml/AutoEmp/do_files/nuts2_data_prep
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts3_data_prep
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts_dummies.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:53
 {txt}
 {com}. 
 . ***
@@ -22,7 +22,7 @@
 {com}. save `lfs_emp'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000001{rm}
 saved
 as .dta format
 {p_end}
@@ -51,12 +51,12 @@ as .dta format
 {com}. save `lfs_sbs_emp', replace
 {txt}{p 0 4 2}
 (file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 not found)
 {p_end}
 {p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 saved
 as .dta format
 {p_end}
@@ -78,7 +78,7 @@ as .dta format
 {com}. save `agri'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000003{rm}
 saved
 as .dta format
 {p_end}
@@ -113,7 +113,7 @@ as .dta format
 {com}. save `us_emp'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000004{rm}
 saved
 as .dta format
 {p_end}
@@ -154,7 +154,7 @@ as .dta format
 . save `lfs_sbs_emp', replace
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 saved
 as .dta format
 {p_end}
@@ -213,7 +213,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_countries_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

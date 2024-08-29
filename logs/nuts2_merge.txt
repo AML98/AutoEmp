@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:53
 {txt}
 {com}. 
 . use "clean_data/nuts2_emp_regions.dta"
@@ -102,8 +102,21 @@
 {com}. gen import_exposure = 0
 {txt}
 {com}. 
+. gen robot_exposure_auto = 0
+{txt}
+{com}. gen frobot_exposure_01_auto = 0
+{txt}
+{com}. gen frobot_exposure_04_auto = 0
+{txt}
+{com}. gen usrobot_exposure_auto = 0
+{txt}
+{com}. 
 . local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 ///
 >         ind28 ind29_30 ind91 AB C E F
+{txt}
+{com}.         
+. local varlist_no_auto ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ///
+>         ind26_27 ind28 ind91 AB C E F
 {txt}
 {com}. 
 . foreach industry of local varlist {c -(}
@@ -285,6 +298,78 @@
 (21 real changes made)
 
 {com}. 
+. foreach industry of local varlist_no_auto {c -(}
+{txt}  2{com}.         
+.         // 1) Robot exposure for EU instrument countries (2001-2016)
+.         replace robot_exposure_auto = robot_exposure_auto + robot_exposure_`industry'
+{txt}  3{com}.         
+.         // 2) Robot exposure for US as instrument (2004-2016)
+.         replace usrobot_exposure_auto = usrobot_exposure_auto + usrobot_exposure_`industry'
+{txt}  4{com}.         
+.         // 3) Robot exposure for France (2001-2016)
+.         replace frobot_exposure_01_auto = frobot_exposure_01_auto + frobot_exposure_01_`industry'
+{txt}  5{com}.         
+.         // 4) Robot exposure for France (2004-2016)
+.         replace frobot_exposure_04_auto = frobot_exposure_04_auto + frobot_exposure_04_`industry'
+{txt}  6{com}. {c )-}
+{txt}(22 real changes made, 1 to missing)
+(22 real changes made, 1 to missing)
+(22 real changes made, 1 to missing)
+(22 real changes made, 1 to missing)
+(20 real changes made)
+(20 real changes made)
+(20 real changes made)
+(20 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(20 real changes made)
+(20 real changes made)
+(20 real changes made)
+(20 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+(21 real changes made)
+
+{com}. 
 . // Compute long difference in employment to population
 . gen diff_emp_to_pop_01 = total_emp_2016/population_2016 - ///
 >         total_emp_2001/population_2001
@@ -314,13 +399,15 @@
 . keep region_code region diff_* robot_exposure robot_exposure_* ///
 >         frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
 >         import_exposure_* population_2001 working_age_pop female_share ///
->         high_school_share bachelor_share emp_share_D emp_share_F FR*
+>         high_school_share bachelor_share emp_share_D emp_share_F FR* ///
+>         emp_to_pop_diff_9601
 {txt}
 {com}.         
 . order region_code region diff_* robot_exposure robot_exposure_* ///
 >         frobot_exposure_* usrobot_exposure usrobot_exposure_* import_exposure ///
 >         import_exposure_* population_2001 working_age_pop female_share ///
->         high_school_share bachelor_share emp_share_D emp_share_F FR*
+>         high_school_share bachelor_share emp_share_D emp_share_F FR* ///
+>         emp_to_pop_diff_9601
 {txt}
 {com}. 
 . save "clean_data/nuts2_reg_ready.dta", replace
@@ -337,7 +424,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

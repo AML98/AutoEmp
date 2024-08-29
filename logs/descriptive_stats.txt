@@ -1,0 +1,164 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/descriptive_stats.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
+{txt}
+{com}. 
+. use "clean_data/nuts2_reg_ready.dta"
+{txt}
+{com}. 
+. sum diff_emp_to_pop_* diff_log_wages_* robot_exposure frobot_exposure_01 ///
+>         frobot_exposure_04 usrobot_exposure import_exposure emp_share_* ///
+>         bachelor_share high_school_share female_share working_age_pop
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+diff_emp_~01 {c |}{res}         21    .0190168     .023001   -.013742   .0658603
+{txt}diff_emp_~04 {c |}{res}         21    .0103728    .0249638  -.0378329   .0518126
+{txt}diff_log_~01 {c |}{res}         22    .3551537    .0761648   .2519312   .5290661
+{txt}diff_log_~04 {c |}{res}         22     .252952    .0720328   .1525345   .4110823
+{txt}robot_expo~e {c |}{res}         21    1.208599    .8082155   .1261919   3.396477
+{txt}{hline 13}{c +}{hline 57}
+frobot_ex~01 {c |}{res}         21    .3547531    .2325101   .0555522   1.045563
+{txt}frobot_ex~04 {c |}{res}         21     .131515    .1512117  -.1291372   .5261759
+{txt}usrobot_ex~e {c |}{res}         21    2.632179     1.77955   .2391196   7.295229
+{txt}import_exp~e {c |}{res}         21   -.0269936    1.368814  -2.920047   2.144114
+{txt}{space 1}emp_share_D {c |}{res}         21    .2174301    .1440521   .0284987   .5767264
+{txt}{hline 13}{c +}{hline 57}
+{space 1}emp_share_F {c |}{res}         21     .075561    .0575504   .0224614   .2765433
+{txt}bachelor_s~e {c |}{res}         22    .1826412    .0365586   .1397444   .3001324
+{txt}high_schoo~e {c |}{res}         22    .4087589    .0471203   .2495088   .4695758
+{txt}female_share {c |}{res}         22    .5048476    .0068711   .4941605   .5202088
+{txt}working_ag~p {c |}{res}         22    1709.959    1553.509      101.8     7626.3
+{txt}
+{com}.         
+. sum robot_exposure_*
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+robot_expo~o {c |}{res}         21    .6612767    .4211043   .0989703   1.655162
+{txt}robot_exp~12 {c |}{res}         21    .2947647    .2162426   .0618178   1.026087
+{txt}robot_exp~15 {c |}{res}         21   -.0027969    .0024927  -.0088174          0
+{txt}robot_exp~16 {c |}{res}         21   -.0246849    .0353349  -.1745591  -.0022365
+{txt}robot_exp~18 {c |}{res}         21    .0032801    .0023124   .0005427   .0094431
+{txt}{hline 13}{c +}{hline 57}
+robot_exp~22 {c |}{res}         21     .137393    .1093928   .0120939   .3301593
+{txt}robot_exp~23 {c |}{res}         21    .0175095    .0135186   .0038809   .0556042
+{txt}robot_exp~25 {c |}{res}         21    .1717101      .11953   .0141877   .4548881
+{txt}robot_exp~27 {c |}{res}         21    .0065912    .0047158   .0008916   .0187276
+{txt}robot_exp~28 {c |}{res}         21    .0565461    .0460109   .0055005    .178526
+{txt}{hline 13}{c +}{hline 57}
+robot_exp~30 {c |}{res}         21    .5473218    .4411488   .0272216   1.741315
+{txt}robot_exp~91 {c |}{res}         21   -.0106749    .0071699  -.0275991  -.0013447
+{txt}robot_expo~B {c |}{res}         21    .0038368    .0017817   .0002354   .0061484
+{txt}robot_expo~C {c |}{res}         21    .0004512    .0005641          0   .0024853
+{txt}robot_expo~E {c |}{res}         21    .0026713    .0023406   .0004339   .0099874
+{txt}{hline 13}{c +}{hline 57}
+robot_expo~F {c |}{res}         21    .0046795    .0035641    .001391   .0171262
+{txt}
+{com}. 
+. sum usrobot_exposure_*
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+usrobot_ex~o {c |}{res}         21    1.378889      .89555   .1767861   3.307862
+{txt}usrobot_e~12 {c |}{res}         21    .2221542    .1629747   .0465899   .7733271
+{txt}usrobot_e~15 {c |}{res}         21    .0019769    .0017619          0   .0062323
+{txt}usrobot_e~16 {c |}{res}         21    .0017627    .0025231   .0001597   .0124646
+{txt}usrobot_e~18 {c |}{res}         21    .0034451    .0024287     .00057   .0099181
+{txt}{hline 13}{c +}{hline 57}
+usrobot_e~22 {c |}{res}         21     .279266    .2223526   .0245821   .6710842
+{txt}usrobot_e~23 {c |}{res}         21    .0085029    .0065648   .0018846   .0270022
+{txt}usrobot_e~25 {c |}{res}         21    .2427304    .1689684   .0200558   .6430325
+{txt}usrobot_e~27 {c |}{res}         21     .425962    .3047628   .0576217   1.210298
+{txt}usrobot_e~28 {c |}{res}         21    .0409366    .0333096   .0039821   .1292439
+{txt}{hline 13}{c +}{hline 57}
+usrobot_e~30 {c |}{res}         21     1.25329    1.010169   .0623336   3.987367
+{txt}usrobot_e~91 {c |}{res}         21    .1471455    .0988321   .0185358   .3804345
+{txt}usrobot_ex~B {c |}{res}         21    .0022103    .0010264   .0001356    .003542
+{txt}usrobot_ex~C {c |}{res}         21    .0001422    .0001778          0   .0007834
+{txt}usrobot_ex~E {c |}{res}         21     .001005    .0008806   .0001632   .0037575
+{txt}{hline 13}{c +}{hline 57}
+usrobot_ex~F {c |}{res}         21    .0016492    .0012561   .0004903    .006036
+{txt}
+{com}. 
+. sum frobot_exposure_*
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+frobot_ex~01 {c |}{res}         21    .3547531    .2325101   .0555522   1.045563
+{txt}frobot_ex~04 {c |}{res}         21     .131515    .1512117  -.1291372   .5261759
+{txt}frobo~1_auto {c |}{res}         21    .3505198     .229785   .0553417   1.032095
+{txt}frobo~4_auto {c |}{res}         21    .3676629    .2411671   .0541897   1.007791
+{txt}f~1_ind10_12 {c |}{res}         21     .146014    .1071174   .0306219     .50828
+{txt}{hline 13}{c +}{hline 57}
+f~4_ind10_12 {c |}{res}         21    .1274915    .0935292   .0267374   .4438027
+{txt}f~1_ind13_15 {c |}{res}         21   -.0024082    .0021463  -.0075921          0
+{txt}f~4_ind13_15 {c |}{res}         21   -.0030231    .0026943  -.0095305          0
+{txt}frob~1_ind16 {c |}{res}         21    .0099363    .0142232   .0009003   .0702646
+{txt}frob~4_ind16 {c |}{res}         21    .0078222     .011197   .0007087   .0553146
+{txt}{hline 13}{c +}{hline 57}
+f~1_ind17_18 {c |}{res}         21    .0177435    .0125088   .0029359   .0510817
+{txt}f~4_ind17_18 {c |}{res}         21    .0168122    .0118523   .0027818   .0484006
+{txt}f~1_ind19_22 {c |}{res}         21    .0488265    .0388758   .0042979   .1173314
+{txt}f~4_ind19_22 {c |}{res}         21    .0387705    .0308692   .0034127   .0931667
+{txt}frob~1_ind23 {c |}{res}         21   -.0015923    .0012294  -.0050566  -.0003529
+{txt}{hline 13}{c +}{hline 57}
+frob~4_ind23 {c |}{res}         21   -.0071948    .0055549  -.0228482  -.0015947
+{txt}f~1_ind24_25 {c |}{res}         21    .1075774    .0748862   .0088887     .28499
+{txt}f~4_ind24_25 {c |}{res}         21    .0868894     .060485   .0071793   .2301842
+{txt}f~1_ind26_27 {c |}{res}         21    .0042633    .0030503   .0005767   .0121134
+{txt}f~4_ind26_27 {c |}{res}         21    .0007932    .0005675   .0001073   .0022537
+{txt}{hline 13}{c +}{hline 57}
+frob~1_ind28 {c |}{res}         21   -.0196483    .0159876  -.0620332  -.0019113
+{txt}frob~4_ind28 {c |}{res}         21    .0576166     .046882   .0056046   .1819057
+{txt}f~1_ind29_30 {c |}{res}         21    .0042333    .0034121   .0002105   .0134682
+{txt}f~4_ind29_30 {c |}{res}         21   -.2361479    .1903384  -.7513093   -.011745
+{txt}frob~1_ind91 {c |}{res}         21     .021701    .0145757   .0027337   .0561064
+{txt}{hline 13}{c +}{hline 57}
+frob~4_ind91 {c |}{res}         21    .0235784    .0158367   .0029702   .0609604
+{txt}frobot_~1_AB {c |}{res}         21    .0028236    .0013112   .0001732   .0045248
+{txt}frobot_~4_AB {c |}{res}         21    .0028236    .0013112   .0001732   .0045248
+{txt}frobot_e~1_C {c |}{res}         21      .00132    .0016503          0   .0072714
+{txt}frobot_e~4_C {c |}{res}         21      .00132    .0016503          0   .0072714
+{txt}{hline 13}{c +}{hline 57}
+frobot_e~1_E {c |}{res}         21    .0011918    .0010442   .0001936   .0044558
+{txt}frobot_e~4_E {c |}{res}         21    .0011918    .0010442   .0001936   .0044558
+{txt}frobot_e~1_F {c |}{res}         21    .0127714    .0097272   .0037964   .0467415
+{txt}frobot_e~4_F {c |}{res}         21    .0127714    .0097272   .0037964   .0467415
+{txt}
+{com}.         
+. clear 
+{txt}
+{com}. use "clean_data/reg_ready.dta"
+{txt}
+{com}. 
+. sum diff_emp_to_pop robot_exposure frobot_exposure import_exposure ///
+>         bachelor_share high_school_share female_share working_age_pop
+
+{txt}    Variable {c |}        Obs        Mean    Std. dev.       Min        Max
+{hline 13}{c +}{hline 57}
+diff_emp_t~p {c |}{res}         96   -.0135747    .0168678  -.0474833    .029272
+{txt}robot_expo~e {c |}{res}         96     .754528      .27415   .1819135   1.326705
+{txt}frobot_exp~e {c |}{res}         96    .2871535     .099533   .0704857   .4945261
+{txt}import_exp~e {c |}{res}         96   -1.432181    .4077526  -2.334742    -.42401
+{txt}bachelor_s~e {c |}{res}         96    .1194916    .0417764   .0753417   .3649434
+{txt}{hline 13}{c +}{hline 57}
+high_schoo~e {c |}{res}         96    .2991192    .0191148   .2292683   .3441481
+{txt}female_share {c |}{res}         96    .5129483    .0054307   .4969059   .5307322
+{txt}working_ag~p {c |}{res}         96    399.1026    316.1111     46.322   1665.797
+{txt}
+{com}.         
+. cd "$mydir/do_files"
+{res}/Users/aml/AutoEmp/do_files
+{txt}
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/aml/AutoEmp/logs/descriptive_stats.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

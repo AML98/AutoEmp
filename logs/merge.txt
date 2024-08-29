@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 2 Aug 2024, 17:38:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
 {txt}
 {com}. 
 . use "clean_data/emp_regions.dta"
@@ -134,14 +134,14 @@ clean_data/reg_ready.dta{rm}
 saved
 {p_end}
 
-{com}. cd "/Users/aml/AutoEmp/do_files"
-{res}/Users/aml/AutoEmp/do_files
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts3_data_prep
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/merge.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 2 Aug 2024, 17:38:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

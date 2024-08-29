@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 2 Aug 2024, 17:38:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
 {txt}
 {com}. 
 . ***
@@ -41,7 +41,7 @@
 . save `emp_France_2012'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000001{rm}
 saved
 as .dta format
 {p_end}
@@ -83,7 +83,7 @@ as .dta format
 . save `emp_regions_2012'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 saved
 as .dta format
 {p_end}
@@ -111,7 +111,7 @@ as .dta format
 {com}. save `emp_regions_2016'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000003{rm}
 saved
 as .dta format
 {p_end}
@@ -224,14 +224,14 @@ clean_data/emp_regions.dta{rm}
 saved
 {p_end}
 
-{com}. cd "/Users/aml/AutoEmp/do_files"
-{res}/Users/aml/AutoEmp/do_files
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts3_data_prep
 {txt}
 {com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 2 Aug 2024, 17:38:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

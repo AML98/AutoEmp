@@ -3,14 +3,14 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:54
 {txt}
 {com}. 
 . use "clean_data/nuts2_reg_ready.dta"
 {txt}
 {com}. 
 . ***
-. *** 1) First stage
+. *** 1) First stage - NUTS 2 ANALYSIS
 . ***
 . 
 . // EU countries
@@ -32,11 +32,10 @@ frobot_exposure_01 {c |}{col 20}{res}{space 2} 3.375131{col 32}{space 2} .132947
 {com}. twoway (scatter robot_exposure frobot_exposure_01, ///
 >        mcolor(black) msymbol(circle) msize(small)) ///
 >        (lfit robot_exposure frobot_exposure_01, lcolor(black) lwidth(medium)), ///
->            xtitle("French Robot Exposure") ytitle("EU Countries Robot Exposure") ///
->            xlabel(, labsize(medium)) ylabel(, labsize(medium)) ///
+>            xtitle("French Robot Exposure", size(large)) ytitle("EU Countries Robot Exposure", size(large)) ///
+>            xlabel(, labsize(large)) ylabel(, labsize(large)) ///
 >        plotregion(style(none)) bgcolor(white) ///
 >        legend(off) graphregion(color(white)) ///
->        subtitle("First Stage Regression") ///
 >          
 {res}{txt}
 {com}. graph export "plots/first_stage_EU.png", replace
@@ -68,11 +67,10 @@ frobot_exposure_04 {c |}{col 20}{res}{space 2} 10.84619{col 32}{space 2} 2.61602
 {com}. twoway (scatter usrobot_exposure frobot_exposure_04, ///
 >        mcolor(black) msymbol(circle) msize(small)) ///
 >        (lfit usrobot_exposure frobot_exposure_04, lcolor(black) lwidth(medium)), ///
->            xtitle("French Robot Exposure") ytitle("US Robot Exposure") ///
->            xlabel(, labsize(medium)) ylabel(, labsize(medium)) ///
+>            xtitle("French Robot Exposure", size(large)) ytitle("US Robot Exposure", size(large)) ///
+>            xlabel(, labsize(large)) ylabel(, labsize(large)) ///
 >        plotregion(style(none)) bgcolor(white) ///
 >        legend(off) graphregion(color(white)) ///
->        subtitle("First Stage Regression") ///
 > 
 {res}{txt}
 {com}. graph export "plots/first_stage_US.png", replace
@@ -86,14 +84,15 @@ format
 
 {com}. 
 . ***
-. *** 2) Reduced form regressions
+. *** 2) Reduced form regressions - NUTS 2 ANALYSIS
 . ***
 . 
 . *** i) Employment to population
 . 
 . // EU countries
-. regress diff_emp_to_pop_01 robot_exposure import_exposure population_2001 ///
->         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_eu_emp: regress diff_emp_to_pop_01 robot_exposure ///
+>         import_exposure population_2001 female_share bachelor_share ///
+>         high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {txt}(analytic weights assumed)
 (sum of wgt is 37,517.3)
@@ -108,20 +107,21 @@ format
 {txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}diff_emp_to_po~01{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
 {hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 3}robot_exposure {c |}{col 19}{res}{space 2} -.020862{col 31}{space 2} .0330341{col 42}{space 1}   -0.63{col 51}{space 3}0.539{col 59}{space 4}-.0922279{col 72}{space 3} .0505038
-{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-6.36e-06{col 31}{space 2} 6.25e-06{col 42}{space 1}   -1.02{col 51}{space 3}0.328{col 59}{space 4}-.0000199{col 72}{space 3} 7.15e-06
+{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.0208621{col 31}{space 2} .0330341{col 42}{space 1}   -0.63{col 51}{space 3}0.539{col 59}{space 4}-.0922279{col 72}{space 3} .0505038
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-.0063621{col 31}{space 2}  .006253{col 42}{space 1}   -1.02{col 51}{space 3}0.328{col 59}{space 4}-.0198708{col 72}{space 3} .0071466
 {txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-5.11e-06{col 31}{space 2} 5.32e-06{col 42}{space 1}   -0.96{col 51}{space 3}0.354{col 59}{space 4}-.0000166{col 72}{space 3} 6.39e-06
-{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .0978378{col 31}{space 2} .1149669{col 42}{space 1}    0.85{col 51}{space 3}0.410{col 59}{space 4}-.1505331{col 72}{space 3} .3462086
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .0978378{col 31}{space 2} .1149669{col 42}{space 1}    0.85{col 51}{space 3}0.410{col 59}{space 4} -.150533{col 72}{space 3} .3462086
 {txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2}-.0355468{col 31}{space 2} .1889849{col 42}{space 1}   -0.19{col 51}{space 3}0.854{col 59}{space 4}-.4438238{col 72}{space 3} .3727301
 {txt}high_school_share {c |}{col 19}{res}{space 2} -.011019{col 31}{space 2} .1484237{col 42}{space 1}   -0.07{col 51}{space 3}0.942{col 59}{space 4}-.3316689{col 72}{space 3}  .309631
-{txt}{space 6}emp_share_D {c |}{col 19}{res}{space 2}-.2286583{col 31}{space 2} .2011467{col 42}{space 1}   -1.14{col 51}{space 3}0.276{col 59}{space 4}-.6632092{col 72}{space 3} .2058927
-{txt}{space 6}emp_share_F {c |}{col 19}{res}{space 2} .8753652{col 31}{space 2} .2190679{col 42}{space 1}    4.00{col 51}{space 3}0.002{col 59}{space 4} .4020979{col 72}{space 3} 1.348633
+{txt}{space 6}emp_share_D {c |}{col 19}{res}{space 2}-.2286582{col 31}{space 2} .2011467{col 42}{space 1}   -1.14{col 51}{space 3}0.276{col 59}{space 4}-.6632092{col 72}{space 3} .2058927
+{txt}{space 6}emp_share_F {c |}{col 19}{res}{space 2} .8753652{col 31}{space 2} .2190679{col 42}{space 1}    4.00{col 51}{space 3}0.002{col 59}{space 4} .4020978{col 72}{space 3} 1.348632
 {txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. 
 . // The US
-. regress diff_emp_to_pop_04 usrobot_exposure import_exposure population_2001 ///
->         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_us_emp: regress diff_emp_to_pop_04 usrobot_exposure ///
+>         import_exposure population_2001 female_share bachelor_share ///
+>         high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {txt}(analytic weights assumed)
 (sum of wgt is 37,517.3)
@@ -136,13 +136,13 @@ format
 {txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}diff_emp_to_po~04{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
 {hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 1}usrobot_exposure {c |}{col 19}{res}{space 2} .0236891{col 31}{space 2}  .015939{col 42}{space 1}    1.49{col 51}{space 3}0.161{col 59}{space 4} -.010745{col 72}{space 3} .0581231
-{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-7.92e-06{col 31}{space 2} 6.77e-06{col 42}{space 1}   -1.17{col 51}{space 3}0.263{col 59}{space 4}-.0000225{col 72}{space 3} 6.71e-06
+{space 1}usrobot_exposure {c |}{col 19}{res}{space 2}  .023689{col 31}{space 2}  .015939{col 42}{space 1}    1.49{col 51}{space 3}0.161{col 59}{space 4} -.010745{col 72}{space 3} .0581231
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-.0079185{col 31}{space 2} .0067722{col 42}{space 1}   -1.17{col 51}{space 3}0.263{col 59}{space 4} -.022549{col 72}{space 3}  .006712
 {txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-2.80e-06{col 31}{space 2} 5.80e-06{col 42}{space 1}   -0.48{col 51}{space 3}0.637{col 59}{space 4}-.0000153{col 72}{space 3} 9.73e-06
 {txt}{space 5}female_share {c |}{col 19}{res}{space 2}-.2634651{col 31}{space 2} .1245523{col 42}{space 1}   -2.12{col 51}{space 3}0.054{col 59}{space 4} -.532544{col 72}{space 3} .0056138
-{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2} .1317846{col 31}{space 2} .2058063{col 42}{space 1}    0.64{col 51}{space 3}0.533{col 59}{space 4}-.3128329{col 72}{space 3} .5764021
+{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2} .1317846{col 31}{space 2} .2058063{col 42}{space 1}    0.64{col 51}{space 3}0.533{col 59}{space 4}-.3128329{col 72}{space 3} .5764022
 {txt}high_school_share {c |}{col 19}{res}{space 2} .3368022{col 31}{space 2} .1628303{col 42}{space 1}    2.07{col 51}{space 3}0.059{col 59}{space 4}-.0149712{col 72}{space 3} .6885756
-{txt}{space 6}emp_share_D {c |}{col 19}{res}{space 2}-.5716993{col 31}{space 2} .2182173{col 42}{space 1}   -2.62{col 51}{space 3}0.021{col 59}{space 4}-1.043129{col 72}{space 3}-.1002694
+{txt}{space 6}emp_share_D {c |}{col 19}{res}{space 2}-.5716992{col 31}{space 2} .2182173{col 42}{space 1}   -2.62{col 51}{space 3}0.021{col 59}{space 4}-1.043129{col 72}{space 3}-.1002694
 {txt}{space 6}emp_share_F {c |}{col 19}{res}{space 2} .6130252{col 31}{space 2} .2386663{col 42}{space 1}    2.57{col 51}{space 3}0.023{col 59}{space 4} .0974181{col 72}{space 3} 1.128632
 {txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
@@ -150,8 +150,9 @@ format
 . *** ii) Wages to employment
 . 
 . // EU countries
-. regress diff_log_wages_01 robot_exposure import_exposure population_2001 ///
->         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_eu_wage: regress diff_log_wages_01 robot_exposure ///
+>         import_exposure population_2001 female_share bachelor_share ///
+>         high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {txt}(analytic weights assumed)
 (sum of wgt is 37,517.3)
@@ -166,8 +167,8 @@ format
 {txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}diff_log_wages_01{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
 {hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.2329825{col 31}{space 2} .0772098{col 42}{space 1}   -3.02{col 51}{space 3}0.010{col 59}{space 4} -.399784{col 72}{space 3} -.066181
-{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2} .0000141{col 31}{space 2} .0000146{col 42}{space 1}    0.96{col 51}{space 3}0.352{col 59}{space 4}-.0000175{col 72}{space 3} .0000457
+{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.2329825{col 31}{space 2} .0772097{col 42}{space 1}   -3.02{col 51}{space 3}0.010{col 59}{space 4} -.399784{col 72}{space 3} -.066181
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}  .014102{col 31}{space 2} .0146149{col 42}{space 1}    0.96{col 51}{space 3}0.352{col 59}{space 4}-.0174715{col 72}{space 3} .0456755
 {txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-3.70e-06{col 31}{space 2} .0000124{col 42}{space 1}   -0.30{col 51}{space 3}0.771{col 59}{space 4}-.0000306{col 72}{space 3} .0000232
 {txt}{space 5}female_share {c |}{col 19}{res}{space 2} .5246793{col 31}{space 2} .2687091{col 42}{space 1}    1.95{col 51}{space 3}0.073{col 59}{space 4}-.0558314{col 72}{space 3}  1.10519
 {txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2} .6695751{col 31}{space 2} .4417094{col 42}{space 1}    1.52{col 51}{space 3}0.153{col 59}{space 4}-.2846801{col 72}{space 3}  1.62383
@@ -178,8 +179,9 @@ format
 {res}{txt}
 {com}. 
 . // The US
-. regress diff_log_wages_04 usrobot_exposure import_exposure population_2001 ///
->         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_us_wage: regress diff_log_wages_04 usrobot_exposure ///
+>         import_exposure population_2001 female_share bachelor_share ///
+>         high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {txt}(analytic weights assumed)
 (sum of wgt is 37,517.3)
@@ -194,27 +196,27 @@ format
 {txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}diff_log_wages_04{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
 {hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 1}usrobot_exposure {c |}{col 19}{res}{space 2}-.0803259{col 31}{space 2} .0363905{col 42}{space 1}   -2.21{col 51}{space 3}0.046{col 59}{space 4}-.1589427{col 72}{space 3} -.001709
-{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2} 6.24e-06{col 31}{space 2} .0000155{col 42}{space 1}    0.40{col 51}{space 3}0.693{col 59}{space 4}-.0000272{col 72}{space 3} .0000396
+{space 1}usrobot_exposure {c |}{col 19}{res}{space 2}-.0803258{col 31}{space 2} .0363905{col 42}{space 1}   -2.21{col 51}{space 3}0.046{col 59}{space 4}-.1589427{col 72}{space 3} -.001709
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2} .0062426{col 31}{space 2} .0154618{col 42}{space 1}    0.40{col 51}{space 3}0.693{col 59}{space 4}-.0271606{col 72}{space 3} .0396457
 {txt}{space 2}population_2001 {c |}{col 19}{res}{space 2}-2.59e-06{col 31}{space 2} .0000132{col 42}{space 1}   -0.20{col 51}{space 3}0.848{col 59}{space 4}-.0000312{col 72}{space 3}  .000026
 {txt}{space 5}female_share {c |}{col 19}{res}{space 2} .2553041{col 31}{space 2} .2843673{col 42}{space 1}    0.90{col 51}{space 3}0.386{col 59}{space 4}-.3590341{col 72}{space 3} .8696423
 {txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2} .8509422{col 31}{space 2} .4698796{col 42}{space 1}    1.81{col 51}{space 3}0.093{col 59}{space 4}-.1641709{col 72}{space 3} 1.866055
-{txt}high_school_share {c |}{col 19}{res}{space 2} -.046767{col 31}{space 2} .3717602{col 42}{space 1}   -0.13{col 51}{space 3}0.902{col 59}{space 4}-.8499062{col 72}{space 3} .7563721
-{txt}{space 6}emp_share_D {c |}{col 19}{res}{space 2} .4788648{col 31}{space 2} .4982153{col 42}{space 1}    0.96{col 51}{space 3}0.354{col 59}{space 4}-.5974639{col 72}{space 3} 1.555193
-{txt}{space 6}emp_share_F {c |}{col 19}{res}{space 2} 1.282157{col 31}{space 2} .5449026{col 42}{space 1}    2.35{col 51}{space 3}0.035{col 59}{space 4} .1049661{col 72}{space 3} 2.459347
+{txt}high_school_share {c |}{col 19}{res}{space 2} -.046767{col 31}{space 2} .3717602{col 42}{space 1}   -0.13{col 51}{space 3}0.902{col 59}{space 4}-.8499062{col 72}{space 3} .7563722
+{txt}{space 6}emp_share_D {c |}{col 19}{res}{space 2} .4788647{col 31}{space 2} .4982152{col 42}{space 1}    0.96{col 51}{space 3}0.354{col 59}{space 4}-.5974639{col 72}{space 3} 1.555193
+{txt}{space 6}emp_share_F {c |}{col 19}{res}{space 2} 1.282157{col 31}{space 2} .5449026{col 42}{space 1}    2.35{col 51}{space 3}0.035{col 59}{space 4} .1049662{col 72}{space 3} 2.459347
 {txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}.         
 . ***
-. *** 3) Two-stage least squares estimation
+. *** 3) Two-stage least squares estimation - NUTS 2 ANALYSIS
 . ***     
 . 
 . *** i) Employment to population
 . 
 . // EU countries
-. ivregress 2sls diff_emp_to_pop_01 (frobot_exposure_01 = robot_exposure) ///
->         import_exposure population_2001 female_share bachelor_share ///
->         high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_iv_eu_emp: ivregress 2sls diff_emp_to_pop_01 ///
+>         (frobot_exposure_01 = robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {res}{txt}(analytic weights assumed)
 (sum of wgt is   3.7517e+04)
@@ -228,23 +230,23 @@ format
 {txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}diff_emp_to_pop_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-frobot_exposure_01 {c |}{col 20}{res}{space 2}-.1607114{col 32}{space 2} .2152608{col 43}{space 1}   -0.75{col 52}{space 3}0.455{col 60}{space 4}-.5826149{col 73}{space 3}  .261192
-{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0000106{col 32}{space 2} 3.46e-06{col 43}{space 1}   -3.06{col 52}{space 3}0.002{col 60}{space 4}-.0000174{col 73}{space 3}-3.80e-06
+frobot_exposure_01 {c |}{col 20}{res}{space 2}-.1607116{col 32}{space 2} .2152609{col 43}{space 1}   -0.75{col 52}{space 3}0.455{col 60}{space 4}-.5826153{col 73}{space 3} .2611921
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0105851{col 32}{space 2} .0034636{col 43}{space 1}   -3.06{col 52}{space 3}0.002{col 60}{space 4}-.0173736{col 73}{space 3}-.0037966
 {txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-5.49e-06{col 32}{space 2} 4.56e-06{col 43}{space 1}   -1.20{col 52}{space 3}0.228{col 60}{space 4}-.0000144{col 73}{space 3} 3.44e-06
-{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .0544462{col 32}{space 2}  .105658{col 43}{space 1}    0.52{col 52}{space 3}0.606{col 60}{space 4}-.1526398{col 73}{space 3} .2615322
-{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2}-.0617328{col 32}{space 2} .1665658{col 43}{space 1}   -0.37{col 52}{space 3}0.711{col 60}{space 4}-.3881957{col 73}{space 3} .2647301
-{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .0655248{col 32}{space 2} .1569417{col 43}{space 1}    0.42{col 52}{space 3}0.676{col 60}{space 4}-.2420754{col 73}{space 3} .3731249
-{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}-.1717062{col 32}{space 2} .2425308{col 43}{space 1}   -0.71{col 52}{space 3}0.479{col 60}{space 4}-.6470579{col 73}{space 3} .3036454
-{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} 1.072516{col 32}{space 2} .3009498{col 43}{space 1}    3.56{col 52}{space 3}0.000{col 60}{space 4} .4826648{col 73}{space 3} 1.662366
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .0544462{col 32}{space 2} .1056581{col 43}{space 1}    0.52{col 52}{space 3}0.606{col 60}{space 4}-.1526398{col 73}{space 3} .2615322
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2}-.0617328{col 32}{space 2} .1665658{col 43}{space 1}   -0.37{col 52}{space 3}0.711{col 60}{space 4}-.3881957{col 73}{space 3} .2647302
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .0655248{col 32}{space 2} .1569418{col 43}{space 1}    0.42{col 52}{space 3}0.676{col 60}{space 4}-.2420754{col 73}{space 3} .3731251
+{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2} -.171706{col 32}{space 2} .2425309{col 43}{space 1}   -0.71{col 52}{space 3}0.479{col 60}{space 4}-.6470579{col 73}{space 3} .3036458
+{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} 1.072516{col 32}{space 2} .3009499{col 43}{space 1}    3.56{col 52}{space 3}0.000{col 60}{space 4} .4826647{col 73}{space 3} 1.662367
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{p 0 12 19}Endogenous: {res:frobot_exposure_01}{p_end}
-{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F robot_exposure}{p_end}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F robot_exposure}{p_end}
 
 {com}. 
 . // The US
-. ivregress 2sls diff_emp_to_pop_04 (frobot_exposure_04 = usrobot_exposure) ///
->         import_exposure population_2001 female_share bachelor_share ///
->         high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_iv_us_emp: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {res}{txt}(analytic weights assumed)
 (sum of wgt is   3.7517e+04)
@@ -258,25 +260,316 @@ frobot_exposure_01 {c |}{col 20}{res}{space 2}-.1607114{col 32}{space 2} .215260
 {txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-frobot_exposure_04 {c |}{col 20}{res}{space 2}-.1206335{col 32}{space 2} .0605674{col 43}{space 1}   -1.99{col 52}{space 3}0.046{col 60}{space 4}-.2393436{col 73}{space 3}-.0019235
-{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0000109{col 32}{space 2} 6.32e-06{col 43}{space 1}   -1.73{col 52}{space 3}0.084{col 60}{space 4}-.0000233{col 73}{space 3} 1.47e-06
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.1206335{col 32}{space 2} .0605674{col 43}{space 1}   -1.99{col 52}{space 3}0.046{col 60}{space 4}-.2393435{col 73}{space 3}-.0019235
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0109223{col 32}{space 2} .0063238{col 43}{space 1}   -1.73{col 52}{space 3}0.084{col 60}{space 4}-.0233168{col 73}{space 3} .0014721
 {txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-3.91e-06{col 32}{space 2} 4.34e-06{col 43}{space 1}   -0.90{col 52}{space 3}0.368{col 60}{space 4}-.0000124{col 73}{space 3} 4.60e-06
-{txt}{space 6}female_share {c |}{col 20}{res}{space 2}-.3021454{col 32}{space 2} .0968393{col 43}{space 1}   -3.12{col 52}{space 3}0.002{col 60}{space 4}-.4919469{col 73}{space 3} -.112344
-{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .1678962{col 32}{space 2} .1532728{col 43}{space 1}    1.10{col 52}{space 3}0.273{col 60}{space 4}-.1325131{col 73}{space 3} .4683055
-{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .3821041{col 32}{space 2} .1265029{col 43}{space 1}    3.02{col 52}{space 3}0.003{col 60}{space 4}  .134163{col 73}{space 3} .6300451
-{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}-.2546053{col 32}{space 2} .0621159{col 43}{space 1}   -4.10{col 52}{space 3}0.000{col 60}{space 4}-.3763503{col 73}{space 3}-.1328603
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2}-.3021454{col 32}{space 2} .0968393{col 43}{space 1}   -3.12{col 52}{space 3}0.002{col 60}{space 4}-.4919468{col 73}{space 3}-.1123439
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .1678962{col 32}{space 2} .1532729{col 43}{space 1}    1.10{col 52}{space 3}0.273{col 60}{space 4}-.1325131{col 73}{space 3} .4683055
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2}  .382104{col 32}{space 2} .1265029{col 43}{space 1}    3.02{col 52}{space 3}0.003{col 60}{space 4}  .134163{col 73}{space 3} .6300451
+{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}-.2546053{col 32}{space 2} .0621159{col 43}{space 1}   -4.10{col 52}{space 3}0.000{col 60}{space 4}-.3763503{col 73}{space 3}-.1328604
 {txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2}  .684664{col 32}{space 2} .1863949{col 43}{space 1}    3.67{col 52}{space 3}0.000{col 60}{space 4} .3193366{col 73}{space 3} 1.049991
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{p 0 12 19}Endogenous: {res:frobot_exposure_04}{p_end}
-{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure}{p_end}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure}{p_end}
+
+{com}. 
+. // The US and EU
+. eststo nuts2_iv_us_eu_emp: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res}  .0122
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.1206853{col 32}{space 2} .0605651{col 43}{space 1}   -1.99{col 52}{space 3}0.046{col 60}{space 4}-.2393907{col 73}{space 3}-.0019799
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0109271{col 32}{space 2} .0063236{col 43}{space 1}   -1.73{col 52}{space 3}0.084{col 60}{space 4}-.0233211{col 73}{space 3} .0014669
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-3.91e-06{col 32}{space 2} 4.34e-06{col 43}{space 1}   -0.90{col 52}{space 3}0.368{col 60}{space 4}-.0000124{col 73}{space 3} 4.60e-06
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2}  -.30217{col 32}{space 2} .0968382{col 43}{space 1}   -3.12{col 52}{space 3}0.002{col 60}{space 4}-.4919694{col 73}{space 3}-.1123706
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .1679018{col 32}{space 2} .1532716{col 43}{space 1}    1.10{col 52}{space 3}0.273{col 60}{space 4} -.132505{col 73}{space 3} .4683086
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .3821371{col 32}{space 2} .1265015{col 43}{space 1}    3.02{col 52}{space 3}0.003{col 60}{space 4} .1341987{col 73}{space 3} .6300754
+{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}-.2545981{col 32}{space 2} .0621154{col 43}{space 1}   -4.10{col 52}{space 3}0.000{col 60}{space 4} -.376342{col 73}{space 3}-.1328542
+{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} .6847153{col 32}{space 2} .1863928{col 43}{space 1}    3.67{col 52}{space 3}0.000{col 60}{space 4} .3193921{col 73}{space 3} 1.050039
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure robot_exposure}{p_end}
+
+{com}.         
+. // Gradually adding control variables - EU countries
+. eststo nuts2_iv_eu_emp_1: ivregress 2sls diff_emp_to_pop_01 ///
+>         (frobot_exposure_01 = robot_exposure), ///
+>         noconstant 
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02349
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} .0379686{col 32}{space 2} .0123609{col 43}{space 1}    3.07{col 52}{space 3}0.002{col 60}{space 4} .0137418{col 73}{space 3} .0621955
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_eu_emp_2: ivregress 2sls diff_emp_to_pop_01 ///
+>         (frobot_exposure_01 = robot_exposure) ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02371
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} .0396472{col 32}{space 2} .0165772{col 43}{space 1}    2.39{col 52}{space 3}0.017{col 60}{space 4} .0071565{col 73}{space 3} .0721379
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_eu_emp_3: ivregress 2sls diff_emp_to_pop_01 ///
+>         (frobot_exposure_01 = robot_exposure) import_exposure ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02337
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} .0400667{col 32}{space 2}  .016272{col 43}{space 1}    2.46{col 52}{space 3}0.014{col 60}{space 4} .0081743{col 73}{space 3} .0719592
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0039385{col 32}{space 2} .0050998{col 43}{space 1}   -0.77{col 52}{space 3}0.440{col 60}{space 4}-.0139339{col 73}{space 3} .0060569
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_eu_emp_4: ivregress 2sls diff_emp_to_pop_01 ///
+>         (frobot_exposure_01 = robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01871
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2}-.0508672{col 32}{space 2} .0291391{col 43}{space 1}   -1.75{col 52}{space 3}0.081{col 60}{space 4}-.1079787{col 73}{space 3} .0062443
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0054875{col 32}{space 2} .0044929{col 43}{space 1}   -1.22{col 52}{space 3}0.222{col 60}{space 4}-.0142935{col 73}{space 3} .0033184
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-6.56e-06{col 32}{space 2} 6.69e-06{col 43}{space 1}   -0.98{col 52}{space 3}0.327{col 60}{space 4}-.0000197{col 73}{space 3} 6.56e-06
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .1149614{col 32}{space 2} .1411539{col 43}{space 1}    0.81{col 52}{space 3}0.415{col 60}{space 4}-.1616952{col 73}{space 3}  .391618
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .0788701{col 32}{space 2} .2320631{col 43}{space 1}    0.34{col 52}{space 3}0.734{col 60}{space 4}-.3759653{col 73}{space 3} .5337054
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2}-.0565426{col 32}{space 2} .1827038{col 43}{space 1}   -0.31{col 52}{space 3}0.757{col 60}{space 4}-.4146355{col 73}{space 3} .3015502
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share robot_exposure}{p_end}
+
+{com}.         
+. // Gradually adding control variables - The US
+. eststo nuts2_iv_us_emp_1: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure), ///
+>         noconstant 
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res}  .0271
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}  .057665{col 32}{space 2} .0440081{col 43}{space 1}    1.31{col 52}{space 3}0.190{col 60}{space 4}-.0285893{col 73}{space 3} .1439193
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_emp_2: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02425
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} .0505257{col 32}{space 2} .0480183{col 43}{space 1}    1.05{col 52}{space 3}0.293{col 60}{space 4}-.0435883{col 73}{space 3} .1446398
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_emp_3: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) import_exposure ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02266
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} .0480219{col 32}{space 2} .0435348{col 43}{space 1}    1.10{col 52}{space 3}0.270{col 60}{space 4}-.0373047{col 73}{space 3} .1333485
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .0083212{col 32}{space 2} .0065379{col 43}{space 1}    1.27{col 52}{space 3}0.203{col 60}{space 4}-.0044928{col 73}{space 3} .0211352
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure usrobot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_emp_4: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01815
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.2397595{col 32}{space 2} .1138632{col 43}{space 1}   -2.11{col 52}{space 3}0.035{col 60}{space 4}-.4629273{col 73}{space 3}-.0165917
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0181449{col 32}{space 2} .0108768{col 43}{space 1}   -1.67{col 52}{space 3}0.095{col 60}{space 4}-.0394631{col 73}{space 3} .0031734
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-6.44e-06{col 32}{space 2} 7.27e-06{col 43}{space 1}   -0.89{col 52}{space 3}0.375{col 60}{space 4}-.0000207{col 73}{space 3} 7.81e-06
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2}-.3241564{col 32}{space 2} .1410548{col 43}{space 1}   -2.30{col 52}{space 3}0.022{col 60}{space 4}-.6006187{col 73}{space 3}-.0476941
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .2951787{col 32}{space 2} .2484893{col 43}{space 1}    1.19{col 52}{space 3}0.235{col 60}{space 4}-.1918514{col 73}{space 3} .7822088
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .3914124{col 32}{space 2} .1804159{col 43}{space 1}    2.17{col 52}{space 3}0.030{col 60}{space 4} .0378038{col 73}{space 3}  .745021
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share usrobot_exposure}{p_end}
+
+{com}.         
+. // Gradually adding control variables - The US and EU
+. eststo nuts2_iv_us_eu_emp_1: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure), ///
+>         noconstant 
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02702
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} .0559886{col 32}{space 2} .0431636{col 43}{space 1}    1.30{col 52}{space 3}0.195{col 60}{space 4}-.0286106{col 73}{space 3} .1405877
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_eu_emp_2: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02412
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} .0472162{col 32}{space 2} .0461355{col 43}{space 1}    1.02{col 52}{space 3}0.306{col 60}{space 4}-.0432078{col 73}{space 3} .1376402
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_eu_emp_3: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) import_exposure ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02264
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} .0449846{col 32}{space 2}  .042095{col 43}{space 1}    1.07{col 52}{space 3}0.285{col 60}{space 4}-.0375201{col 73}{space 3} .1274893
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .0080207{col 32}{space 2} .0064427{col 43}{space 1}    1.24{col 52}{space 3}0.213{col 60}{space 4}-.0046067{col 73}{space 3} .0206481
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure usrobot_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_eu_emp_4: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01745
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.2133126{col 32}{space 2} .0962141{col 43}{space 1}   -2.22{col 52}{space 3}0.027{col 60}{space 4}-.4018888{col 73}{space 3}-.0247365
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0158302{col 32}{space 2} .0094058{col 43}{space 1}   -1.68{col 52}{space 3}0.092{col 60}{space 4}-.0342653{col 73}{space 3}  .002605
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-5.43e-06{col 32}{space 2} 6.70e-06{col 43}{space 1}   -0.81{col 52}{space 3}0.418{col 60}{space 4}-.0000186{col 73}{space 3} 7.70e-06
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2}-.3161171{col 32}{space 2} .1346921{col 43}{space 1}   -2.35{col 52}{space 3}0.019{col 60}{space 4}-.5801088{col 73}{space 3}-.0521255
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .2638571{col 32}{space 2} .2307752{col 43}{space 1}    1.14{col 52}{space 3}0.253{col 60}{space 4}-.1884539{col 73}{space 3} .7161681
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .3830882{col 32}{space 2} .1726898{col 43}{space 1}    2.22{col 52}{space 3}0.027{col 60}{space 4} .0446224{col 73}{space 3} .7215539
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share usrobot_exposure robot_exposure}{p_end}
 
 {com}.         
 . ** ii) Wages to employment
 . 
 . // EU countries
-. ivregress 2sls diff_log_wages_01 (frobot_exposure_01 = robot_exposure) ///
->         import_exposure population_2001 female_share bachelor_share ///
->         high_school_share emp_share_D emp_share_F ///
+. eststo nuts2_iv_eu_wage: ivregress 2sls diff_log_wages_01 ///
+>         (frobot_exposure_01 = robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
 >         [w=working_age_pop], noconstant 
 {res}{txt}(analytic weights assumed)
 (sum of wgt is   3.7517e+04)
@@ -290,24 +583,24 @@ frobot_exposure_04 {c |}{col 20}{res}{space 2}-.1206335{col 32}{space 2} .060567
 {txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1} diff_log_wages_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-frobot_exposure_01 {c |}{col 20}{res}{space 2}-1.794788{col 32}{space 2} .9419713{col 43}{space 1}   -1.91{col 52}{space 3}0.057{col 60}{space 4}-3.641018{col 73}{space 3} .0514418
-{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0000331{col 32}{space 2} .0000152{col 43}{space 1}   -2.18{col 52}{space 3}0.029{col 60}{space 4}-.0000628{col 73}{space 3}-3.35e-06
+frobot_exposure_01 {c |}{col 20}{res}{space 2}-1.794789{col 32}{space 2} .9419718{col 43}{space 1}   -1.91{col 52}{space 3}0.057{col 60}{space 4}-3.641019{col 73}{space 3} .0514422
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0330596{col 32}{space 2} .0151564{col 43}{space 1}   -2.18{col 52}{space 3}0.029{col 60}{space 4}-.0627656{col 73}{space 3}-.0033535
 {txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-7.94e-06{col 32}{space 2} .0000199{col 43}{space 1}   -0.40{col 52}{space 3}0.691{col 60}{space 4} -.000047{col 73}{space 3} .0000312
-{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .0400923{col 32}{space 2} .4623546{col 43}{space 1}    0.09{col 52}{space 3}0.931{col 60}{space 4}-.8661062{col 73}{space 3} .9462907
-{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .3771368{col 32}{space 2} .7288839{col 43}{space 1}    0.52{col 52}{space 3}0.605{col 60}{space 4}-1.051449{col 73}{space 3} 1.805723
-{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .8298861{col 32}{space 2} .6867697{col 43}{space 1}    1.21{col 52}{space 3}0.227{col 60}{space 4}-.5161578{col 73}{space 3}  2.17593
-{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}  1.38434{col 32}{space 2} 1.061303{col 43}{space 1}    1.30{col 52}{space 3}0.192{col 60}{space 4}-.6957759{col 73}{space 3} 3.464457
-{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} 3.520298{col 32}{space 2} 1.316942{col 43}{space 1}    2.67{col 52}{space 3}0.008{col 60}{space 4} .9391388{col 73}{space 3} 6.101457
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .0400922{col 32}{space 2} .4623548{col 43}{space 1}    0.09{col 52}{space 3}0.931{col 60}{space 4}-.8661065{col 73}{space 3} .9462909
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .3771368{col 32}{space 2} .7288841{col 43}{space 1}    0.52{col 52}{space 3}0.605{col 60}{space 4} -1.05145{col 73}{space 3} 1.805723
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .8298862{col 32}{space 2} .6867699{col 43}{space 1}    1.21{col 52}{space 3}0.227{col 60}{space 4}-.5161581{col 73}{space 3} 2.175931
+{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2} 1.384341{col 32}{space 2} 1.061304{col 43}{space 1}    1.30{col 52}{space 3}0.192{col 60}{space 4}-.6957764{col 73}{space 3} 3.464458
+{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} 3.520299{col 32}{space 2} 1.316943{col 43}{space 1}    2.67{col 52}{space 3}0.008{col 60}{space 4} .9391383{col 73}{space 3} 6.101459
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{p 0 12 19}Endogenous: {res:frobot_exposure_01}{p_end}
-{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F robot_exposure}{p_end}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F robot_exposure}{p_end}
 
 {com}. 
 . // The US
-. ivregress 2sls diff_log_wages_04 (frobot_exposure_04 = usrobot_exposure) ///
->         import_exposure population_2001 female_share bachelor_share ///
->         high_school_share emp_share_D emp_share_F ///
->         [w=working_age_pop], noconstant 
+. eststo nuts2_iv_us_wage: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant
 {res}{txt}(analytic weights assumed)
 (sum of wgt is   3.7517e+04)
 {res}
@@ -320,19 +613,783 @@ frobot_exposure_01 {c |}{col 20}{res}{space 2}-1.794788{col 32}{space 2} .941971
 {txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
 {hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-frobot_exposure_04 {c |}{col 20}{res}{space 2} .4090493{col 32}{space 2} .1458981{col 43}{space 1}    2.80{col 52}{space 3}0.005{col 60}{space 4} .1230942{col 73}{space 3} .6950045
-{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .0000164{col 32}{space 2} .0000152{col 43}{space 1}    1.08{col 52}{space 3}0.281{col 60}{space 4}-.0000134{col 73}{space 3} .0000463
+frobot_exposure_04 {c |}{col 20}{res}{space 2} .4090493{col 32}{space 2} .1458981{col 43}{space 1}    2.80{col 52}{space 3}0.005{col 60}{space 4} .1230942{col 73}{space 3} .6950044
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .0164282{col 32}{space 2} .0152331{col 43}{space 1}    1.08{col 52}{space 3}0.281{col 60}{space 4}-.0134282{col 73}{space 3} .0462845
 {txt}{space 3}population_2001 {c |}{col 20}{res}{space 2} 1.18e-06{col 32}{space 2} .0000105{col 43}{space 1}    0.11{col 52}{space 3}0.910{col 60}{space 4}-.0000193{col 73}{space 3} .0000217
-{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .3864629{col 32}{space 2} .2332717{col 43}{space 1}    1.66{col 52}{space 3}0.098{col 60}{space 4}-.0707412{col 73}{space 3} .8436669
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .3864628{col 32}{space 2} .2332717{col 43}{space 1}    1.66{col 52}{space 3}0.098{col 60}{space 4}-.0707412{col 73}{space 3} .8436669
 {txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .7284935{col 32}{space 2}  .369212{col 43}{space 1}    1.97{col 52}{space 3}0.048{col 60}{space 4} .0048514{col 73}{space 3} 1.452136
-{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2}-.2003785{col 32}{space 2}  .304727{col 43}{space 1}   -0.66{col 52}{space 3}0.511{col 60}{space 4}-.7976323{col 73}{space 3} .3968754
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2}-.2003784{col 32}{space 2} .3047269{col 43}{space 1}   -0.66{col 52}{space 3}0.511{col 60}{space 4}-.7976323{col 73}{space 3} .3968754
 {txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}-.5963509{col 32}{space 2} .1496282{col 43}{space 1}   -3.99{col 52}{space 3}0.000{col 60}{space 4}-.8896168{col 73}{space 3} -.303085
-{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} 1.039241{col 32}{space 2} .4489983{col 43}{space 1}    2.31{col 52}{space 3}0.021{col 60}{space 4} .1592205{col 73}{space 3} 1.919261
+{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2} 1.039241{col 32}{space 2} .4489983{col 43}{space 1}    2.31{col 52}{space 3}0.021{col 60}{space 4} .1592206{col 73}{space 3} 1.919261
 {txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{p 0 12 19}Endogenous: {res:frobot_exposure_04}{p_end}
-{p 0 12 19}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure}{p_end}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure}{p_end}
+
+{com}.         
+. // The US and EU
+. eststo nuts2_iv_us_eu_wage: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .02939
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}  .411401{col 32}{space 2} .1459565{col 43}{space 1}    2.82{col 52}{space 3}0.005{col 60}{space 4} .1253315{col 73}{space 3} .6974705
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .0166435{col 32}{space 2} .0152393{col 43}{space 1}    1.09{col 52}{space 3}0.275{col 60}{space 4} -.013225{col 73}{space 3}  .046512
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2} 1.20e-06{col 32}{space 2} .0000105{col 43}{space 1}    0.11{col 52}{space 3}0.909{col 60}{space 4}-.0000193{col 73}{space 3} .0000217
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .3875793{col 32}{space 2} .2333715{col 43}{space 1}    1.66{col 52}{space 3}0.097{col 60}{space 4}-.0698205{col 73}{space 3} .8449791
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} .7282404{col 32}{space 2}  .369371{col 43}{space 1}    1.97{col 52}{space 3}0.049{col 60}{space 4} .0042865{col 73}{space 3} 1.452194
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} -.201878{col 32}{space 2} .3048574{col 43}{space 1}   -0.66{col 52}{space 3}0.508{col 60}{space 4}-.7993875{col 73}{space 3} .3956315
+{txt}{space 7}emp_share_D {c |}{col 20}{res}{space 2}-.5966789{col 32}{space 2} .1496926{col 43}{space 1}   -3.99{col 52}{space 3}0.000{col 60}{space 4} -.890071{col 73}{space 3}-.3032868
+{txt}{space 7}emp_share_F {c |}{col 20}{res}{space 2}  1.03691{col 32}{space 2} .4491903{col 43}{space 1}    2.31{col 52}{space 3}0.021{col 60}{space 4} .1565129{col 73}{space 3} 1.917306
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure robot_exposure}{p_end}
+
+{com}.         
+. // Gradually adding control variables - EU countries
+. eststo nuts2_iv_eu_wage_1: ivregress 2sls diff_log_wages_01 ///
+>         (frobot_exposure_01 = robot_exposure), ///
+>         noconstant 
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .20999
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} .6675592{col 32}{space 2} .1104909{col 43}{space 1}    6.04{col 52}{space 3}0.000{col 60}{space 4}  .451001{col 73}{space 3} .8841175
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_eu_wage_2: ivregress 2sls diff_log_wages_01 ///
+>         (frobot_exposure_01 = robot_exposure) ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .24358
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} .9308933{col 32}{space 2} .1702865{col 43}{space 1}    5.47{col 52}{space 3}0.000{col 60}{space 4} .5971378{col 73}{space 3} 1.264649
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_eu_wage_3: ivregress 2sls diff_log_wages_01 ///
+>         (frobot_exposure_01 = robot_exposure) import_exposure ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .24236
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2} .9283124{col 32}{space 2} .1687605{col 43}{space 1}    5.50{col 52}{space 3}0.000{col 60}{space 4} .5975479{col 73}{space 3} 1.259077
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .0242282{col 32}{space 2} .0528911{col 43}{space 1}    0.46{col 52}{space 3}0.647{col 60}{space 4}-.0794364{col 73}{space 3} .1278929
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_eu_wage_4: ivregress 2sls diff_log_wages_01 ///
+>         (frobot_exposure_01 = robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res}  .0433
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_01{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01 {c |}{col 20}{res}{space 2}-.0943729{col 32}{space 2} .0674405{col 43}{space 1}   -1.40{col 52}{space 3}0.162{col 60}{space 4}-.2265538{col 73}{space 3} .0378081
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0143921{col 32}{space 2} .0103986{col 43}{space 1}   -1.38{col 52}{space 3}0.166{col 60}{space 4}-.0347729{col 73}{space 3} .0059888
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-7.14e-06{col 32}{space 2} .0000155{col 43}{space 1}   -0.46{col 52}{space 3}0.645{col 60}{space 4}-.0000375{col 73}{space 3} .0000232
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .4623709{col 32}{space 2} .3266916{col 43}{space 1}    1.42{col 52}{space 3}0.157{col 60}{space 4} -.177933{col 73}{space 3} 1.102675
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} 1.041945{col 32}{space 2} .5370951{col 43}{space 1}    1.94{col 52}{space 3}0.052{col 60}{space 4}-.0107423{col 73}{space 3} 2.094632
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2}-.0644897{col 32}{space 2} .4228561{col 43}{space 1}   -0.15{col 52}{space 3}0.879{col 60}{space 4}-.8932725{col 73}{space 3} .7642931
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_01}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share robot_exposure}{p_end}
+
+{com}.         
+. // Gradually adding control variables - The US
+. eststo nuts2_iv_us_wage_1: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure), ///
+>         noconstant 
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .21165
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} 1.435605{col 32}{space 2} .3436713{col 43}{space 1}    4.18{col 52}{space 3}0.000{col 60}{space 4}  .762022{col 73}{space 3} 2.109189
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_wage_2: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .27408
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}  1.92424{col 32}{space 2} .5426228{col 43}{space 1}    3.55{col 52}{space 3}0.000{col 60}{space 4} .8607193{col 73}{space 3} 2.987761
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_wage_3: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) import_exposure ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .20194
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} 1.870946{col 32}{space 2} .3880276{col 43}{space 1}    4.82{col 52}{space 3}0.000{col 60}{space 4} 1.110426{col 73}{space 3} 2.631466
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}  .177121{col 32}{space 2} .0582723{col 43}{space 1}    3.04{col 52}{space 3}0.002{col 60}{space 4} .0629094{col 73}{space 3} .2913327
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure usrobot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_wage_4: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant         
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .05448
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.3531709{col 32}{space 2} .3417137{col 43}{space 1}   -1.03{col 52}{space 3}0.301{col 60}{space 4}-1.022917{col 73}{space 3} .3165757
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0451725{col 32}{space 2} .0326424{col 43}{space 1}   -1.38{col 52}{space 3}0.166{col 60}{space 4}-.1091504{col 73}{space 3} .0188054
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-.0000106{col 32}{space 2} .0000218{col 43}{space 1}   -0.49{col 52}{space 3}0.626{col 60}{space 4}-.0000534{col 73}{space 3} .0000321
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .1142734{col 32}{space 2}  .423318{col 43}{space 1}    0.27{col 52}{space 3}0.787{col 60}{space 4}-.7154147{col 73}{space 3} .9439615
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2} 1.157233{col 32}{space 2} .7457387{col 43}{space 1}    1.55{col 52}{space 3}0.121{col 60}{space 4}-.3043882{col 73}{space 3} 2.618854
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .1132699{col 32}{space 2} .5414442{col 43}{space 1}    0.21{col 52}{space 3}0.834{col 60}{space 4}-.9479412{col 73}{space 3} 1.174481
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share usrobot_exposure}{p_end}
+
+{com}.         
+. // Gradually adding control variables - The US and EU
+. eststo nuts2_iv_us_eu_wage_1: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure), ///
+>         noconstant 
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res}  .2067
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} 1.384592{col 32}{space 2}  .330236{col 43}{space 1}    4.19{col 52}{space 3}0.000{col 60}{space 4} .7373409{col 73}{space 3} 2.031842
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_eu_wage_2: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}1{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .25602
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} 1.712109{col 32}{space 2} .4897071{col 43}{space 1}    3.50{col 52}{space 3}0.000{col 60}{space 4} .7523004{col 73}{space 3} 2.671917
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:usrobot_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_eu_wage_3: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) import_exposure ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}2{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res}  .1974
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2} 1.671323{col 32}{space 2} .3669756{col 43}{space 1}    4.55{col 52}{space 3}0.000{col 60}{space 4} .9520644{col 73}{space 3} 2.390582
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2} .1573701{col 32}{space 2} .0561659{col 43}{space 1}    2.80{col 52}{space 3}0.005{col 60}{space 4} .0472871{col 73}{space 3} .2674532
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure usrobot_exposure robot_exposure}{p_end}
+
+{com}. eststo nuts2_iv_us_eu_wage_4: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04 = usrobot_exposure robot_exposure) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}6{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .05433
+
+{txt}{hline 19}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1} diff_log_wages_04{col 20}{c |} Coefficient{col 32}  Std. err.{col 44}      z{col 52}   P>|z|{col 60}     [95% con{col 73}f. interval]
+{hline 19}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04 {c |}{col 20}{res}{space 2}-.3500276{col 32}{space 2} .2994801{col 43}{space 1}   -1.17{col 52}{space 3}0.242{col 60}{space 4}-.9369979{col 73}{space 3} .2369427
+{txt}{space 3}import_exposure {c |}{col 20}{res}{space 2}-.0448974{col 32}{space 2} .0292771{col 43}{space 1}   -1.53{col 52}{space 3}0.125{col 60}{space 4}-.1022793{col 73}{space 3} .0124846
+{txt}{space 3}population_2001 {c |}{col 20}{res}{space 2}-.0000105{col 32}{space 2} .0000208{col 43}{space 1}   -0.50{col 52}{space 3}0.614{col 60}{space 4}-.0000514{col 73}{space 3} .0000303
+{txt}{space 6}female_share {c |}{col 20}{res}{space 2} .1152289{col 32}{space 2} .4192484{col 43}{space 1}    0.27{col 52}{space 3}0.783{col 60}{space 4}-.7064829{col 73}{space 3} .9369408
+{txt}{space 4}bachelor_share {c |}{col 20}{res}{space 2}  1.15351{col 32}{space 2} .7183208{col 43}{space 1}    1.61{col 52}{space 3}0.108{col 60}{space 4}-.2543727{col 73}{space 3} 2.561393
+{txt}{space 1}high_school_share {c |}{col 20}{res}{space 2} .1122805{col 32}{space 2} .5375217{col 43}{space 1}    0.21{col 52}{space 3}0.835{col 60}{space 4}-.9412427{col 73}{space 3} 1.165804
+{txt}{hline 19}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 21}Endogenous: {res:frobot_exposure_04}{p_end}
+{p 0 12 21}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share usrobot_exposure robot_exposure}{p_end}
+
+{com}.         
+. *** iii) Robustness check on employment - no automobile industry
+. 
+. // EU countries
+. eststo nuts2_iv_eu_emp_auto: ivregress 2sls diff_emp_to_pop_01 ///
+>         (frobot_exposure_01_auto = robot_exposure_auto) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01197
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     diff_emp_to_pop_01{col 25}{c |} Coefficient{col 37}  Std. err.{col 49}      z{col 57}   P>|z|{col 65}     [95% con{col 78}f. interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01_auto {c |}{col 25}{res}{space 2}-.0040267{col 37}{space 2}  .099293{col 48}{space 1}   -0.04{col 57}{space 3}0.968{col 65}{space 4}-.1986373{col 78}{space 3}  .190584
+{txt}{space 8}import_exposure {c |}{col 25}{res}{space 2}-.0095604{col 37}{space 2} .0030876{col 48}{space 1}   -3.10{col 57}{space 3}0.002{col 65}{space 4}-.0156119{col 78}{space 3}-.0035089
+{txt}{space 8}population_2001 {c |}{col 25}{res}{space 2}-4.95e-06{col 37}{space 2} 4.26e-06{col 48}{space 1}   -1.16{col 57}{space 3}0.245{col 65}{space 4}-.0000133{col 78}{space 3} 3.40e-06
+{txt}{space 11}female_share {c |}{col 25}{res}{space 2} .0862659{col 37}{space 2} .0930917{col 48}{space 1}    0.93{col 57}{space 3}0.354{col 65}{space 4}-.0961905{col 78}{space 3} .2687223
+{txt}{space 9}bachelor_share {c |}{col 25}{res}{space 2}-.0262418{col 37}{space 2} .1519683{col 48}{space 1}   -0.17{col 57}{space 3}0.863{col 65}{space 4}-.3240942{col 78}{space 3} .2716105
+{txt}{space 6}high_school_share {c |}{col 25}{res}{space 2}  -.00325{col 37}{space 2} .1261974{col 48}{space 1}   -0.03{col 57}{space 3}0.979{col 65}{space 4}-.2505924{col 78}{space 3} .2440923
+{txt}{space 12}emp_share_D {c |}{col 25}{res}{space 2}-.3420753{col 37}{space 2} .1216603{col 48}{space 1}   -2.81{col 57}{space 3}0.005{col 65}{space 4} -.580525{col 78}{space 3}-.1036255
+{txt}{space 12}emp_share_F {c |}{col 25}{res}{space 2} .8989507{col 37}{space 2} .2057587{col 48}{space 1}    4.37{col 57}{space 3}0.000{col 65}{space 4} .4956711{col 78}{space 3}  1.30223
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 16}Endogenous: {res:frobot_exposure_01_auto}{p_end}
+{p 0 12 16}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F robot_exposure_auto}{p_end}
 
 {com}. 
+. // The US
+. eststo nuts2_iv_us_emp: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04_auto = usrobot_exposure_auto) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01289
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     diff_emp_to_pop_04{col 25}{c |} Coefficient{col 37}  Std. err.{col 49}      z{col 57}   P>|z|{col 65}     [95% con{col 78}f. interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04_auto {c |}{col 25}{res}{space 2}-.3411622{col 37}{space 2} 5.667992{col 48}{space 1}   -0.06{col 57}{space 3}0.952{col 65}{space 4}-11.45022{col 78}{space 3}  10.7679
+{txt}{space 8}import_exposure {c |}{col 25}{res}{space 2}-.0041316{col 37}{space 2} .0707578{col 48}{space 1}   -0.06{col 57}{space 3}0.953{col 65}{space 4}-.1428144{col 78}{space 3} .1345512
+{txt}{space 8}population_2001 {c |}{col 25}{res}{space 2}-4.23e-06{col 37}{space 2}  .000019{col 48}{space 1}   -0.22{col 57}{space 3}0.824{col 65}{space 4}-.0000415{col 78}{space 3} .0000331
+{txt}{space 11}female_share {c |}{col 25}{res}{space 2}-.3271558{col 37}{space 2} 1.370477{col 48}{space 1}   -0.24{col 57}{space 3}0.811{col 65}{space 4} -3.01324{col 78}{space 3} 2.358929
+{txt}{space 9}bachelor_share {c |}{col 25}{res}{space 2} .1319474{col 37}{space 2}  .414502{col 48}{space 1}    0.32{col 57}{space 3}0.750{col 65}{space 4}-.6804617{col 78}{space 3} .9443564
+{txt}{space 6}high_school_share {c |}{col 25}{res}{space 2} .4391493{col 37}{space 2} 2.229331{col 48}{space 1}    0.20{col 57}{space 3}0.844{col 65}{space 4} -3.93026{col 78}{space 3} 4.808558
+{txt}{space 12}emp_share_D {c |}{col 25}{res}{space 2} .2183625{col 37}{space 2} 8.137552{col 48}{space 1}    0.03{col 57}{space 3}0.979{col 65}{space 4}-15.73095{col 78}{space 3} 16.16767
+{txt}{space 12}emp_share_F {c |}{col 25}{res}{space 2} .7122623{col 37}{space 2} 2.452409{col 48}{space 1}    0.29{col 57}{space 3}0.771{col 65}{space 4}-4.094372{col 78}{space 3} 5.518897
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 16}Endogenous: {res:frobot_exposure_04_auto}{p_end}
+{p 0 12 16}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure_auto}{p_end}
+
+{com}. 
+. // The US and EU
+. eststo nuts2_iv_us_eu_emp: ivregress 2sls diff_emp_to_pop_04 ///
+>         (frobot_exposure_04_auto = usrobot_exposure_auto robot_exposure_auto) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .01301
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     diff_emp_to_pop_04{col 25}{c |} Coefficient{col 37}  Std. err.{col 49}      z{col 57}   P>|z|{col 65}     [95% con{col 78}f. interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04_auto {c |}{col 25}{res}{space 2}-.1288742{col 37}{space 2} .1739492{col 48}{space 1}   -0.74{col 57}{space 3}0.459{col 65}{space 4}-.4698084{col 78}{space 3}   .21206
+{txt}{space 8}import_exposure {c |}{col 25}{res}{space 2}-.0014842{col 37}{space 2} .0039012{col 48}{space 1}   -0.38{col 57}{space 3}0.704{col 65}{space 4}-.0091304{col 78}{space 3} .0061619
+{txt}{space 8}population_2001 {c |}{col 25}{res}{space 2}-3.54e-06{col 37}{space 2} 4.65e-06{col 48}{space 1}   -0.76{col 57}{space 3}0.447{col 65}{space 4}-.0000126{col 78}{space 3} 5.57e-06
+{txt}{space 11}female_share {c |}{col 25}{res}{space 2}-.2759569{col 37}{space 2} .1072045{col 48}{space 1}   -2.57{col 57}{space 3}0.010{col 65}{space 4} -.486074{col 78}{space 3}-.0658399
+{txt}{space 9}bachelor_share {c |}{col 25}{res}{space 2} .1462394{col 37}{space 2} .1637927{col 48}{space 1}    0.89{col 57}{space 3}0.372{col 65}{space 4}-.1747883{col 78}{space 3} .4672671
+{txt}{space 6}high_school_share {c |}{col 25}{res}{space 2} .3557886{col 37}{space 2} .1455424{col 48}{space 1}    2.44{col 57}{space 3}0.015{col 65}{space 4} .0705307{col 78}{space 3} .6410466
+{txt}{space 12}emp_share_D {c |}{col 25}{res}{space 2}-.0864103{col 37}{space 2} .2582173{col 48}{space 1}   -0.33{col 57}{space 3}0.738{col 65}{space 4}-.5925068{col 78}{space 3} .4196863
+{txt}{space 12}emp_share_F {c |}{col 25}{res}{space 2} .6206762{col 37}{space 2} .2026652{col 48}{space 1}    3.06{col 57}{space 3}0.002{col 65}{space 4} .2234598{col 78}{space 3} 1.017893
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 16}Endogenous: {res:frobot_exposure_04_auto}{p_end}
+{p 0 12 16}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure_auto robot_exposure_auto}{p_end}
+
+{com}.         
+. *** iv) Robustness check on wages - no automobile industry
+. 
+. // EU countries
+. eststo nuts2_iv_eu_wage: ivregress 2sls diff_log_wages_01 ///
+>         (frobot_exposure_01_auto = robot_exposure_auto) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .03517
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      diff_log_wages_01{col 25}{c |} Coefficient{col 37}  Std. err.{col 49}      z{col 57}   P>|z|{col 65}     [95% con{col 78}f. interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_01_auto {c |}{col 25}{res}{space 2}-.1195788{col 37}{space 2} .2916139{col 48}{space 1}   -0.41{col 57}{space 3}0.682{col 65}{space 4}-.6911315{col 78}{space 3} .4519738
+{txt}{space 8}import_exposure {c |}{col 25}{res}{space 2}-.0222125{col 37}{space 2} .0090679{col 48}{space 1}   -2.45{col 57}{space 3}0.014{col 65}{space 4}-.0399853{col 78}{space 3}-.0044398
+{txt}{space 8}population_2001 {c |}{col 25}{res}{space 2}-2.17e-06{col 37}{space 2} .0000125{col 48}{space 1}   -0.17{col 57}{space 3}0.862{col 65}{space 4}-.0000267{col 78}{space 3} .0000223
+{txt}{space 11}female_share {c |}{col 25}{res}{space 2} .3799751{col 37}{space 2} .2734013{col 48}{space 1}    1.39{col 57}{space 3}0.165{col 65}{space 4}-.1558816{col 78}{space 3} .9158318
+{txt}{space 9}bachelor_share {c |}{col 25}{res}{space 2}  .756831{col 37}{space 2} .4463161{col 48}{space 1}    1.70{col 57}{space 3}0.090{col 65}{space 4}-.1179324{col 78}{space 3} 1.631594
+{txt}{space 6}high_school_share {c |}{col 25}{res}{space 2} .0949105{col 37}{space 2} .3706295{col 48}{space 1}    0.26{col 57}{space 3}0.798{col 65}{space 4}-.6315101{col 78}{space 3}  .821331
+{txt}{space 12}emp_share_D {c |}{col 25}{res}{space 2}-.4389535{col 37}{space 2} .3573044{col 48}{space 1}   -1.23{col 57}{space 3}0.219{col 65}{space 4}-1.139257{col 78}{space 3} .2613503
+{txt}{space 12}emp_share_F {c |}{col 25}{res}{space 2} 1.665383{col 37}{space 2} .6042933{col 48}{space 1}    2.76{col 57}{space 3}0.006{col 65}{space 4} .4809896{col 78}{space 3} 2.849776
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 16}Endogenous: {res:frobot_exposure_01_auto}{p_end}
+{p 0 12 16}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F robot_exposure_auto}{p_end}
+
+{com}. 
+. // The US
+. eststo nuts2_iv_us_wage: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04_auto = usrobot_exposure_auto) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .33425
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      diff_log_wages_04{col 25}{c |} Coefficient{col 37}  Std. err.{col 49}      z{col 57}   P>|z|{col 65}     [95% con{col 78}f. interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04_auto {c |}{col 25}{res}{space 2}-14.64025{col 37}{space 2} 146.9528{col 48}{space 1}   -0.10{col 57}{space 3}0.921{col 65}{space 4}-302.6624{col 78}{space 3} 273.3819
+{txt}{space 8}import_exposure {c |}{col 25}{res}{space 2}-.2036015{col 37}{space 2} 1.834522{col 48}{space 1}   -0.11{col 57}{space 3}0.912{col 65}{space 4}-3.799199{col 78}{space 3} 3.391996
+{txt}{space 8}population_2001 {c |}{col 25}{res}{space 2}-.0000492{col 37}{space 2} .0004932{col 48}{space 1}   -0.10{col 57}{space 3}0.921{col 65}{space 4}-.0010158{col 78}{space 3} .0009174
+{txt}{space 11}female_share {c |}{col 25}{res}{space 2}-3.338614{col 37}{space 2} 35.53203{col 48}{space 1}   -0.09{col 57}{space 3}0.925{col 65}{space 4}-72.98012{col 78}{space 3} 66.30289
+{txt}{space 9}bachelor_share {c |}{col 25}{res}{space 2} -.213129{col 37}{space 2}  10.7467{col 48}{space 1}   -0.02{col 57}{space 3}0.984{col 65}{space 4}-21.27627{col 78}{space 3} 20.85002
+{txt}{space 6}high_school_share {c |}{col 25}{res}{space 2} 5.809343{col 37}{space 2} 57.79937{col 48}{space 1}    0.10{col 57}{space 3}0.920{col 65}{space 4}-107.4753{col 78}{space 3}  119.094
+{txt}{space 12}emp_share_D {c |}{col 25}{res}{space 2} 20.47907{col 37}{space 2} 210.9805{col 48}{space 1}    0.10{col 57}{space 3}0.923{col 65}{space 4} -393.035{col 78}{space 3} 433.9932
+{txt}{space 12}emp_share_F {c |}{col 25}{res}{space 2} 7.760892{col 37}{space 2} 63.58307{col 48}{space 1}    0.12{col 57}{space 3}0.903{col 65}{space 4}-116.8596{col 78}{space 3} 132.3814
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 16}Endogenous: {res:frobot_exposure_04_auto}{p_end}
+{p 0 12 16}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure_auto}{p_end}
+
+{com}.         
+. // The US and EU
+. eststo nuts2_iv_us_eu_wage: ivregress 2sls diff_log_wages_04 ///
+>         (frobot_exposure_04_auto = usrobot_exposure_auto robot_exposure_auto) import_exposure population_2001 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F ///
+>         [w=working_age_pop], noconstant 
+{res}{txt}(analytic weights assumed)
+(sum of wgt is   3.7517e+04)
+{res}
+{txt}{col 1}Instrumental variables 2SLS regression{col 51}Number of obs{col 67}= {res}        21
+{txt}{col 1}{col 51}Wald chi2({res}8{txt}){col 67}= {res}         .
+{txt}{col 1}{col 51}Prob > chi2{col 67}= {res}         .
+{txt}{col 1}{col 51}R-squared{col 67}= {res}         .
+{txt}{col 51}Root MSE{col 67}=    {res} .03463
+
+{txt}{hline 24}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      diff_log_wages_04{col 25}{c |} Coefficient{col 37}  Std. err.{col 49}      z{col 57}   P>|z|{col 65}     [95% con{col 78}f. interval]
+{hline 24}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+frobot_exposure_04_auto {c |}{col 25}{res}{space 2}-.0821319{col 37}{space 2} .4629846{col 48}{space 1}   -0.18{col 57}{space 3}0.859{col 65}{space 4}-.9895649{col 78}{space 3} .8253012
+{txt}{space 8}import_exposure {c |}{col 25}{res}{space 2} -.022049{col 37}{space 2} .0103834{col 48}{space 1}   -2.12{col 57}{space 3}0.034{col 65}{space 4}-.0424001{col 78}{space 3}-.0016979
+{txt}{space 8}population_2001 {c |}{col 25}{res}{space 2}-1.77e-06{col 37}{space 2} .0000124{col 48}{space 1}   -0.14{col 57}{space 3}0.886{col 65}{space 4} -.000026{col 78}{space 3} .0000225
+{txt}{space 11}female_share {c |}{col 25}{res}{space 2} .1724614{col 37}{space 2} .2853364{col 48}{space 1}    0.60{col 57}{space 3}0.546{col 65}{space 4}-.3867877{col 78}{space 3} .7317106
+{txt}{space 9}bachelor_share {c |}{col 25}{res}{space 2} .7669788{col 37}{space 2} .4359518{col 48}{space 1}    1.76{col 57}{space 3}0.079{col 65}{space 4} -.087471{col 78}{space 3} 1.621429
+{txt}{space 6}high_school_share {c |}{col 25}{res}{space 2} .0927012{col 37}{space 2} .3873769{col 48}{space 1}    0.24{col 57}{space 3}0.811{col 65}{space 4}-.6665435{col 78}{space 3} .8519459
+{txt}{space 12}emp_share_D {c |}{col 25}{res}{space 2}  -.42139{col 37}{space 2} .6872731{col 48}{space 1}   -0.61{col 57}{space 3}0.540{col 65}{space 4} -1.76842{col 78}{space 3} .9256405
+{txt}{space 12}emp_share_F {c |}{col 25}{res}{space 2} 1.480176{col 37}{space 2} .5394151{col 48}{space 1}    2.74{col 57}{space 3}0.006{col 65}{space 4} .4229415{col 78}{space 3}  2.53741
+{txt}{hline 24}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 12 16}Endogenous: {res:frobot_exposure_04_auto}{p_end}
+{p 0 12 16}Exogenous:{space 1} {res:import_exposure population_2001 female_share bachelor_share high_school_share emp_share_D emp_share_F usrobot_exposure_auto robot_exposure_auto}{p_end}
+
+{com}.         
+. ***
+. *** 4) Placebo check
+. *** 
+.         
+. // These regions do not have emp data in 1996
+. drop if region_code == "FR10" | region_code == "FRE1"
+{txt}(2 observations deleted)
+
+{com}. 
+. regress emp_to_pop_diff_9601 robot_exposure, noconstant
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        19
+{txt}{hline 13}{c +}{hline 34}   F(1, 18)        = {res}     1.12
+{txt}       Model {c |} {res} .005453431         1  .005453431   {txt}Prob > F        ={res}    0.3039
+{txt}    Residual {c |} {res} .087635265        18  .004868626   {txt}R-squared       ={res}    0.0586
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0063
+{txt}       Total {c |} {res} .093088696        19  .004899405   {txt}Root MSE        =   {res} .06978
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}emp_to_po~9601{col 16}{c |} Coefficient{col 28}  Std. err.{col 40}      t{col 48}   P>|t|{col 56}     [95% con{col 69}f. interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+robot_exposure {c |}{col 16}{res}{space 2} .0112358{col 28}{space 2} .0106162{col 39}{space 1}    1.06{col 48}{space 3}0.304{col 56}{space 4}-.0110681{col 69}{space 3} .0335397
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. twoway (scatter emp_to_pop_diff_9601 robot_exposure, ///
+>        mcolor(black) msymbol(circle) msize(small)), ///
+>            ytitle("Change in emp.-to-pop. ratio 1996-2001", size(large)) xtitle("Robot exposure using EU instrument 2001-2016", size(large)) ///
+>            xlabel(, labsize(large)) ylabel(, labsize(large)) ///
+>        plotregion(style(none)) bgcolor(white) ///
+>        legend(off) graphregion(color(white)) ///
+>          
+{res}{txt}
+{com}. graph export "plots/placebo_check_EU.png", replace
+{txt}{p 0 4 2}
+file {bf}
+/Users/aml/AutoEmp/plots/placebo_check_EU.png{rm}
+saved as
+PNG
+format
+{p_end}
+
+{com}. 
+. regress emp_to_pop_diff_9601 usrobot_exposure, noconstant
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        19
+{txt}{hline 13}{c +}{hline 34}   F(1, 18)        = {res}     1.12
+{txt}       Model {c |} {res} .005439136         1  .005439136   {txt}Prob > F        ={res}    0.3045
+{txt}    Residual {c |} {res} .087649559        18   .00486942   {txt}R-squared       ={res}    0.0584
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0061
+{txt}       Total {c |} {res} .093088696        19  .004899405   {txt}Root MSE        =   {res} .06978
+
+{txt}{hline 17}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}emp_to_pop_~9601{col 18}{c |} Coefficient{col 30}  Std. err.{col 42}      t{col 50}   P>|t|{col 58}     [95% con{col 71}f. interval]
+{hline 17}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+usrobot_exposure {c |}{col 18}{res}{space 2} .0051459{col 30}{space 2} .0048689{col 41}{space 1}    1.06{col 50}{space 3}0.305{col 58}{space 4}-.0050834{col 71}{space 3} .0153751
+{txt}{hline 17}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. twoway (scatter emp_to_pop_diff_9601 usrobot_exposure, ///
+>        mcolor(black) msymbol(circle) msize(small)), ///
+>            ytitle("Change in emp.-to-pop. ratio 1996-2001", size(large)) xtitle("Robot exposure using US instrument 2004-2016", size(large)) ///
+>            xlabel(, labsize(large)) ylabel(, labsize(large)) ///
+>        plotregion(style(none)) bgcolor(white) ///
+>        legend(off) graphregion(color(white)) ///
+>          
+{res}{txt}
+{com}. graph export "plots/placebo_check_US.png", replace
+{txt}{p 0 4 2}
+file {bf}
+/Users/aml/AutoEmp/plots/placebo_check_US.png{rm}
+saved as
+PNG
+format
+{p_end}
+
+{com}.         
+. ***
+. *** 5) Reduced form regressions - NUTS 3 ANALYSIS
+. ***
+. 
+. clear 
+{txt}
+{com}. use "clean_data/reg_ready.dta"
+{txt}
+{com}. 
+. *** i) Employment to population
+. 
+. // EU countries
+. eststo nuts3_eu_emp: regress diff_emp_to_pop robot_exposure import_exposure ///
+>         population_2000 female_share bachelor_share high_school_share FR* ///
+>         [w=working_age_pop], noconstant 
+{txt}(analytic weights assumed)
+(sum of wgt is 38,313.848)
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(28, 68)       = {res}     6.40
+{txt}       Model {c |} {res} .029038039        28  .001037073   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .011025144        68  .000162134   {txt}R-squared       ={res}    0.7248
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.6115
+{txt}       Total {c |} {res} .040063183        96  .000417325   {txt}Root MSE        =   {res} .01273
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  diff_emp_to_pop{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.0892091{col 31}{space 2} .0247215{col 42}{space 1}   -3.61{col 51}{space 3}0.001{col 59}{space 4}-.1385402{col 72}{space 3} -.039878
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-.0377537{col 31}{space 2} .0145681{col 42}{space 1}   -2.59{col 51}{space 3}0.012{col 59}{space 4}-.0668238{col 72}{space 3}-.0086835
+{txt}{space 2}population_2000 {c |}{col 19}{res}{space 2} .0000215{col 31}{space 2} 5.03e-06{col 42}{space 1}    4.26{col 51}{space 3}0.000{col 59}{space 4} .0000114{col 72}{space 3} .0000315
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .8807752{col 31}{space 2}  .436892{col 42}{space 1}    2.02{col 51}{space 3}0.048{col 59}{space 4} .0089708{col 72}{space 3}  1.75258
+{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2}-.1764582{col 31}{space 2} .0528056{col 42}{space 1}   -3.34{col 51}{space 3}0.001{col 59}{space 4}-.2818302{col 72}{space 3}-.0710862
+{txt}high_school_share {c |}{col 19}{res}{space 2} .0659106{col 31}{space 2} .1125279{col 42}{space 1}    0.59{col 51}{space 3}0.560{col 59}{space 4}-.1586354{col 72}{space 3} .2904566
+{txt}{space 13}FR10 {c |}{col 19}{res}{space 2} -.467504{col 31}{space 2} .2372295{col 42}{space 1}   -1.97{col 51}{space 3}0.053{col 59}{space 4}-.9408882{col 72}{space 3} .0058801
+{txt}{space 13}FRB0 {c |}{col 19}{res}{space 2}-.4630693{col 31}{space 2} .2415908{col 42}{space 1}   -1.92{col 51}{space 3}0.059{col 59}{space 4}-.9451563{col 72}{space 3} .0190178
+{txt}{space 13}FRC1 {c |}{col 19}{res}{space 2}-.4574523{col 31}{space 2} .2424693{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9412922{col 72}{space 3} .0263876
+{txt}{space 13}FRC2 {c |}{col 19}{res}{space 2}-.4570087{col 31}{space 2} .2416129{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9391398{col 72}{space 3} .0251224
+{txt}{space 13}FRD1 {c |}{col 19}{res}{space 2}-.4644401{col 31}{space 2}  .241484{col 42}{space 1}   -1.92{col 51}{space 3}0.059{col 59}{space 4} -.946314{col 72}{space 3} .0174337
+{txt}{space 13}FRD2 {c |}{col 19}{res}{space 2}-.4778518{col 31}{space 2} .2426501{col 42}{space 1}   -1.97{col 51}{space 3}0.053{col 59}{space 4}-.9620525{col 72}{space 3} .0063489
+{txt}{space 13}FRE1 {c |}{col 19}{res}{space 2}-.4730968{col 31}{space 2} .2419536{col 42}{space 1}   -1.96{col 51}{space 3}0.055{col 59}{space 4}-.9559076{col 72}{space 3} .0097141
+{txt}{space 13}FRE2 {c |}{col 19}{res}{space 2}-.4593787{col 31}{space 2} .2393063{col 42}{space 1}   -1.92{col 51}{space 3}0.059{col 59}{space 4}-.9369071{col 72}{space 3} .0181496
+{txt}{space 13}FRF1 {c |}{col 19}{res}{space 2}-.4670771{col 31}{space 2} .2438387{col 42}{space 1}   -1.92{col 51}{space 3}0.060{col 59}{space 4}-.9536497{col 72}{space 3} .0194956
+{txt}{space 13}FRF2 {c |}{col 19}{res}{space 2}-.4587858{col 31}{space 2} .2409844{col 42}{space 1}   -1.90{col 51}{space 3}0.061{col 59}{space 4}-.9396628{col 72}{space 3} .0220911
+{txt}{space 13}FRF3 {c |}{col 19}{res}{space 2}-.4768756{col 31}{space 2} .2417087{col 42}{space 1}   -1.97{col 51}{space 3}0.053{col 59}{space 4}-.9591978{col 72}{space 3} .0054465
+{txt}{space 13}FRG0 {c |}{col 19}{res}{space 2} -.458268{col 31}{space 2} .2425432{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9422553{col 72}{space 3} .0257194
+{txt}{space 13}FRH0 {c |}{col 19}{res}{space 2}-.4634862{col 31}{space 2} .2419099{col 42}{space 1}   -1.92{col 51}{space 3}0.060{col 59}{space 4}-.9462099{col 72}{space 3} .0192376
+{txt}{space 13}FRI1 {c |}{col 19}{res}{space 2}-.4766538{col 31}{space 2} .2429841{col 42}{space 1}   -1.96{col 51}{space 3}0.054{col 59}{space 4}-.9615209{col 72}{space 3} .0082133
+{txt}{space 13}FRI2 {c |}{col 19}{res}{space 2}-.4726191{col 31}{space 2} .2431143{col 42}{space 1}   -1.94{col 51}{space 3}0.056{col 59}{space 4} -.957746{col 72}{space 3} .0125079
+{txt}{space 13}FRI3 {c |}{col 19}{res}{space 2}-.4696403{col 31}{space 2} .2414103{col 42}{space 1}   -1.95{col 51}{space 3}0.056{col 59}{space 4}-.9513671{col 72}{space 3} .0120866
+{txt}{space 13}FRJ1 {c |}{col 19}{res}{space 2}-.4713764{col 31}{space 2} .2400929{col 42}{space 1}   -1.96{col 51}{space 3}0.054{col 59}{space 4}-.9504744{col 72}{space 3} .0077217
+{txt}{space 13}FRJ2 {c |}{col 19}{res}{space 2}-.4543083{col 31}{space 2} .2399922{col 42}{space 1}   -1.89{col 51}{space 3}0.063{col 59}{space 4}-.9332054{col 72}{space 3} .0245888
+{txt}{space 13}FRK1 {c |}{col 19}{res}{space 2}-.4581092{col 31}{space 2} .2429941{col 42}{space 1}   -1.89{col 51}{space 3}0.064{col 59}{space 4}-.9429963{col 72}{space 3} .0267779
+{txt}{space 13}FRK2 {c |}{col 19}{res}{space 2}-.4609586{col 31}{space 2}  .241163{col 42}{space 1}   -1.91{col 51}{space 3}0.060{col 59}{space 4}-.9421919{col 72}{space 3} .0202746
+{txt}{space 13}FRL0 {c |}{col 19}{res}{space 2} -.459711{col 31}{space 2} .2411923{col 42}{space 1}   -1.91{col 51}{space 3}0.061{col 59}{space 4}-.9410027{col 72}{space 3} .0215807
+{txt}{space 13}FRM0 {c |}{col 19}{res}{space 2}-.4397534{col 31}{space 2}  .236345{col 42}{space 1}   -1.86{col 51}{space 3}0.067{col 59}{space 4}-.9113725{col 72}{space 3} .0318658
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}.         
+. // Gradually adding control variables
+. eststo nuts3_eu_emp_1: regress diff_emp_to_pop robot_exposure, ///
+>         noconstant 
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(1, 95)        = {res}   124.86
+{txt}       Model {c |} {res} .025396579         1  .025396579   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .019323212        95  .000203402   {txt}R-squared       ={res}    0.5679
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5634
+{txt}       Total {c |} {res} .044719791        96  .000465831   {txt}Root MSE        =   {res} .01426
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_~p{col 16}{c |} Coefficient{col 28}  Std. err.{col 40}      t{col 48}   P>|t|{col 56}     [95% con{col 69}f. interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+robot_exposure {c |}{col 16}{res}{space 2}-.0202728{col 28}{space 2} .0018143{col 39}{space 1}  -11.17{col 48}{space 3}0.000{col 56}{space 4}-.0238746{col 69}{space 3} -.016671
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. eststo nuts3_eu_emp_2: regress diff_emp_to_pop robot_exposure ///
+>         [w=working_age_pop], noconstant 
+{txt}(analytic weights assumed)
+(sum of wgt is 38,313.848)
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(1, 95)        = {res}    47.06
+{txt}       Model {c |} {res} .013271643         1  .013271643   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .026791539        95  .000282016   {txt}R-squared       ={res}    0.3313
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.3242
+{txt}       Total {c |} {res} .040063183        96  .000417325   {txt}Root MSE        =   {res} .01679
+
+{txt}{hline 15}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_~p{col 16}{c |} Coefficient{col 28}  Std. err.{col 40}      t{col 48}   P>|t|{col 56}     [95% con{col 69}f. interval]
+{hline 15}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+robot_exposure {c |}{col 16}{res}{space 2}-.0155365{col 28}{space 2} .0022648{col 39}{space 1}   -6.86{col 48}{space 3}0.000{col 56}{space 4}-.0200326{col 69}{space 3}-.0110403
+{txt}{hline 15}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. eststo nuts3_eu_emp_3: regress diff_emp_to_pop robot_exposure import_exposure ///
+>         [w=working_age_pop], noconstant 
+{txt}(analytic weights assumed)
+(sum of wgt is 38,313.848)
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(2, 94)        = {res}    31.67
+{txt}       Model {c |} {res} .016127995         2  .008063998   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .023935188        94   .00025463   {txt}R-squared       ={res}    0.4026
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.3899
+{txt}       Total {c |} {res} .040063183        96  .000417325   {txt}Root MSE        =   {res} .01596
+
+{txt}{hline 16}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}diff_emp_to_pop{col 17}{c |} Coefficient{col 29}  Std. err.{col 41}      t{col 49}   P>|t|{col 57}     [95% con{col 70}f. interval]
+{hline 16}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}robot_exposure {c |}{col 17}{res}{space 2}-.0840973{col 29}{space 2} .0205831{col 40}{space 1}   -4.09{col 49}{space 3}0.000{col 57}{space 4}-.1249657{col 70}{space 3} -.043229
+{txt}import_exposure {c |}{col 17}{res}{space 2}-.0372584{col 29}{space 2} .0111243{col 40}{space 1}   -3.35{col 49}{space 3}0.001{col 57}{space 4}-.0593459{col 70}{space 3}-.0151708
+{txt}{hline 16}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. eststo nuts3_eu_emp_4: regress diff_emp_to_pop robot_exposure import_exposure ///
+>         population_2000 female_share bachelor_share high_school_share ///
+>         [w=working_age_pop], noconstant 
+{txt}(analytic weights assumed)
+(sum of wgt is 38,313.848)
+
+      Source {c |}       SS           df       MS      Number of obs   ={res}        96
+{txt}{hline 13}{c +}{hline 34}   F(6, 90)        = {res}    23.06
+{txt}       Model {c |} {res} .024274611         6  .004045769   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} .015788572        90  .000175429   {txt}R-squared       ={res}    0.6059
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.5796
+{txt}       Total {c |} {res} .040063183        96  .000417325   {txt}Root MSE        =   {res} .01324
+
+{txt}{hline 18}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}  diff_emp_to_pop{col 19}{c |} Coefficient{col 31}  Std. err.{col 43}      t{col 51}   P>|t|{col 59}     [95% con{col 72}f. interval]
+{hline 18}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 3}robot_exposure {c |}{col 19}{res}{space 2}-.0900296{col 31}{space 2}  .019843{col 42}{space 1}   -4.54{col 51}{space 3}0.000{col 59}{space 4}-.1294511{col 72}{space 3}-.0506081
+{txt}{space 2}import_exposure {c |}{col 19}{res}{space 2}-.0336312{col 31}{space 2} .0131789{col 42}{space 1}   -2.55{col 51}{space 3}0.012{col 59}{space 4}-.0598134{col 72}{space 3}-.0074489
+{txt}{space 2}population_2000 {c |}{col 19}{res}{space 2} .0000173{col 31}{space 2} 2.90e-06{col 42}{space 1}    5.94{col 51}{space 3}0.000{col 59}{space 4} .0000115{col 72}{space 3}  .000023
+{txt}{space 5}female_share {c |}{col 19}{res}{space 2} .0168396{col 31}{space 2} .0461613{col 42}{space 1}    0.36{col 51}{space 3}0.716{col 59}{space 4}-.0748679{col 72}{space 3} .1085471
+{txt}{space 3}bachelor_share {c |}{col 19}{res}{space 2}-.1365011{col 31}{space 2} .0329519{col 42}{space 1}   -4.14{col 51}{space 3}0.000{col 59}{space 4}-.2019658{col 72}{space 3}-.0710365
+{txt}high_school_share {c |}{col 19}{res}{space 2} .0118672{col 31}{space 2} .0691081{col 42}{space 1}    0.17{col 51}{space 3}0.864{col 59}{space 4}-.1254281{col 72}{space 3} .1491626
+{txt}{hline 18}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}.         
+. ***
+. *** 6) Tex tables
+. *** 
+. 
+. esttab nuts2_iv_eu_emp nuts2_iv_us_emp nuts3_eu_emp ///
+>         using "tables/table1.tex", drop(import_exposure population_2001 population_2000 ///
+>         female_share bachelor_share high_school_share emp_share_D emp_share_F FR*) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>     booktabs nomtitle label     
+{res}{txt}(output written to {browse  `"tables/table1.tex"'})
+
+{com}. 
+. esttab nuts2_iv_eu_wage nuts2_iv_us_wage ///
+>         using "tables/table2.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) append ///
+>     booktabs nomtitle label     
+{res}{txt}(output written to {browse  `"tables/table2.tex"'})
+
+{com}.         
+. esttab nuts2_iv_eu_emp_1 nuts2_iv_eu_emp_2 nuts2_iv_eu_emp_3 nuts2_iv_eu_emp_4 nuts2_iv_eu_emp ///
+>         using "tables/controls_iv_eu_emp.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_iv_eu_emp.tex"'})
+
+{com}.         
+. esttab nuts2_iv_us_emp_1 nuts2_iv_us_emp_2 nuts2_iv_us_emp_3 nuts2_iv_us_emp_4 nuts2_iv_us_emp ///
+>         using "tables/controls_iv_us_emp.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_iv_us_emp.tex"'})
+
+{com}.         
+. esttab nuts2_iv_us_eu_emp_1 nuts2_iv_us_eu_emp_2 nuts2_iv_us_eu_emp_3 nuts2_iv_us_eu_emp_4 nuts2_iv_us_eu_emp ///
+>         using "tables/controls_iv_eu_us_emp.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_iv_eu_us_emp.tex"'})
+
+{com}.         
+. esttab nuts2_iv_eu_wage_1 nuts2_iv_eu_wage_2 nuts2_iv_eu_wage_3 nuts2_iv_eu_wage_4 nuts2_iv_eu_wage ///
+>         using "tables/controls_iv_eu_wage.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_iv_eu_wage.tex"'})
+
+{com}. 
+. esttab nuts2_iv_us_wage_1 nuts2_iv_us_wage_2 nuts2_iv_us_wage_3 nuts2_iv_us_wage_4 nuts2_iv_us_wage ///
+>         using "tables/controls_iv_us_wage.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_iv_us_wage.tex"'})
+
+{com}.         
+. esttab nuts2_iv_us_eu_wage_1 nuts2_iv_us_eu_wage_2 nuts2_iv_us_eu_wage_3 nuts2_iv_us_eu_wage_4 nuts2_iv_us_eu_wage ///
+>         using "tables/controls_iv_us_eu_wage.tex", drop(import_exposure population_2001 female_share ///
+>         bachelor_share high_school_share emp_share_D emp_share_F) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_iv_us_eu_wage.tex"'})
+
+{com}.         
+. esttab nuts3_eu_emp_1 nuts3_eu_emp_2 nuts3_eu_emp_3 nuts3_eu_emp_4 nuts3_eu_emp ///
+>         using "tables/controls_nuts3.tex", drop(import_exposure population_2000 ///
+>         female_share bachelor_share high_school_share FR*) ///
+>         se star(* 0.05 ** 0.01 *** 0.001) replace ///
+>         booktabs nomtitle label
+{res}{txt}(output written to {browse  `"tables/controls_nuts3.tex"'})
+
+{com}.         
 . cd "$mydir/do_files"
 {res}/Users/aml/AutoEmp/do_files
 {txt}
@@ -340,7 +1397,7 @@ frobot_exposure_04 {c |}{col 20}{res}{space 2} .4090493{col 32}{space 2} .145898
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/estimation.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:54
+ {txt}closed on:  {res}29 Aug 2024, 23:23:57
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

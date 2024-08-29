@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 6 Aug 2024, 00:32:53
+ {txt}opened on:  {res}29 Aug 2024, 23:23:52
 {txt}
 {com}. 
 . ***
@@ -20,7 +20,7 @@
 {com}. save `lfs_emp'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000001{rm}
 saved
 as .dta format
 {p_end}
@@ -50,7 +50,7 @@ as .dta format
 . save `lfs_sbs_emp'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000002{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000002{rm}
 saved
 as .dta format
 {p_end}
@@ -87,7 +87,7 @@ as .dta format
 . save `emp_national_2001'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000003{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000003{rm}
 saved
 as .dta format
 {p_end}
@@ -156,7 +156,7 @@ as .dta format
 . save `emp_regions_2001'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000004{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000004{rm}
 saved
 as .dta format
 {p_end}
@@ -184,7 +184,7 @@ as .dta format
 {com}. save `emp_regions_2016'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000005{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000005{rm}
 saved
 as .dta format
 {p_end}
@@ -212,7 +212,7 @@ as .dta format
 {com}. save `emp_regions_2004'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000006{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000006{rm}
 saved
 as .dta format
 {p_end}
@@ -221,7 +221,29 @@ as .dta format
 {txt}
 {com}. 
 . ***
-. *** 5) Merge into one data set
+. *** 5) Placebo check
+. ***
+. 
+. import excel "raw_data/eurostat/placebo_check.xlsx", sheet("Sheet 1") ///
+>         cellrange(M11:O32) firstrow     
+{res}{text}(3 vars, 21 obs)
+
+{com}.         
+. tempfile placebo_check
+{txt}
+{com}. save `placebo_check'
+{txt}{p 0 4 2}
+file {bf}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000007{rm}
+saved
+as .dta format
+{p_end}
+
+{com}. clear
+{txt}
+{com}. 
+. ***
+. *** 6) Merge into one data set
 . ***
 . 
 . use `emp_regions_2001'
@@ -275,7 +297,21 @@ as .dta format
 {com}. drop _merge
 {txt}
 {com}. 
-. order region_code region total_emp_* emp_share_* diff_robots_* emp_base_* fr_emp_base_* id
+. merge 1:1 region_code using `placebo_check'
+{res}
+{txt}{col 5}Result{col 33}Number of obs
+{col 5}{hline 41}
+{col 5}Not matched{col 30}{res}               0
+{txt}{col 5}Matched{col 30}{res}              21{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. drop if _merge == 2
+{txt}(0 observations deleted)
+
+{com}. drop _merge
+{txt}
+{com}. 
+. order region_code region total_emp_* emp_share_* diff_robots_* emp_base_* fr_emp_base_* emp_to_pop_diff_9601 id
 {txt}
 {com}. 
 . save "clean_data/nuts2_emp_regions.dta", replace
@@ -292,7 +328,7 @@ saved
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/nuts2_emp_regions_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 6 Aug 2024, 00:32:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:53
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

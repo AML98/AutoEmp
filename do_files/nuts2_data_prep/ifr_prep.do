@@ -1,6 +1,7 @@
 clear
 cd "$mydir"
-log using "logs/nuts2_fr_prep.txt", replace
+capture log close
+log using "logs/nuts2_ifr_prep.txt", replace
 
 import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet2") firstrow
 save "raw_data/ifr/nuts2_IFR_data.dta", replace

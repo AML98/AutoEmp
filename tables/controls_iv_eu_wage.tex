@@ -1,0 +1,18 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{5}{c}}
+\toprule
+                    &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         \\
+\midrule
+frobot\_exposure\_01  &       0.668\sym{***}&       0.931\sym{***}&       0.928\sym{***}&     -0.0944         &                     \\
+                    &     (0.110)         &     (0.170)         &     (0.169)         &    (0.0674)         &                     \\
+\addlinespace
+frobot\_exposure\_01\_auto&                     &                     &                     &                     &      -0.120         \\
+                    &                     &                     &                     &                     &     (0.292)         \\
+\midrule
+Observations        &          21         &          21         &          21         &          21         &          21         \\
+\bottomrule
+\multicolumn{6}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{6}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}

@@ -95,7 +95,18 @@ save `emp_regions_2004'
 clear
 
 ***
-*** 5) Merge into one data set
+*** 5) Placebo check
+***
+
+import excel "raw_data/eurostat/placebo_check.xlsx", sheet("Sheet 1") ///
+	cellrange(M11:O32) firstrow	
+	
+tempfile placebo_check
+save `placebo_check'
+clear
+
+***
+*** 6) Merge into one data set
 ***
 
 use `emp_regions_2001'
@@ -113,7 +124,11 @@ merge 1:1 region_code using `emp_regions_2016'
 drop if _merge == 2
 drop _merge
 
-order region_code region total_emp_* emp_share_* diff_robots_* emp_base_* fr_emp_base_* id
+merge 1:1 region_code using `placebo_check'
+drop if _merge == 2
+drop _merge
+
+order region_code region total_emp_* emp_share_* diff_robots_* emp_base_* fr_emp_base_* emp_to_pop_diff_9601 id
 
 save "clean_data/nuts2_emp_regions.dta", replace
 cd "$mydir/do_files/nuts2_data_prep"

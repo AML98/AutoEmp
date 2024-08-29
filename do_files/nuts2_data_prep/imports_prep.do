@@ -12,7 +12,7 @@ local varlist ind10_12 ind13_15 ind16 ind17_18 ind19_22 ind23 ind24_25 ind26_27 
 	ind28 ind29_30 ind91 AB C E F
 
 foreach var of local varlist {
-	gen diff_imp_`var' = `var' - `var'[_n-1]
+	gen diff_imp_`var' = (`var' - `var'[_n-1])/1000
 	format diff_imp_`var' %14.2f
 	drop `var'
 }

@@ -3,11 +3,11 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 2 Aug 2024, 17:38:52
+ {txt}opened on:  {res}29 Aug 2024, 23:23:53
 {txt}
 {com}. 
 . import excel "raw_data/ifr/IFR_data_new.xlsx", sheet("Sheet1") firstrow
-{res}{text}(7 vars, 1,296 obs)
+{res}{text}(10 vars, 1,296 obs)
 
 {com}. save "raw_data/ifr/IFR_data_new.dta", replace
 {txt}{p 0 4 2}
@@ -92,7 +92,7 @@ saved
 . save `robots_inst_countries'
 {txt}{p 0 4 2}
 file {bf}
-/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_94849.000001{rm}
+/var/folders/gj/lpt24fdn4bz32zqcdsrmyzz80000gn/T//S_68442.000001{rm}
 saved
 as .dta format
 {p_end}
@@ -194,15 +194,14 @@ clean_data/diff_robots.dta{rm}
 saved
 {p_end}
 
-{com}. cd "/Users/aml/AutoEmp/do_files"
-{res}/Users/aml/AutoEmp/do_files
+{com}. cd "/Users/aml/AutoEmp/do_files/nuts3_data_prep"
+{res}/Users/aml/AutoEmp/do_files/nuts3_data_prep
 {txt}
-{com}. 
-. log close
+{com}. log close
       {txt}name:  {res}<unnamed>
        {txt}log:  {res}/Users/aml/AutoEmp/logs/ifr_prep.txt
   {txt}log type:  {res}smcl
- {txt}closed on:  {res} 2 Aug 2024, 17:38:53
+ {txt}closed on:  {res}29 Aug 2024, 23:23:54
 {txt}{.-}
 {smcl}
 {txt}{sf}{ul off}

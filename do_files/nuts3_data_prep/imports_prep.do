@@ -3,7 +3,7 @@ capture log c
 cd "/Users/aml/AutoEmp"
 log using "logs/imports_prep.txt", replace
 
-import excel "raw_data/eurostat/imports.xlsx", sheet("Sheet 1") ///
+import excel "raw_data/eurostat/imports_broad_industry.xlsx", sheet("Sheet 1") ///
 	cellrange(A14:F25) firstrow	
 
 gen imp_other_industry = imp_industry_ex_construct - imp_manufact
@@ -12,7 +12,7 @@ drop imp_industry_ex_construct
 drop imp_total
 
 foreach v in imp_agri_forest_fish imp_manufact imp_construct imp_other_industry{
-	gen diff_`v' = `v' - `v'[_n-1]
+	gen diff_`v' = (`v' - `v'[_n-1])/1000
 	format diff_`v' %14.2f
 	drop `v'
 }
